@@ -1,17 +1,13 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
-import NavBar from '@/components/bussiness/NavBar.vue';
-import TabBar from '@/components/bussiness/TabBar.vue';
+import { useFolderStore } from './stores/folder';
+import Editor from './views/Editor.vue'
+import NoFile from './views/NoFile.vue';
+
+const folderStore = useFolderStore()
 </script>
 
 <template>
-  <div class="flex w-screen h-screen">
-    <TabBar />
+  <NoFile v-if="!folderStore.openFolder" />
 
-    <NavBar />
-
-    <div class="grow bg-bgSecondary">
-      <RouterView />
-    </div>
-  </div>
-</template>./components/bussiness/TabBar.vue
+  <Editor v-if="folderStore.openFolder" />
+</template>
