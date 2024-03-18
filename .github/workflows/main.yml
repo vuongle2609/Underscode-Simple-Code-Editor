@@ -5,8 +5,6 @@ on:
   push:
     branches:
       - 'main'
-    tags-ignore:
-      - '*'
 
 jobs:
   buildWin:
@@ -18,6 +16,7 @@ jobs:
         with:
           node-version: 20
 
+      - run: 'ls'
       - run: 'npm install'
       - run: 'npm run build'
 
