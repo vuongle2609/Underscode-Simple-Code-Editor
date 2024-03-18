@@ -2,25 +2,43 @@ import "./assets/main.css";
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";
-import { install as VueMonacoEditorPlugin } from "@guolao/vue-monaco-editor";
+import { install as VueMonacoEditorPlugin,loader  } from "@guolao/vue-monaco-editor";
 import App from "./App.vue";
 import router from "./router";
 import path from "path";
 const app = createApp(App);
+
 import * as monaco from "monaco-editor";
+import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker"
+import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker"
+import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker"
+import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker"
+import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
 
-// const configFile = path.join(path.dirname(__dirname), "extraResources", "vs");
+self.MonacoEnvironment = {
+  getWorker(_, label) {
+    if (label === "json") {
+      return new jsonWorker()
+    }
+    if (label === "css" || label === "scss" || label === "less") {
+      return new cssWorker()
+    }
+    if (label === "html" || label === "handlebars" || label === "razor") {
+      return new htmlWorker()
+    }
+    if (label === "typescript" || label === "javascript") {
+      return new tsWorker()
+    }
+    return new editorWorker()
+  }
+}
 
-const configFile = path.join(path.join(__dirname, "../dist"), "vs");
+loader.config({ monaco })
+
 
 app.use(createPinia());
 app.use(router);
-// app.use(VueMonacoEditorPlugin, {
-//   monaco,
-//   // paths: {
-//   //   // vs: 'extraResources/vs',
-//   //   vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs",
-//   // },
-// });
+app.use(VueMonacoEditorPlugin);
+
 
 app.mount("#app");
