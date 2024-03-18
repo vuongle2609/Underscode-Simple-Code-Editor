@@ -25,6 +25,8 @@ remoteMain.initialize();
 function createWindow() {
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
+    minWidth: 1024,
+    minHeight: 720,
     webPreferences: {
       preload: "preload.js",
       // preload: path.join(__dirname, "preload.js"),

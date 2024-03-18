@@ -1,37 +1,42 @@
 <script setup lang="ts">
 import { useFolderStore } from "@/stores/folder";
-import { ref, onMounted, shallowRef, watchEffect } from "vue";
 import fs from "fs";
+import langDetector from "language-detect";
+import langMapper from "language-map";
+import { onMounted, ref, shallowRef, watchEffect } from "vue";
 const folderStore = useFolderStore();
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
+const editor = ref();
+const lang = ref("");
 const code = ref("");
 
-watchEffect(() => {
-  if (folderStore.openFile)
-    fs.readFile(folderStore.openFile, "utf8", (err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      code.value = data;
-    });
+onMounted(() => {
+ const a = monaco.editor.create(editor.value, {
+    value: code.value,
+    language: lang.value,
+    automaticLayout: true,
+    formatOnType: true,
+    formatOnPaste: true,
+    theme: "vs-dark",
+  });
+
 });
 
-const MONACO_EDITOR_OPTIONS = {
-  automaticLayout: true,
-  formatOnType: true,
-  formatOnPaste: true,
+
+const mapFileContent = async (path: string) => {
+  const data = await fs.promises.readFile(path, "utf8");
+  code.value = data;
+
+  //@ts-ignore
+  const langDetected = await langDetector.sync(path);
+
+  lang.value = langMapper[langDetected as keyof typeof langMapper].aceMode;
 };
 
-const editorRef = shallowRef();
-const handleMount = (editor: string) => (editorRef.value = editor);
+watchEffect(() => {
+  if (folderStore.openFile) mapFileContent(folderStore.openFile);
+});
 </script>
 
-<template>
-  <vue-monaco-editor
-    v-model:value="code"
-    theme="vs-dark"
-    :options="MONACO_EDITOR_OPTIONS"
-    @mount="handleMount"
-  />
-</template>
+<template><div id="editor" ref="editor" class="w-full h-full"></div></template>

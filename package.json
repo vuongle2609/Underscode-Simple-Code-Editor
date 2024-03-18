@@ -12,6 +12,8 @@
     "@guolao/vue-monaco-editor": "^1.5.1",
     "@tabler/icons-vue": "^3.1.0",
     "file-icons-js": "github:websemantics/file-icons-js",
+    "language-detect": "^1.1.0",
+    "language-map": "^1.5.0",
     "monaco-editor": "^0.47.0",
     "pinia": "^2.1.7",
     "recursive-readdir": "^2.2.3",

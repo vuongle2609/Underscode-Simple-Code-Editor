@@ -30,7 +30,7 @@ const folderStore = useFolderStore();
 
 const getFileDetail = (path: string) =>
   fs
-    .readdirSync(path, { withFileTypes: true, recursive: true })
+    .readdirSync(path, { withFileTypes: true })
     .sort((a, b) => (a.isFile() ? 1 : 0) - (b.isFile() ? 1 : 0))
     .map((file) => {
       return {
