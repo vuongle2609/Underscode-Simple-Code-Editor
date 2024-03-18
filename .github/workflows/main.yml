@@ -11,25 +11,25 @@ jobs:
     runs-on: 'windows-latest'
 
     steps:
-      # - name: 'Checkout source code'
-      #   uses: 'actions/checkout@v3'
-      #   with:
-      #     lfs: true
-      #     fetch-depth: 0
+      - name: 'Checkout source code'
+        uses: 'actions/checkout@v3'
+        with:
+          lfs: true
+          fetch-depth: 0
           
-      # - name: '🔧 setup node'
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     cache: 'npm'
-      #     cache-dependency-path: 'package-lock.json'
-      #     node-version: 20
+      - name: '🔧 setup node'
+        uses: actions/setup-node@v3
+        with:
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+          node-version: 20
       
-      # - run: 'ls'
-      # - run: 'npm install'
-      # - run: 'npm run build'
-      #   env:
-      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # - run: 'Compress-Archive -Path .\release\0.0.0\* -Destination test.zip'
+      - run: 'ls'
+      - run: 'npm install'
+      - run: 'npm run build'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: 'Compress-Archive -Path .\release\0.0.0\* -Destination Dori.zip'
 
       - uses: 'marvinpinto/action-automatic-releases@latest'
         with:
@@ -38,5 +38,5 @@ jobs:
           prerelease: true
           title: 'Development Build'
           files: |
-            package-lock.json
+            Dori.zip
         id: 'automatic_releases'
