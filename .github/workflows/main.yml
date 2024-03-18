@@ -23,15 +23,17 @@ jobs:
           cache: 'npm'
           cache-dependency-path: 'package-lock.json'
           node-version: 20
-
+      
       - run: 'ls'
       - run: 'npm install'
       - run: 'npm run build'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: 'Compress-Archive -Path .\release\0.0.0\* -Destination test.zip'
 
       - uses: 'marvinpinto/action-automatic-releases@latest'
         with:
-          repo_token: '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'
+          repo_token: '${{ secrets.GITHUB_TOKEN }}'
           automatic_release_tag: 'latest'
           prerelease: true
           title: 'Development Build'
