@@ -2,7 +2,7 @@
 import Button from "@/components/general/Button.vue";
 import { IconChevronDown, IconChevronRight } from "@tabler/icons-vue";
 
-const { name, isFile, fileClass, isOpen, ...props } = defineProps<{
+const { name, isFile, fileClass, isOpen } = defineProps<{
   name: string;
   isFile: boolean;
   fileClass: string;

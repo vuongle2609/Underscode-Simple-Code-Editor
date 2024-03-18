@@ -94,9 +94,7 @@ renderFileStruct(folderStore.openFolder);
 
     <div class="px-4 py-2 overflow-auto grow">
       <template
-        v-for="(
-          { fileClass, isFile, isOpen, name, path }, index
-        ) in directoryStruct"
+        v-for="{ fileClass, isFile, isOpen, name, path } in directoryStruct"
       >
         <ExplorerItem
           @click="handleClickItem(path, isFile)"

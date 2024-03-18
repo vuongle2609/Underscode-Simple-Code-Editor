@@ -1,8 +1,8 @@
-import { ref, computed } from "vue";
 import { defineStore } from "pinia";
+import { ref } from "vue";
 
 export const useFolderStore = defineStore("counter", () => {
-  const openFolder = ref<null | string>("D:\\code\\Aim-Lab-ThreeJS");
+  const openFolder = ref<null | string>(null);
 
   const openFile = ref<null | string>(null);
 
