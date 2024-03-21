@@ -27,6 +27,8 @@ function createWindow() {
     icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
     minWidth: 1024,
     minHeight: 720,
+    autoHideMenuBar: true,
+    // frame: false,
     webPreferences: {
       preload: "preload.js",
       // preload: path.join(__dirname, "preload.js"),
@@ -36,6 +38,8 @@ function createWindow() {
       webSecurity: false,
     },
   });
+
+  win.maximize();
 
   remoteMain.enable(win.webContents);
 

@@ -9,10 +9,10 @@ interface Props extends /** @vue-ignore */ ButtonHTMLAttributes {
 const { size, variant } = defineProps<Props>()
 
 const sizeStyle = {
-    sm: 'text-sm',
-    md: 'text-md',
-    lg: 'text-lg',
-    xl: 'text-xl',
+    sm: 'text-xs size-6',
+    md: 'text-md size-8',
+    lg: 'text-lg size-9',
+    xl: 'text-xl size-10',
 }
 
 const variantStyle = {
@@ -25,7 +25,7 @@ const variantStyle = {
 
 <template>
     <button :class="[sizeStyle[size || 'md'], variantStyle[variant || 'subtle']]"
-        class="px-1 py-1 rounded-md hover:bg-bgButtonHover active:bg-bgSecondary" v-bind="$props">
+        class="px-1 py-1 rounded-md hover:bg-bgButtonHover active:bg-bgSecondary aspect-square" v-bind="$props">
         <slot />
     </button>
 </template>

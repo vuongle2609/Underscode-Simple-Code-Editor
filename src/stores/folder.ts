@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-export const useFolderStore = defineStore("counter", () => {
+export const useFolderStore = defineStore("folder", () => {
   const openFolder = ref<null | string>('D:/code/DoriElectron');
 
   const openFile = ref<null | string>(null);

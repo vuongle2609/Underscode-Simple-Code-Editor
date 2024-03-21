@@ -3,7 +3,7 @@ import FileExplorer from "@/views/FileExplorer.vue";
 </script>
 
 <template>
-  <div class="text-white bg-bgMain min-w-[300px] py-2">
+  <div class="text-white bg-bgMain min-w-[300px]">
     <FileExplorer />
   </div>
 </template>

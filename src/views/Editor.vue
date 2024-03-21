@@ -2,7 +2,7 @@
 import { RouterView } from "vue-router";
 import NavBar from "@/components/bussiness/NavBar.vue";
 import TabBar from "@/components/bussiness/TabBar.vue";
-import "file-icons-js/css/style.css";
+import OpenEditors from "./OpenEditors.vue";
 </script>
 
 <template>
@@ -11,7 +11,9 @@ import "file-icons-js/css/style.css";
 
     <NavBar />
 
-    <div class="max-w-full grow bg-bgSecondary">
+    <div class="flex flex-col max-w-full grow bg-bgSecondary">
+      <OpenEditors />
+
       <RouterView />
     </div>
   </div>
