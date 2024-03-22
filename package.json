@@ -11,9 +11,9 @@
     "@electron/remote": "^2.1.2",
     "@guolao/vue-monaco-editor": "^1.5.1",
     "file-icons-js": "github:websemantics/file-icons-js",
+    "hotkeys-js": "^3.13.7",
     "monaco-editor": "^0.47.0",
     "pinia": "^2.1.7",
-    "recursive-readdir": "^2.2.3",
     "uuid": "^9.0.1",
     "vue": "^3.3.4",
     "vue-horizontal-scroll": "^0.2.4",
@@ -23,7 +23,6 @@
   "devDependencies": {
     "@tsconfig/node20": "^20.1.2",
     "@types/node": "^20.11.25",
-    "@types/recursive-readdir": "^2.2.4",
     "@types/uuid": "^9.0.8",
     "@vitejs/plugin-vue": "^4.3.4",
     "@vue/tsconfig": "^0.5.1",

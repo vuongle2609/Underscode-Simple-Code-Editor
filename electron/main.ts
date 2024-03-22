@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, globalShortcut } from "electron";
 import * as remoteMain from "@electron/remote/main";
 import path from "node:path";
 
@@ -38,7 +38,7 @@ function createWindow() {
       webSecurity: false,
     },
   });
-
+  // win.setMenu(null);
   win.maximize();
 
   remoteMain.enable(win.webContents);
@@ -73,5 +73,11 @@ app.on("activate", () => {
     createWindow();
   }
 });
+
+// app.on("ready", () => {
+//   globalShortcut.register("CommandOrControl+W", () => {
+//     //stuff here
+//   });
+// });
 
 app.whenReady().then(createWindow);

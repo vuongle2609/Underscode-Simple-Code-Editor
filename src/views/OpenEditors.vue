@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { useEditorsOpenStore } from "@/stores/editorsOpen";
-import { storeToRefs } from "pinia";
 import Button from "@/components/general/IconButton.vue";
-import { watchEffect, ref } from "vue";
+import { useEditorsOpenStore } from "@/stores/editorsOpen";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import { storeToRefs } from "pinia";
+import { onBeforeUnmount, onMounted, ref, watchEffect } from "vue";
 
 const editorsOpenStore = useEditorsOpenStore();
 const { openEditors, focusEditor } = storeToRefs(editorsOpenStore);
+import hotkeys from "hotkeys-js";
+import { useHotkey } from "@simolation/vue-hotkey";
+import fs from "fs";
 
 const scrollContainer = ref();
 
@@ -18,13 +21,44 @@ const scrollX = (e: WheelEvent) => {
   scrollContainer.value.scrollLeft += e.deltaY;
 };
 
-const closeEditor = async (id: string) => {
+const closeEditor = async (id?: string | null) => {
+  if (!id) return;
+
   const itemRemove = await editorsOpenStore.removeEditor(id);
 
   const path = itemRemove?.path || "";
 
   monaco.editor.getModel(monaco.Uri.file(path))?.dispose();
 };
+
+const handleSaveEditor = async () => {
+  const currentFocusEditor = openEditors.value.find(
+    (item) => item.id === focusEditor.value
+  );
+
+  console.log("🚀 ~ handleSaveEditor ~ newValue:", currentFocusEditor);
+  if (!currentFocusEditor) return;
+  
+  const newValue = monaco.editor.getEditors()[0].getValue() || "";
+
+  fs.writeFileSync(currentFocusEditor.path, newValue);
+};
+
+onMounted(() => {
+  hotkeys("ctrl+w,command+w", () => {
+    closeEditor(focusEditor.value);
+  });
+
+  hotkeys("ctrl+s,command+s", () => {
+    console.log(2)
+    handleSaveEditor();
+  });
+});
+
+onBeforeUnmount(() => {
+  hotkeys.unbind("ctrl+w,command+w");
+  hotkeys.unbind("ctrl+s,command+s");
+});
 </script>
 
 <template>
@@ -39,8 +73,9 @@ const closeEditor = async (id: string) => {
         v-for="{ fileClass, name, id } of openEditors"
         @click="editorsOpenStore.focusEditor = id"
         :id
-        class="flex items-center justify-center h-full gap-1 px-2 pl-4 text-sm transition-all duration-150 cursor-pointer text-textSecondary hover:text-white hover:bg-bgSecondary whitespace-nowrap"
+        class="flex items-center justify-center h-full gap-1 px-2 pl-4 text-sm transition-colors duration-150 cursor-pointer text-textSecondary hover:text-white hover:bg-bgSecondary whitespace-nowrap"
         :class="focusEditor === id ? 'bg-bgSecondary text-white' : 'bg-bgMain'"
+        @click.middle.exact="closeEditor(id)"
       >
         <i class="icon" :class="fileClass"></i>
 
