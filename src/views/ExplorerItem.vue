@@ -1,52 +1,132 @@
 <script setup lang="ts">
 import Button from "@/components/general/Button.vue";
 import { useEditorsOpenStore } from "@/stores/editorsOpen";
+import { getClassWithColor } from "file-icons-js";
+import fs from "fs";
+import { ref } from "vue";
 
-const { name, isFile, fileClass, isOpen, path } = defineProps<{
+const { path } = defineProps<{
+  path: string;
+}>();
+
+interface DirectoryStructType {
   name: string;
   isFile: boolean;
   fileClass: string;
   isOpen: boolean;
   path: string;
-}>();
+}
+
+const directoryStruct = ref<DirectoryStructType[]>([]);
+
+const getFileDetail = (path: string) =>
+  fs
+    .readdirSync(path, { withFileTypes: true })
+    .sort((a, b) => (a.isFile() ? 1 : 0) - (b.isFile() ? 1 : 0))
+    .map((file) => {
+      return {
+        name: file.name,
+        isFile: file.isFile(),
+        fileClass: getClassWithColor(file.name),
+        isOpen: false,
+        path: path + "/" + file.name,
+      };
+    });
+
+const renderFileStruct = async (folderPath?: string) => {
+  if (!folderPath) return;
+
+  const directoryDetail = getFileDetail(folderPath);
+
+  directoryStruct.value = directoryDetail;
+};
 
 const { addEditor } = useEditorsOpenStore();
 
-const handleClickItem = () => {
-  if (!isFile) return;
-
+const handleClickFile = ({
+  path,
+  name,
+  fileClass,
+}: Omit<DirectoryStructType, "isOpen" | "isFile">) => {
   addEditor({
     path,
     name,
     fileClass,
   });
 };
+
+const handleClickFolder = ({
+  index,
+  isOpen,
+}: {
+  index: number;
+  isOpen: boolean;
+}) => {
+  directoryStruct.value[index].isOpen = !isOpen;
+};
+
+const handleClickItem = ({
+  fileClass,
+  isFile,
+  name,
+  path,
+  index,
+  isOpen,
+}: DirectoryStructType & { index: number }) => {
+  if (!isFile) {
+    handleClickFolder({ index, isOpen });
+    return;
+  }
+
+  handleClickFile({ fileClass, name, path });
+};
+
+renderFileStruct(path);
 </script>
 
 <template>
-  <Button
-    v-if="name !== '.git'"
-    :full-width="true"
-    :v-bind="$props"
-    @click="handleClickItem"
-  >
-    <i
-      class="text-xs fa-light fa-chevron-right"
-      v-if="!isOpen"
-      :class="isFile && 'invisible'"
-    ></i>
-    <i
-      class="text-xs fa-light fa-chevron-down"
-      v-if="isOpen"
-      :class="isFile && 'invisible'"
-    ></i>
-
-    <i class="icon" :class="fileClass" v-if="isFile"></i>
-
-    <span
-      class="overflow-hidden text-sm font-light whitespace-nowrap text-ellipsis"
+  <div class="pl-2">
+    <template
+      v-for="(
+        { fileClass, isFile, isOpen, name, path }, index
+      ) in directoryStruct"
     >
-      {{ name }}</span
-    >
-  </Button>
+      <Button
+        :full-width="true"
+        :v-bind="$props"
+        @click="
+          handleClickItem({
+            fileClass,
+            isFile,
+            name,
+            path,
+            index,
+            isOpen,
+          })
+        "
+      >
+        <i
+          class="text-xs fa-light fa-chevron-right"
+          v-if="!isOpen"
+          :class="isFile && 'invisible'"
+        ></i>
+
+        <i
+          class="text-xs fa-light fa-chevron-down"
+          v-if="isOpen"
+          :class="isFile && 'invisible'"
+        ></i>
+
+        <i class="icon" :class="fileClass" v-if="isFile"></i>
+
+        <span
+          class="overflow-hidden text-sm font-light whitespace-nowrap text-ellipsis"
+        >
+          {{ name }}</span
+        >
+      </Button>
+
+      <ExplorerItem v-if="!isFile && isOpen" :path />
+    </template>
+  </div>
 </template>

@@ -2,86 +2,37 @@
 import Button from "@/components/general/Button.vue";
 import IconButton from "@/components/general/IconButton.vue";
 import { useFolderStore } from "@/stores/folder";
-import { getClassWithColor } from "file-icons-js";
-import fs from "fs";
-import { shallowRef } from "vue";
 import ExplorerItem from "./ExplorerItem.vue";
 
-const directoryStruct = shallowRef<
-  {
-    name: string;
-    isFile: boolean;
-    fileClass: string;
-    isOpen: boolean;
-    path: string;
-  }[]
->([]);
-
 const folderStore = useFolderStore();
-
-const getFileDetail = (path: string) =>
-  fs
-    .readdirSync(path, { withFileTypes: true })
-    .sort((a, b) => (a.isFile() ? 1 : 0) - (b.isFile() ? 1 : 0))
-    .map((file) => {
-      return {
-        name: file.name,
-        isFile: file.isFile(),
-        fileClass: getClassWithColor(file.name),
-        isOpen: false,
-        path: path + "/" + file.name,
-      };
-    });
-
-const renderFileStruct = async (folderPath: string | null) => {
-  if (!folderPath) return;
-
-  const directoryDetail = getFileDetail(folderPath);
-
-  directoryStruct.value = directoryDetail;
-};
-
-const handleClickItem = (path: string, isFile: boolean) => {
-  if (isFile) {
-    folderStore.changeOpenFile(path);
-
-    return;
-  }
-
-  const directoryDetail = getFileDetail(path);
-
-  console.log(directoryDetail);
-};
-
-renderFileStruct(folderStore.openFolder);
 
 const actionButtons = [
   {
     title: "Search Files",
     icon: "fa-magnifying-glass",
-    click: () => renderFileStruct(folderStore.openFolder),
+    click: () => console.log(1),
   },
   {
     title: "Create File",
     icon: "fa-file-plus",
-    click: () => renderFileStruct(folderStore.openFolder),
+    click: () => console.log(1),
   },
   {
     title: "Create Folder",
     icon: "fa-folder-plus",
-    click: () => renderFileStruct(folderStore.openFolder),
+    click: () => console.log(1),
   },
   {
     title: "Refresh Explorer",
     icon: "fa-rotate-right",
-    click: () => renderFileStruct(folderStore.openFolder),
+    click: () => folderStore.reloadFolder(),
   },
 ];
 </script>
 
 <template>
   <div class="flex flex-col h-full">
-    <div class="flex items-center justify-between px-4 py-1 bg-bgSecondary">
+    <div class="flex items-center justify-between px-4 py-1 bg-bgMain">
       <span class="text-sm font-light">Explorer</span>
 
       <div class="flex">
@@ -93,12 +44,13 @@ const actionButtons = [
       </div>
     </div>
 
-    <perfect-scrollbar class="px-2 py-2 overflow-auto grow">
-      <template
-        v-for="{ fileClass, isFile, isOpen, name, path } in directoryStruct"
-      >
-        <ExplorerItem :name :isFile :fileClass :isOpen :path /> </template
-    ></perfect-scrollbar>
+    <perfect-scrollbar class="py-2 pr-4 overflow-x-hidden overflow-y-auto grow">
+      <ExplorerItem
+        v-if="folderStore.openFolder"
+        :isOpen="true"
+        :path="folderStore.openFolder"
+      />
+    </perfect-scrollbar>
 
     <div class="flex items-center justify-between px-2 py-2 bg-bgSecondary">
       <Button>

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { nextTick, reactive, ref, shallowRef } from "vue";
 import { v4 } from "uuid";
+import { nextTick, ref } from "vue";
 
 interface EditorProps {
   name: string;
@@ -35,16 +35,23 @@ export const useEditorsOpenStore = defineStore("editorsOpen", () => {
     focusEditor.value = id;
   };
 
-  const removeEditor = async (id: string) => {
-    openEditors.value = openEditors.value.filter((item) => item.id !== id);
+  const removeEditor = async (id: string): Promise<EditorProps | null> => {
+    let itemRemove: EditorProps | null = null;
 
-    await nextTick();
+    openEditors.value = openEditors.value.filter((item) => {
+      if (item.id == id) itemRemove = item;
+
+      return item.id !== id;
+    });
 
     // closed editor has same path with focus editor then change
     // focus editor to last path in open editors
-    if (id === focusEditor.value) {
-      focusEditor.value = openEditors.value.at(0)?.id || null;
-    }
+    setTimeout(
+      () => (focusEditor.value = openEditors.value.at(0)?.id || null),
+      50
+    );
+
+    return itemRemove;
   };
 
   return { openEditors, focusEditor, addEditor, removeEditor };

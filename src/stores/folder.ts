@@ -1,19 +1,34 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 
 export const useFolderStore = defineStore("folder", () => {
-  const openFolder = ref<null | string>(null);
-  // const openFolder = ref<null | string>('D:/code/DoriElectron');
+  const openFolder = ref<null | string>("D:/code/DoriElectron");
 
   const openFile = ref<null | string>(null);
 
-  function changeOpenFolder(newFolder: string) {
+  const changeOpenFolder = (newFolder: string) => {
     openFolder.value = newFolder;
-  }
+  };
 
-  function changeOpenFile(path: string) {
+  const changeOpenFile = (path: string) => {
     openFile.value = path;
-  }
+  };
 
-  return { openFolder, openFile, changeOpenFolder, changeOpenFile };
+  const reloadFolder = async () => {
+    const prevOpen = openFolder.value;
+
+    openFolder.value = null;
+
+    await nextTick();
+
+    openFolder.value = prevOpen;
+  };
+
+  return {
+    openFolder,
+    openFile,
+    changeOpenFolder,
+    changeOpenFile,
+    reloadFolder,
+  };
 });
