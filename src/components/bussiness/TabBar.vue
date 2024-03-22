@@ -3,7 +3,7 @@ import TabBarItem from "./TabBarItem.vue";
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-between py-2 text-2xl w-14 bg-bgSecondary">
+  <div class="flex flex-col items-center justify-between py-2 text-2xl min-w-14 bg-bgSecondary">
     <div class="flex flex-col items-center gap-2">
       <TabBarItem>
         <i class="fa-solid fa-bars"></i>

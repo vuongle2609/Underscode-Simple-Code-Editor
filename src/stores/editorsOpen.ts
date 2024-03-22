@@ -22,6 +22,7 @@ export const useEditorsOpenStore = defineStore("editorsOpen", () => {
     );
     if (foundEditor) {
       focusEditor.value = foundEditor.id;
+
       return;
     }
 
@@ -29,10 +30,9 @@ export const useEditorsOpenStore = defineStore("editorsOpen", () => {
 
     await nextTick();
 
-    // if only have one editor open then focus into it
-    if (openEditors.value.length === 1) {
-      focusEditor.value = id;
-    }
+    // focus into it
+
+    focusEditor.value = id;
   };
 
   const removeEditor = async (id: string) => {
