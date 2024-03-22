@@ -2,16 +2,18 @@
 import { RouterView } from "vue-router";
 import NavBar from "@/components/bussiness/NavBar.vue";
 import TabBar from "@/components/bussiness/TabBar.vue";
-import "file-icons-js/css/style.css";
+import OpenEditors from "./OpenEditors.vue";
 </script>
 
 <template>
-  <div class="flex w-screen h-screen overflow-hidden">
+  <div class="flex h-screen overflow-hidden max-w-[100vw]">
     <TabBar />
 
     <NavBar />
 
-    <div class="max-w-full grow bg-bgSecondary">
+    <div class="flex flex-col overflow-hidden grow bg-bgSecondary">
+      <OpenEditors />
+
       <RouterView />
     </div>
   </div>

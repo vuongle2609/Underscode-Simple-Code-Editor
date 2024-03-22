@@ -1,29 +1,45 @@
 <script setup lang="ts">
 import Button from "@/components/general/Button.vue";
-import { IconChevronDown, IconChevronRight } from "@tabler/icons-vue";
+import { useEditorsOpenStore } from "@/stores/editorsOpen";
 
-const { name, isFile, fileClass, isOpen } = defineProps<{
+const { name, isFile, fileClass, isOpen, path } = defineProps<{
   name: string;
   isFile: boolean;
   fileClass: string;
   isOpen: boolean;
+  path: string;
 }>();
+
+const { addEditor } = useEditorsOpenStore();
+
+const handleClickItem = () => {
+  if (!isFile) return;
+
+  addEditor({
+    path,
+    name,
+    fileClass,
+  });
+};
 </script>
 
 <template>
-  <Button v-if="name !== '.git'" :full-width="true" :v-bind="$props">
-    <IconChevronRight
+  <Button
+    v-if="name !== '.git'"
+    :full-width="true"
+    :v-bind="$props"
+    @click="handleClickItem"
+  >
+    <i
+      class="text-xs fa-light fa-chevron-right"
       v-if="!isOpen"
-      size="1.4rem"
-      stroke="1.5"
       :class="isFile && 'invisible'"
-    />
-    <IconChevronDown
+    ></i>
+    <i
+      class="text-xs fa-light fa-chevron-down"
       v-if="isOpen"
-      size="1.4rem"
-      stroke="1.5"
       :class="isFile && 'invisible'"
-    />
+    ></i>
 
     <i class="icon" :class="fileClass" v-if="isFile"></i>
 

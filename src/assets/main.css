@@ -1,3 +1,5 @@
+@import url("./icons/index.css");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,4 +11,15 @@
 
 * {
   font-family: JetBrainsMono;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hideScrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hideScrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

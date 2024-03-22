@@ -4,8 +4,13 @@ import { createApp } from "vue";
 import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
-import path from "path";
 const app = createApp(App);
+import PerfectScrollbar from "vue3-perfect-scrollbar";
+import "vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css";
+import "file-icons-js/css/style.css";
+
+
+import { install as VueMonacoEditorPlugin } from "@guolao/vue-monaco-editor";
 
 import * as monaco from "monaco-editor";
 import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
@@ -34,5 +39,9 @@ self.MonacoEnvironment = {
 
 app.use(createPinia());
 app.use(router);
+app.use(PerfectScrollbar);
+app.use(VueMonacoEditorPlugin, {
+  monaco,
+});
 
 app.mount("#app");

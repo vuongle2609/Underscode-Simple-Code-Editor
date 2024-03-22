@@ -1,3 +1,3 @@
 declare module "file-icons-js" {
-  export { getClass };
+  export { getClass, getClassWithColor };
 }
