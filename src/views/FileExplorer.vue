@@ -2,7 +2,7 @@
 import Button from "@/components/general/Button.vue";
 import IconButton from "@/components/general/IconButton.vue";
 import { useFolderStore } from "@/stores/folder";
-import ExplorerItem from "./ExplorerItem.vue";
+import ExplorerItem from "@/components/bussiness/ExplorerItem.vue";
 
 const folderStore = useFolderStore();
 
@@ -76,3 +76,4 @@ const actionButtons = [
     </div>
   </div>
 </template>
+../components/bussiness/ExplorerItem.vue
