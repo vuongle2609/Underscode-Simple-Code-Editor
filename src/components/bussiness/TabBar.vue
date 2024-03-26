@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TabBarItem from "./TabBarItem.vue";
-import AppOptions from "./AppOptions.vue";
+import AppOptions from "./AppOptions";
 </script>
 
 <template>

@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { ButtonHTMLAttributes } from 'vue';
 
-interface Props extends /** @vue-ignore */ ButtonHTMLAttributes {
+export interface ButtonProps extends /** @vue-ignore */ ButtonHTMLAttributes {
     size?: 'sm' | 'md' | 'lg' | 'xl',
     variant?: 'filled' | 'subtle',
     fullWidth?: boolean
 }
 
-const { size, variant, fullWidth } = defineProps<Props>()
+const { size, variant, fullWidth } = defineProps<ButtonProps>()
 
 const sizeStyle = {
     sm: 'text-sm',
