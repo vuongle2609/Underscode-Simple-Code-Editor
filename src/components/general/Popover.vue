@@ -18,14 +18,18 @@ onClickOutside(target, () => {
 });
 
 const dropDownClass = computed(() => [
-  "absolute top-0 z-30 rounded-md shadow-md left-full bg-bgMain",
+  "absolute top-0 z-30 rounded-md shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] left-full bg-bgMain",
   isOpened.value ? "" : "hidden",
   activeWithHover ? "group-hover:block hidden" : "",
 ]);
 </script>
 
 <template>
-  <div class="relative group w-full" ref="target">
+  <div
+    class="relative w-full"
+    :class="activeWithHover ? 'group' : ''"
+    ref="target"
+  >
     <slot :toggle="togglePopover" :isOpened :dropDownClass></slot>
   </div>
 </template>

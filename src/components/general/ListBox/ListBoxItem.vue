@@ -9,11 +9,14 @@ defineProps<PropsType>();
 </script>
 
 <template>
-  <Button v-bind="$props" :full-width="true">
-    <div class="h-fit flex items-center min-w-3" v-if="icon">
-      <i class="fa-solid text-sm text-white" :class="[icon]"></i>
+  <button
+    class="flex items-center w-full gap-2 px-3 py-2 text-gray-400 rounded-md hover:text-white hover:bg-bgButtonHover active:bg-bgSecondary"
+    v-bind="$props"
+  >
+    <div class="flex items-center justify-center h-fit min-w-4" v-if="icon">
+      <i class="text-sm fa-solid" :class="[icon]"></i>
     </div>
 
-    <span class="text-sm text-white"><slot /></span>
-  </Button>
+    <span class="text-sm"><slot /></span>
+  </button>
 </template>

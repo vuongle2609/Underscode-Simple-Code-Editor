@@ -76,4 +76,3 @@ const actionButtons = [
     </div>
   </div>
 </template>
-../components/bussiness/ExplorerItem.vue

@@ -12,8 +12,42 @@ export type OptionType = {
 };
 
 const options: OptionType[] = [
-  { label: "File", icon: "fa-file", items: [] },
-  { label: "View", icon: "fa-sidebar" },
+  {
+    label: "File",
+    icon: "fa-file",
+    items: [
+      { label: "New File" },
+      { label: "New Window" },
+
+      { label: "Open File" },
+      { label: "Open Folder" },
+
+      { label: "Save" },
+      { label: "Save As..." },
+      { label: "Save All" },
+
+      { label: "Close Editor" },
+      { label: "Close Folder" },
+      { label: "Close All" },
+      { label: "Close Window" },
+    ],
+  },
+  { label: "View", icon: "fa-sidebar", items: [
+      { label: "New File" },
+      { label: "New Window" },
+
+      { label: "Open File" },
+      { label: "Open Folder" },
+
+      { label: "Save" },
+      { label: "Save As..." },
+      { label: "Save All" },
+
+      { label: "Close Editor" },
+      { label: "Close Folder" },
+      { label: "Close All" },
+      { label: "Close Window" },
+    ], },
   { label: "Edit", icon: "fa-file-pen" },
   { label: "About", icon: "fa-memo-circle-info" },
 ];
@@ -27,7 +61,12 @@ const options: OptionType[] = [
 
     <div :class="dropDownClass" class="w-[200px]">
       <ListBox>
-        <Item v-for="{ label, icon } in options" :label :icon></Item>
+        <Item
+          v-for="{ label, icon, items } in options"
+          :label
+          :icon
+          :options="items || []"
+        ></Item>
       </ListBox>
     </div>
   </Popover>
