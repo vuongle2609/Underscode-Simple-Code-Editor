@@ -27,7 +27,7 @@ const getFileDetail = (path: string) =>
       return {
         name: file.name,
         isFile: file.isFile(),
-        fileClass: getClassWithColor(file.name),
+        fileClass: getClassWithColor(file.name) || getClassWithColor("foo.txt"),
         isOpen: false,
         path: path + "/" + file.name,
       };
@@ -118,6 +118,7 @@ renderFileStruct(path);
         ></i>
 
         <i class="icon" :class="fileClass" v-if="isFile"></i>
+        <i class="fa-regular fa-file" v-if="isFile && !fileClass"></i>
 
         <span
           class="overflow-hidden text-sm font-light whitespace-nowrap text-ellipsis"
