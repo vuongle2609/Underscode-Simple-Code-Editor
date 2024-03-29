@@ -37,7 +37,7 @@ const handleSaveEditor = async () => {
 
   console.log("🚀 ~ handleSaveEditor ~ newValue:", currentFocusEditor);
   if (!currentFocusEditor) return;
-  
+
   const newValue = monaco.editor.getEditors()[0].getValue() || "";
 
   fs.writeFileSync(currentFocusEditor.path, newValue);
@@ -49,7 +49,7 @@ onMounted(() => {
   });
 
   hotkeys("ctrl+s,command+s", () => {
-    console.log(2)
+    console.log(2);
     handleSaveEditor();
   });
 });

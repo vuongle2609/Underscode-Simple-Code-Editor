@@ -4,7 +4,7 @@ import Popover from "@/components/general/Popover.vue";
 import { useEditorsOpenStore } from "@/stores/editorsOpen";
 import { useFolderStore } from "@/stores/folder";
 import { ipcRenderer, shell } from "electron";
-import { nextTick } from "vue";
+import { computed, nextTick } from "vue";
 import TabBarItem from "../TabBarItem.vue";
 import Item from "./Item.vue";
 
@@ -13,12 +13,13 @@ export type OptionType = {
   icon?: string;
   items?: OptionType[];
   action?: () => void;
+  disabled?: boolean;
 };
 
 const folderStore = useFolderStore();
 const editorsOpenStore = useEditorsOpenStore();
 
-const options: OptionType[] = [
+const options = computed<OptionType[]>(() => [
   {
     label: "File",
     icon: "fa-file",
@@ -64,7 +65,9 @@ const options: OptionType[] = [
     items: [
       { label: "Save", action: editorsOpenStore.handleSaveEditor },
       { label: "Save All", action: editorsOpenStore.handleSaveAllEditor },
+      { label: "Search", action: editorsOpenStore.toggleSearch },
     ],
+    disabled: !editorsOpenStore.focusEditor,
   },
   {
     label: "About",
@@ -81,7 +84,7 @@ const options: OptionType[] = [
       },
     ],
   },
-];
+]);
 </script>
 
 <template>
@@ -90,15 +93,17 @@ const options: OptionType[] = [
       <i class="fa-solid fa-bars"></i>
     </TabBarItem>
 
-    <div :class="dropDownClass" class="w-[200px]">
+    <div :class="dropDownClass" class="min-w-[200px]">
       <ListBox>
-        <Item
-          v-for="{ label, icon, items } in options"
-          :label
-          :icon
-          :options="items || []"
-          :closePopover="close"
-        ></Item>
+        <template v-for="{ label, icon, items, disabled } in options">
+          <Item
+            :label
+            v-if="!disabled"
+            :icon
+            :options="items || []"
+            :closePopover="close"
+          ></Item
+        ></template>
       </ListBox>
     </div>
   </Popover>

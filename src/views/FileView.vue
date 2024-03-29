@@ -4,7 +4,8 @@ import { useEditorsOpenStore } from "@/stores/editorsOpen";
 import fs from "fs";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { storeToRefs } from "pinia";
-import { shallowRef, watchEffect } from "vue";
+import { shallowRef, watchEffect, nextTick } from "vue";
+import OpenEditors from "./OpenEditors.vue";
 
 const editorsOpenStore = useEditorsOpenStore();
 const { focusEditor, openEditors } = storeToRefs(editorsOpenStore);
@@ -31,6 +32,7 @@ const mapFileContent = async (id: string | null) => {
 
     if (!currentFocusEditor) return;
 
+    // TODO: change to stream file
     const value = await fs.promises.readFile(currentFocusEditor.path, "utf8");
 
     const newModel =
@@ -47,8 +49,12 @@ const mapFileContent = async (id: string | null) => {
   }
 };
 
-watchEffect(() => {
-  if (focusEditor.value) mapFileContent(focusEditor.value);
+watchEffect(async () => {
+  if (focusEditor.value) {
+    // prevent some time model not update content
+    await nextTick();
+    mapFileContent(focusEditor.value);
+  }
 });
 
 const handleMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
@@ -69,6 +75,8 @@ const handleMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
 </script>
 
 <template>
+  <OpenEditors />
+
   <vue-monaco-editor
     v-if="openEditors.length"
     theme="vs-dark"

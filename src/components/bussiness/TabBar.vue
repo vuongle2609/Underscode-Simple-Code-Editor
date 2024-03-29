@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import TabBarItem from "./TabBarItem.vue";
 import AppOptions from "./AppOptions";
+import { Tab, useTabOpen } from "@/stores/tabOpen";
+
+const tabOpen = useTabOpen();
 </script>
 
 <template>
@@ -10,22 +13,31 @@ import AppOptions from "./AppOptions";
     <div class="flex flex-col items-center gap-2">
       <AppOptions />
 
-      <TabBarItem :is-active="true">
+      <TabBarItem
+        :is-active="tabOpen.openTab === Tab.explorer"
+        @click="tabOpen.changeOpenTab(Tab.explorer)"
+      >
         <i class="fa-solid fa-files"></i>
       </TabBarItem>
 
-      <TabBarItem>
+      <TabBarItem
+        :is-active="tabOpen.openTab === Tab.search"
+        @click="tabOpen.changeOpenTab(Tab.search)"
+      >
         <i class="fa-solid fa-magnifying-glass"></i>
       </TabBarItem>
 
-      <TabBarItem>
+      <TabBarItem
+        :is-active="tabOpen.openTab === Tab.git"
+        @click="tabOpen.changeOpenTab(Tab.git)"
+      >
         <i class="text-3xl fa-brands fa-git-alt"></i>
       </TabBarItem>
     </div>
     <div class="flex flex-col items-center gap-2">
-      <TabBarItem>
+      <!-- <TabBarItem>
         <i class="fa-solid fa-circle-user"></i>
-      </TabBarItem>
+      </TabBarItem> -->
 
       <TabBarItem>
         <i class="fa-solid fa-gear"></i>

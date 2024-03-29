@@ -171,12 +171,14 @@ const actionButtons = [
           class="fa-light"
           :class="isCreateFile ? 'fa-bars-sort' : 'fa-folder'"
         ></i>
+
         <input
           ref="inputCreateDirRef"
           type="text"
           class="px-2 py-1 text-sm rounded-md outline-none bg-bgSecondary"
         />
       </div>
+
       <ExplorerItem
         v-if="folderStore.openFolder"
         :isOpen="true"

@@ -82,6 +82,10 @@ export const useEditorsOpenStore = defineStore("editorsOpen", () => {
     });
   };
 
+  const toggleSearch = () => {
+    monaco.editor.getEditors()[0].getAction("actions.find")?.run();
+  };
+
   return {
     openEditors,
     focusEditor,
@@ -90,5 +94,6 @@ export const useEditorsOpenStore = defineStore("editorsOpen", () => {
     resetEditor,
     handleSaveEditor,
     handleSaveAllEditor,
+    toggleSearch,
   };
 });

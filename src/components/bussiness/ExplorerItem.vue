@@ -21,9 +21,8 @@ interface DirectoryStructType {
 
 const directoryStruct = ref<DirectoryStructType[]>([]);
 
-const getFileDetail = (path: string) =>
-  fs
-    .readdirSync(path, { withFileTypes: true })
+const getFileDetail = async (path: string) => {
+  return (await fs.promises.readdir(path, { withFileTypes: true }))
     .sort((a, b) => (a.isFile() ? 1 : 0) - (b.isFile() ? 1 : 0))
     .map((file) => {
       return {
@@ -34,11 +33,11 @@ const getFileDetail = (path: string) =>
         path: path + "/" + file.name,
       };
     });
-
+};
 const renderFileStruct = async (folderPath?: string) => {
   if (!folderPath) return;
 
-  const directoryDetail = getFileDetail(folderPath);
+  const directoryDetail = await getFileDetail(folderPath);
 
   directoryStruct.value = directoryDetail;
 };

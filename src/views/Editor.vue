@@ -2,7 +2,6 @@
 import { RouterView } from "vue-router";
 import NavBar from "@/components/bussiness/NavBar.vue";
 import TabBar from "@/components/bussiness/TabBar.vue";
-import OpenEditors from "./OpenEditors.vue";
 </script>
 
 <template>
@@ -12,8 +11,6 @@ import OpenEditors from "./OpenEditors.vue";
     <NavBar />
 
     <div class="flex flex-col overflow-hidden grow bg-bgSecondary">
-      <OpenEditors />
-
       <RouterView />
     </div>
   </div>
