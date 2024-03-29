@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import TabBarItem from "../TabBarItem.vue";
-import Popover from "@/components/general/Popover.vue";
 import { ListBox } from "@/components/general/ListBox";
+import Popover from "@/components/general/Popover.vue";
+import { useEditorsOpenStore } from "@/stores/editorsOpen";
+import { useFolderStore } from "@/stores/folder";
+import { ipcRenderer, shell } from "electron";
+import { nextTick } from "vue";
+import TabBarItem from "../TabBarItem.vue";
 import Item from "./Item.vue";
 
 export type OptionType = {
@@ -11,50 +15,77 @@ export type OptionType = {
   action?: () => void;
 };
 
+const folderStore = useFolderStore();
+const editorsOpenStore = useEditorsOpenStore();
+
 const options: OptionType[] = [
   {
     label: "File",
     icon: "fa-file",
     items: [
-      { label: "New File" },
-      { label: "New Window" },
+      { label: "Open Folder", action: folderStore.chooseFolder },
+      { label: "Close Folder", action: folderStore.closeFolder },
 
-      { label: "Open File" },
-      { label: "Open Folder" },
+      {
+        label: "Close All Editor (Save)",
+        action: async () => {
+          editorsOpenStore.handleSaveAllEditor();
 
-      { label: "Save" },
-      { label: "Save As..." },
-      { label: "Save All" },
+          await nextTick();
 
-      { label: "Close Editor" },
-      { label: "Close Folder" },
-      { label: "Close All" },
-      { label: "Close Window" },
+          editorsOpenStore.resetEditor();
+        },
+      },
+      {
+        label: "Close All Editor (Not Save)",
+        action: editorsOpenStore.resetEditor,
+      },
+
+      {
+        label: "New Window",
+        action: () =>
+          ipcRenderer.send("asynchronous-message", "createNewWindow"),
+      },
+      {
+        label: "Close Window",
+        action: () =>
+          ipcRenderer.send("asynchronous-message", "quitCurrentWindow"),
+      },
     ],
   },
-  { label: "View", icon: "fa-sidebar", items: [
-      { label: "New File" },
-      { label: "New Window" },
-
-      { label: "Open File" },
-      { label: "Open Folder" },
-
-      { label: "Save" },
-      { label: "Save As..." },
-      { label: "Save All" },
-
-      { label: "Close Editor" },
-      { label: "Close Folder" },
-      { label: "Close All" },
-      { label: "Close Window" },
-    ], },
-  { label: "Edit", icon: "fa-file-pen" },
-  { label: "About", icon: "fa-memo-circle-info" },
+  {
+    label: "View",
+    icon: "fa-sidebar",
+    items: [{ label: "a" }],
+  },
+  {
+    label: "Edit",
+    icon: "fa-file-pen",
+    items: [
+      { label: "Save", action: editorsOpenStore.handleSaveEditor },
+      { label: "Save All", action: editorsOpenStore.handleSaveAllEditor },
+    ],
+  },
+  {
+    label: "About",
+    icon: "fa-memo-circle-info",
+    items: [
+      {
+        label: "vuongle2609 (Creator)",
+        action: () => shell.openExternal("https://github.com/vuongle2609"),
+      },
+      {
+        label: "Github (Source Code)",
+        action: () =>
+          shell.openExternal("https://github.com/vuongle2609/DoriElectron"),
+      },
+    ],
+  },
 ];
 </script>
 
 <template>
-  <Popover v-slot="{ toggle, dropDownClass }">
+  <Popover v-slot="{ toggle, dropDownClass, close }">
     <TabBarItem @click="toggle()">
       <i class="fa-solid fa-bars"></i>
     </TabBarItem>
@@ -66,6 +97,7 @@ const options: OptionType[] = [
           :label
           :icon
           :options="items || []"
+          :closePopover="close"
         ></Item>
       </ListBox>
     </div>

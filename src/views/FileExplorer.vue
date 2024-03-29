@@ -29,6 +29,7 @@ const windowFocused = useWindowFocus();
 
 const showCreateDir = ref(false);
 const isCreateFile = ref(false);
+
 const handleClickCreateDir = async (isFile: boolean) => {
   showCreateDir.value = true;
   isCreateFile.value = isFile;
@@ -176,7 +177,6 @@ const actionButtons = [
           class="px-2 py-1 text-sm rounded-md outline-none bg-bgSecondary"
         />
       </div>
-
       <ExplorerItem
         v-if="folderStore.openFolder"
         :isOpen="true"

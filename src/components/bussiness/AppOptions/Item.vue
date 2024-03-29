@@ -8,6 +8,7 @@ defineProps<{
   label: string;
   icon?: string;
   options: OptionType[];
+  closePopover: () => void;
 }>();
 </script>
 
@@ -15,9 +16,18 @@ defineProps<{
   <Popover v-slot="{ dropDownClass }" :activeWithHover="true">
     <ListBoxItem :icon>{{ label }}</ListBoxItem>
 
-    <div :class="dropDownClass" class="w-[200px]" v-if="options.length">
+    <div :class="dropDownClass" class="min-w-[200px]" v-if="options.length">
       <ListBox>
-        <ListBoxItem v-for="{ label } in options">{{ label }}</ListBoxItem>
+        <ListBoxItem
+          v-for="{ label, action } in options"
+          @click="
+            () => {
+              action?.();
+              closePopover();
+            }
+          "
+          >{{ label }}</ListBoxItem
+        >
       </ListBox>
     </div>
   </Popover>

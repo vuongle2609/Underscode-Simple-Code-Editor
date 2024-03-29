@@ -3,11 +3,13 @@ import Button from "@/components/general/Button.vue";
 import { useEditorsOpenStore } from "@/stores/editorsOpen";
 import { getClassWithColor } from "file-icons-js";
 import fs from "fs";
-import { ref } from "vue";
+import { ref, watch, toRef } from "vue";
 
-const { path } = defineProps<{
+const props = defineProps<{
   path: string;
 }>();
+
+const path = toRef(props, "path");
 
 interface DirectoryStructType {
   name: string;
@@ -81,7 +83,11 @@ const handleClickItem = ({
   handleClickFile({ fileClass, name, path });
 };
 
-renderFileStruct(path);
+watch(path, () => {
+  renderFileStruct(path.value);
+});
+
+renderFileStruct(path.value);
 </script>
 
 <template>

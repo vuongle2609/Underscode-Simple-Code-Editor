@@ -13,6 +13,10 @@ const togglePopover = () => {
   isOpened.value = !isOpened.value;
 };
 
+const closePopover = () => {
+  isOpened.value = false;
+};
+
 onClickOutside(target, () => {
   isOpened.value = false;
 });
@@ -30,6 +34,11 @@ const dropDownClass = computed(() => [
     :class="activeWithHover ? 'group' : ''"
     ref="target"
   >
-    <slot :toggle="togglePopover" :isOpened :dropDownClass></slot>
+    <slot
+      :toggle="togglePopover"
+      :close="closePopover"
+      :isOpened
+      :dropDownClass
+    ></slot>
   </div>
 </template>

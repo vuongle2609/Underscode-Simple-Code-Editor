@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import { v4 } from "uuid";
 import { nextTick, ref } from "vue";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import fs from "fs";
 
 interface EditorProps {
   name: string;
@@ -54,5 +56,39 @@ export const useEditorsOpenStore = defineStore("editorsOpen", () => {
     return itemRemove;
   };
 
-  return { openEditors, focusEditor, addEditor, removeEditor };
+  const handleSaveEditor = () => {
+    const currentFocusEditor = openEditors.value.find(
+      (item) => item.id === focusEditor.value
+    );
+
+    if (!currentFocusEditor) return;
+
+    const newValue = monaco.editor.getEditors()[0].getValue() || "";
+
+    fs.writeFileSync(currentFocusEditor.path, newValue);
+  };
+
+  const resetEditor = () => {
+    openEditors.value = [];
+    focusEditor.value = null;
+  };
+
+  const handleSaveAllEditor = async () => {
+    Object.values(openEditors.value).forEach((editor) => {
+      const newValue =
+        monaco.editor.getModel(monaco.Uri.file(editor.path))?.getValue() || "";
+
+      fs.writeFileSync(editor.path, newValue);
+    });
+  };
+
+  return {
+    openEditors,
+    focusEditor,
+    addEditor,
+    removeEditor,
+    resetEditor,
+    handleSaveEditor,
+    handleSaveAllEditor,
+  };
 });

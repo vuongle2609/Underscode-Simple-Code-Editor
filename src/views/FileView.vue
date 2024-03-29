@@ -4,8 +4,7 @@ import { useEditorsOpenStore } from "@/stores/editorsOpen";
 import fs from "fs";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { storeToRefs } from "pinia";
-import { shallowRef, watchEffect, onMounted, onBeforeUnmount } from "vue";
-import hotkeys from "hotkeys-js";
+import { shallowRef, watchEffect } from "vue";
 
 const editorsOpenStore = useEditorsOpenStore();
 const { focusEditor, openEditors } = storeToRefs(editorsOpenStore);
@@ -47,18 +46,6 @@ const mapFileContent = async (id: string | null) => {
     console.error(err);
   }
 };
-const handleSaveEditor = async () => {
-  const currentFocusEditor = openEditors.value.find(
-    (item) => item.id === focusEditor.value
-  );
-
-  console.log("🚀 ~ handleSaveEditor ~ newValue:", currentFocusEditor);
-  if (!currentFocusEditor) return;
-
-  const newValue = monaco.editor.getEditors()[0].getValue() || "";
-
-  fs.writeFileSync(currentFocusEditor.path, newValue);
-};
 
 watchEffect(() => {
   if (focusEditor.value) mapFileContent(focusEditor.value);
@@ -69,7 +56,7 @@ const handleMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
 
   editorRef.value?.addCommand(
     monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS,
-    handleSaveEditor
+    editorsOpenStore.handleSaveEditor
   );
 };
 

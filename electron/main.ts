@@ -1,6 +1,7 @@
 import { app, BrowserWindow, globalShortcut } from "electron";
 import * as remoteMain from "@electron/remote/main";
 import path from "node:path";
+import { ipcMain } from "electron";
 
 // The built directory structure
 //
@@ -16,18 +17,20 @@ process.env.VITE_PUBLIC = app.isPackaged
   ? process.env.DIST
   : path.join(process.env.DIST, "../public");
 
-let win: BrowserWindow | null;
+let wins: Record<string, BrowserWindow> = {};
+
 // 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
 const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
 
 remoteMain.initialize();
 
 function createWindow() {
-  win = new BrowserWindow({
+  const win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
     minWidth: 1024,
     minHeight: 720,
     autoHideMenuBar: true,
+    title: "Dori",
     // frame: false,
     webPreferences: {
       preload: "preload.js",
@@ -54,6 +57,8 @@ function createWindow() {
     // win.loadFile('dist/index.html')
     win.loadFile(path.join(process.env.DIST, "index.html"));
   }
+
+  wins[win.id] = win;
 }
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -62,7 +67,7 @@ function createWindow() {
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
-    win = null;
+    wins = {};
   }
 });
 
@@ -71,6 +76,16 @@ app.on("activate", () => {
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
+  }
+});
+
+ipcMain.on("asynchronous-message", function (evt, message) {
+  if (message == "createNewWindow") {
+    createWindow();
+  }
+
+  if (message == "quitCurrentWindow") {
+    wins[evt.sender.id].close();
   }
 });
 

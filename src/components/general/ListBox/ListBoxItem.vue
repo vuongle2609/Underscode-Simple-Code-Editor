@@ -17,6 +17,6 @@ defineProps<PropsType>();
       <i class="text-sm fa-solid" :class="[icon]"></i>
     </div>
 
-    <span class="text-sm"><slot /></span>
+    <span class="text-sm whitespace-nowrap"><slot /></span>
   </button>
 </template>
