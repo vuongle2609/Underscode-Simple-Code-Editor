@@ -175,7 +175,7 @@ const actionButtons = [
         <input
           ref="inputCreateDirRef"
           type="text"
-          class="px-2 py-1 text-sm rounded-md outline-none bg-bgSecondary"
+          class="w-full py-1 pl-2 text-sm rounded-md outline-none bg-bgSecondary"
         />
       </div>
 
