@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import FileExplorer from "@/views/FileExplorer.vue";
 import { Tab, useTabOpen } from "@/stores/tabOpen";
-import SearchTab from "@/views/SearchTab.vue";
+import SearchTab from "@/views/SearchTab";
 import GitTab from "@/views/GitTab.vue";
 
 const tabOpen = useTabOpen();

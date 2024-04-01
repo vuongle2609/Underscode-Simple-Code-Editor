@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
-import { nextTick, ref } from "vue";
-import * as remote from "@electron/remote";
+import { ref } from "vue";
 
 export enum Tab {
   explorer,
@@ -9,7 +8,7 @@ export enum Tab {
 }
 
 export const useTabOpen = defineStore("tab", () => {
-  const openTab = ref<Tab>(Tab.explorer);
+  const openTab = ref<Tab>(Tab.search);
 
   const changeOpenTab = (newTab: Tab) => {
     openTab.value = newTab;

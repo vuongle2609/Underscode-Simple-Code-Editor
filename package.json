@@ -35,7 +35,7 @@
     "npm-run-all2": "^6.1.2",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.2.2",
+    "typescript": "^5.4.3",
     "vite": "^4.4.9",
     "vite-plugin-electron": "^0.14.0",
     "vite-plugin-electron-renderer": "^0.14.5",

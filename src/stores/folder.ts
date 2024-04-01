@@ -6,7 +6,7 @@ import { useEditorsOpenStore } from "./editorsOpen";
 export const useFolderStore = defineStore("folder", () => {
   const editorsOpenStore = useEditorsOpenStore();
   // const openFolder = ref<null | string>(null);
-  const openFolder = ref<null | string>("D:/code/test1");
+  const openFolder = ref<null | string>("D:\\code\\test1");
 
   const openFile = ref<null | string>(null);
 
