@@ -8,7 +8,7 @@ export enum Tab {
 }
 
 export const useTabOpen = defineStore("tab", () => {
-  const openTab = ref<Tab>(Tab.search);
+  const openTab = ref<Tab>(Tab.explorer);
 
   const changeOpenTab = (newTab: Tab) => {
     openTab.value = newTab;
