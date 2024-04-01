@@ -1,24 +1,23 @@
 <script setup lang="ts">
+import ExplorerItem from "@/components/bussiness/ExplorerItem.vue";
 import Button from "@/components/general/Button.vue";
 import IconButton from "@/components/general/IconButton.vue";
+import { useEditorsOpenStore } from "@/stores/editorsOpen";
 import { useFolderStore } from "@/stores/folder";
-import ExplorerItem from "@/components/bussiness/ExplorerItem.vue";
-import { ref, nextTick, watch } from "vue";
 import {
-  useFocus,
-  onKeyStroke,
-  onClickOutside,
-  useWindowFocus,
+onClickOutside,
+onKeyStroke,
+useFocus,
+useWindowFocus,
 } from "@vueuse/core";
 import fs from "fs";
 import path from "path";
+import { nextTick, ref, watch } from "vue";
 import { useToast } from "vue-toastification";
-import { useEditorsOpenStore } from "@/stores/editorsOpen";
-import { getClassWithColor } from "file-icons-js";
 
 const toast = useToast();
 
-const { addEditor } = useEditorsOpenStore();
+const { addEditorWithPath } = useEditorsOpenStore();
 
 const folderStore = useFolderStore();
 
@@ -57,11 +56,7 @@ const handleCreateFile = async () => {
 
       handleCloseCreateDir();
 
-      addEditor({
-        path: newPath,
-        name: fileName,
-        fileClass: getClassWithColor(fileName) || getClassWithColor("foo.txt"),
-      });
+      addEditorWithPath(newPath);
     } catch (err) {
       if (err instanceof Error && "code" in err && err.code === "EEXIST") {
         toast.error("File already exists");

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useFolderStore } from "@/stores/folder";
+import { useEditorsOpenStore } from "@/stores/editorsOpen";
 import { getClassWithColor } from "file-icons-js";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import path from "path";
 import { LineResult } from "search-in-file/dist/types";
-
 interface PropsType {
   files: LineResult[];
   input: string;
@@ -11,7 +11,31 @@ interface PropsType {
 
 const { files, input } = defineProps<PropsType>();
 
-const folderStore = useFolderStore();
+const { addEditorWithPath } = useEditorsOpenStore();
+
+const handleClickResult = (
+  path: string,
+  line: string,
+  lineNo: number,
+  input: string
+) => {
+  addEditorWithPath(path);
+
+  const lineSplit = line.split(input);
+
+  const startCursor = lineSplit[0].length + 1;
+  const endCursor = startCursor + input.length;
+
+  setTimeout(() => {
+    monaco.editor.getEditors()[0].revealLineInCenter(lineNo);
+
+    monaco.editor
+      .getEditors()[0]
+      .setSelection(
+        new monaco.Selection(lineNo, startCursor, lineNo, endCursor)
+      );
+  }, 100);
+};
 </script>
 
 <template>
@@ -39,17 +63,16 @@ const folderStore = useFolderStore();
         }}</span> -->
       </div>
 
-      <div
-        class="text-xs"
-      >
+      <div class="text-xs">
         {{ files.length }}
       </div>
     </div>
 
     <div
-      v-for="{ line, lineNo } in files"
+      v-for="{ line, lineNo, filePath } in files"
       class="px-2 py-1 overflow-hidden text-gray-500 rounded-md cursor-pointer hover:text-white hover:bg-bgSecondary whitespace-nowrap text-ellipsis"
       :title="line"
+      @click="handleClickResult(filePath, line, lineNo, input)"
       v-html="
         line
           .split(input)

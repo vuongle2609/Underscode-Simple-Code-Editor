@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import IconButton from "@/components/general/IconButton.vue";
 import { useFolderStore } from "@/stores/folder";
+import { readDirRecursiveFlat } from "@/utils/file";
 import { refDebounced } from "@vueuse/core";
-import path from "path";
-import { fileSearch, getFilesFromDir } from "search-in-file";
+import { fileSearch } from "search-in-file";
 import { LineResult, SearchOptions } from "search-in-file/dist/types";
 import { ref, watch } from "vue";
 import SearchItem from "./SeachItem.vue";
-import fs from "fs";
-import { readDirRecursive, readDirRecursiveFlat } from "@/utils/file";
 
 const input = ref("");
+const exclude = ref("node_modules,.git,dist,release,build,.exe");
 const debounced = refDebounced(input, 700);
 
 const folderStore = useFolderStore();
@@ -31,38 +30,14 @@ const searchFile = async () => {
     return;
   }
 
-  const paths = await getFilesFromDir(folderStore.openFolder, true, false);
+  const ignorePath = exclude.value.split(",");
 
-  const pathsSearch = (paths.flat(Infinity) as string[]) || [];
+  const paths = readDirRecursiveFlat({
+    dir: folderStore.openFolder || "",
+    excludeDir: ignorePath,
+  });
 
-  const ignorePath = [
-    ".git",
-    ".exe",
-    "node_modules",
-    "bower_components",
-    "tmp",
-    "dist",
-    "build",
-    "release",
-  ];
-
-  console.log(
-    readDirRecursiveFlat({
-      dir: folderStore.openFolder || "",
-      excludeDir: ignorePath,
-    })
-  );
-
-  const a = pathsSearch.filter(
-    (item) =>
-      !ignorePath.some((path) =>
-        path.includes(".") && path !== ".git"
-          ? item.includes(path)
-          : item.includes(`\\${path}\\`)
-      )
-  );
-
-  const result = await fileSearch(a, debounced.value, {
+  const result = await fileSearch(paths, debounced.value, {
     searchResults: "lineNo",
     recursive: false,
   } as SearchOptions);
@@ -100,10 +75,27 @@ searchFile();
       />
     </div>
 
+    <div class="px-4 py-1">
+      <label for="exclude_search" class="text-xs text-gray-400"
+        >Directory to exclude</label
+      >
+      <input
+        type="text"
+        id="exclude_search"
+        placeholder="eg. .ts,.js,node_modules"
+        v-model="exclude"
+        class="w-full py-1 pl-2 text-sm rounded-md outline-none bg-bgSecondary"
+      />
+    </div>
+
     <perfect-scrollbar
       class="px-2 py-2 overflow-x-hidden overflow-y-auto text-sm grow"
     >
-      <SearchItem v-for="files in searchResult" :input="input" :files="files" />
+      <SearchItem
+        v-for="files in searchResult"
+        :input="debounced"
+        :files="files"
+      />
     </perfect-scrollbar>
   </div>
 </template>

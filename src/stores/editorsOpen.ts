@@ -3,6 +3,8 @@ import { v4 } from "uuid";
 import { nextTick, ref } from "vue";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import fs from "fs";
+import path from "path";
+import { getClassWithColor } from "file-icons-js";
 
 interface EditorProps {
   name: string;
@@ -35,6 +37,18 @@ export const useEditorsOpenStore = defineStore("editorsOpen", () => {
     // focus into it
 
     focusEditor.value = id;
+  };
+
+  const addEditorWithPath = (pathRead: string) => {
+    const filePath = path.parse(pathRead);
+    const name = filePath.base;
+    const fileClass = getClassWithColor(name) || getClassWithColor("foo.txt");
+
+    addEditor({
+      fileClass,
+      name,
+      path: pathRead,
+    });
   };
 
   const removeEditor = async (id: string): Promise<EditorProps | null> => {
@@ -90,6 +104,7 @@ export const useEditorsOpenStore = defineStore("editorsOpen", () => {
     openEditors,
     focusEditor,
     addEditor,
+    addEditorWithPath,
     removeEditor,
     resetEditor,
     handleSaveEditor,

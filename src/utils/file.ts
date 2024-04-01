@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { fileSearch } from "search-in-file";
-import { LineResult, SearchOptions } from "search-in-file/dist/types";
+import { SearchOptions } from "search-in-file/dist/types";
 
 type DirItemGeneric<T> = {
   name: string;
@@ -9,11 +9,6 @@ type DirItemGeneric<T> = {
   isFolder: boolean;
   childs: T;
 };
-
-interface a {
-  name: string;
-  path: string;
-}
 
 export interface DirItemType extends DirItemGeneric<DirItemType[]> {}
 
@@ -64,7 +59,7 @@ export const readDirRecursiveFlat = ({
 }: {
   dir: string;
   excludeDir?: string[];
-}): a[] => {
+}): string[] => {
   const result = fs
     .readdirSync(dir, {
       withFileTypes: true,
@@ -74,7 +69,7 @@ export const readDirRecursiveFlat = ({
       const isDirectory = item.isDirectory();
       const newPath = path.join(dir, item.name);
 
-      let nameCondition = !excludeDir.includes(item.name);
+      let nameCondition = !excludeDir.some((path) => item.name.includes(path));
 
       return [
         ...prev,
@@ -86,15 +81,10 @@ export const readDirRecursiveFlat = ({
                   excludeDir,
                 }),
               ]
-            : [
-                {
-                  name: item.name,
-                  path: newPath,
-                },
-              ]
+            : [newPath]
           : []),
       ];
-    }, [] as a[]);
+    }, [] as string[]);
 
   return result;
 };

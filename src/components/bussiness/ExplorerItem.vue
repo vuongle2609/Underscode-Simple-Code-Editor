@@ -3,7 +3,7 @@ import Button from "@/components/general/Button.vue";
 import { useEditorsOpenStore } from "@/stores/editorsOpen";
 import { getClassWithColor } from "file-icons-js";
 import fs from "fs";
-import { ref, watch, toRef } from "vue";
+import { ref, toRef, watch } from "vue";
 
 const props = defineProps<{
   path: string;
@@ -42,18 +42,14 @@ const renderFileStruct = async (folderPath?: string) => {
   directoryStruct.value = directoryDetail;
 };
 
-const { addEditor } = useEditorsOpenStore();
+const { addEditorWithPath } = useEditorsOpenStore();
 
 const handleClickFile = ({
   path,
   name,
   fileClass,
 }: Omit<DirectoryStructType, "isOpen" | "isFile">) => {
-  addEditor({
-    path,
-    name,
-    fileClass,
-  });
+  addEditorWithPath(path);
 };
 
 const handleClickFolder = ({
