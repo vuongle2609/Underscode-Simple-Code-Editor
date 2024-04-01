@@ -1,6 +1,10 @@
 import { defineStore } from "pinia";
-import { nextTick, reactive, ref, shallowRef } from "vue";
 import { v4 } from "uuid";
+import { nextTick, ref } from "vue";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import fs from "fs";
+import path from "path";
+import { getClassWithColor } from "file-icons-js";
 
 interface EditorProps {
   name: string;
@@ -35,17 +39,76 @@ export const useEditorsOpenStore = defineStore("editorsOpen", () => {
     focusEditor.value = id;
   };
 
-  const removeEditor = async (id: string) => {
-    openEditors.value = openEditors.value.filter((item) => item.id !== id);
+  const addEditorWithPath = (pathRead: string) => {
+    const filePath = path.parse(pathRead);
+    const name = filePath.base;
+    const fileClass = getClassWithColor(name) || getClassWithColor("foo.txt");
 
-    await nextTick();
+    addEditor({
+      fileClass,
+      name,
+      path: pathRead,
+    });
+  };
+
+  const removeEditor = async (id: string): Promise<EditorProps | null> => {
+    let itemRemove: EditorProps | null = null;
+
+    openEditors.value = openEditors.value.filter((item) => {
+      if (item.id == id) itemRemove = item;
+
+      return item.id !== id;
+    });
 
     // closed editor has same path with focus editor then change
     // focus editor to last path in open editors
-    if (id === focusEditor.value) {
-      focusEditor.value = openEditors.value.at(0)?.id || null;
-    }
+    setTimeout(
+      () => (focusEditor.value = openEditors.value.at(0)?.id || null),
+      50
+    );
+
+    return itemRemove;
   };
 
-  return { openEditors, focusEditor, addEditor, removeEditor };
+  const handleSaveEditor = () => {
+    const currentFocusEditor = openEditors.value.find(
+      (item) => item.id === focusEditor.value
+    );
+
+    if (!currentFocusEditor) return;
+
+    const newValue = monaco.editor.getEditors()[0].getValue() || "";
+
+    fs.writeFileSync(currentFocusEditor.path, newValue);
+  };
+
+  const resetEditor = () => {
+    openEditors.value = [];
+    focusEditor.value = null;
+  };
+
+  const handleSaveAllEditor = async () => {
+    Object.values(openEditors.value).forEach((editor) => {
+      const newValue =
+        monaco.editor.getModel(monaco.Uri.file(editor.path))?.getValue() || "";
+
+      fs.writeFileSync(editor.path, newValue);
+    });
+  };
+
+  const toggleSearch = () => {
+    monaco.editor.getEditors()[0].getAction("actions.find")?.run();
+  };
+
+  return {
+    openEditors,
+    focusEditor,
+    addEditor,
+    addEditorWithPath,
+    removeEditor,
+    resetEditor,
+    handleSaveEditor,
+    handleSaveAllEditor,
+    toggleSearch,
+  };
 });

@@ -1,19 +1,56 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
+import * as remote from "@electron/remote";
+import { useEditorsOpenStore } from "./editorsOpen";
 
 export const useFolderStore = defineStore("folder", () => {
+  const editorsOpenStore = useEditorsOpenStore();
   const openFolder = ref<null | string>(null);
-  // const openFolder = ref<null | string>('D:/code/DoriElectron');
+  // const openFolder = ref<null | string>("D:\\code\\test1");
 
   const openFile = ref<null | string>(null);
 
-  function changeOpenFolder(newFolder: string) {
+  const changeOpenFolder = (newFolder: string) => {
     openFolder.value = newFolder;
-  }
+  };
 
-  function changeOpenFile(path: string) {
+  const changeOpenFile = (path: string) => {
     openFile.value = path;
-  }
+  };
 
-  return { openFolder, openFile, changeOpenFolder, changeOpenFile };
+  const reloadFolder = async () => {
+    const prevOpen = openFolder.value;
+
+    openFolder.value = null;
+
+    await nextTick();
+
+    openFolder.value = prevOpen;
+  };
+
+  const closeFolder = () => {
+    openFolder.value = null;
+  };
+
+  const chooseFolder = async () => {
+    const showDialog = await remote.dialog.showOpenDialog({
+      properties: ["openDirectory"],
+    });
+
+    if (!showDialog.filePaths[0]) return;
+
+    changeOpenFolder(showDialog.filePaths[0]);
+
+    editorsOpenStore.resetEditor();
+  };
+
+  return {
+    openFolder,
+    openFile,
+    changeOpenFolder,
+    changeOpenFile,
+    reloadFolder,
+    chooseFolder,
+    closeFolder,
+  };
 });

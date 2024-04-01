@@ -1,87 +1,154 @@
 <script setup lang="ts">
+import ExplorerItem from "@/components/bussiness/ExplorerItem.vue";
 import Button from "@/components/general/Button.vue";
 import IconButton from "@/components/general/IconButton.vue";
+import { useEditorsOpenStore } from "@/stores/editorsOpen";
 import { useFolderStore } from "@/stores/folder";
-import { getClassWithColor } from "file-icons-js";
+import {
+onClickOutside,
+onKeyStroke,
+useFocus,
+useWindowFocus,
+} from "@vueuse/core";
 import fs from "fs";
-import { shallowRef } from "vue";
-import ExplorerItem from "./ExplorerItem.vue";
+import path from "path";
+import { nextTick, ref, watch } from "vue";
+import { useToast } from "vue-toastification";
 
-const directoryStruct = shallowRef<
-  {
-    name: string;
-    isFile: boolean;
-    fileClass: string;
-    isOpen: boolean;
-    path: string;
-  }[]
->([]);
+const toast = useToast();
+
+const { addEditorWithPath } = useEditorsOpenStore();
 
 const folderStore = useFolderStore();
 
-const getFileDetail = (path: string) =>
-  fs
-    .readdirSync(path, { withFileTypes: true })
-    .sort((a, b) => (a.isFile() ? 1 : 0) - (b.isFile() ? 1 : 0))
-    .map((file) => {
-      return {
-        name: file.name,
-        isFile: file.isFile(),
-        fileClass: getClassWithColor(file.name),
-        isOpen: false,
-        path: path + "/" + file.name,
-      };
-    });
+const inputCreateDirRef = ref<HTMLInputElement>();
+const { focused } = useFocus(inputCreateDirRef);
 
-const renderFileStruct = async (folderPath: string | null) => {
-  if (!folderPath) return;
+const windowFocused = useWindowFocus();
 
-  const directoryDetail = getFileDetail(folderPath);
+const showCreateDir = ref(false);
+const isCreateFile = ref(false);
 
-  directoryStruct.value = directoryDetail;
+const handleClickCreateDir = async (isFile: boolean) => {
+  showCreateDir.value = true;
+  isCreateFile.value = isFile;
+
+  await nextTick();
+
+  focused.value = true;
 };
 
-const handleClickItem = (path: string, isFile: boolean) => {
-  if (isFile) {
-    folderStore.changeOpenFile(path);
+const handleCreateFile = async () => {
+  if (
+    inputCreateDirRef.value &&
+    inputCreateDirRef.value?.value &&
+    folderStore.openFolder
+  ) {
+    try {
+      const fileName = inputCreateDirRef.value.value;
+      const newPath = path.join(folderStore.openFolder, fileName);
 
-    return;
+      const fd = fs.openSync(newPath, "wx");
+
+      fs.closeSync(fd);
+
+      folderStore.reloadFolder();
+
+      handleCloseCreateDir();
+
+      addEditorWithPath(newPath);
+    } catch (err) {
+      if (err instanceof Error && "code" in err && err.code === "EEXIST") {
+        toast.error("File already exists");
+      } else {
+        toast.error("Error creating file");
+      }
+    }
   }
-
-  const directoryDetail = getFileDetail(path);
-
-  console.log(directoryDetail);
 };
 
-renderFileStruct(folderStore.openFolder);
+const handleCreateFolder = async () => {
+  if (
+    inputCreateDirRef.value &&
+    inputCreateDirRef.value?.value &&
+    folderStore.openFolder
+  ) {
+    try {
+      const folderName = inputCreateDirRef.value.value;
+      const newPath = path.join(folderStore.openFolder, folderName);
+
+      fs.mkdirSync(newPath, { recursive: true });
+
+      folderStore.reloadFolder();
+
+      handleCloseCreateDir();
+    } catch (err) {
+      if (err instanceof Error && "code" in err && err.code === "EEXIST") {
+        toast.error("File already exists");
+      } else {
+        toast.error("Error creating file");
+      }
+    }
+  }
+};
+
+const handleCloseCreateDir = () => {
+  if (inputCreateDirRef.value) {
+    showCreateDir.value = false;
+    inputCreateDirRef.value.value = "";
+  }
+};
+
+onClickOutside(inputCreateDirRef, () => {
+  handleCloseCreateDir();
+});
+
+onKeyStroke(["Enter"], () => {
+  if (showCreateDir && isCreateFile.value) handleCreateFile();
+
+  if (showCreateDir && !isCreateFile.value) handleCreateFolder();
+});
+
+onKeyStroke(["Escape"], () => {
+  if (showCreateDir && inputCreateDirRef.value) {
+    showCreateDir.value = false;
+    inputCreateDirRef.value.value = "";
+  }
+});
+
+watch(windowFocused, () => {
+  if (!windowFocused.value) {
+    handleCloseCreateDir();
+  }
+});
 
 const actionButtons = [
   {
     title: "Search Files",
     icon: "fa-magnifying-glass",
-    click: () => renderFileStruct(folderStore.openFolder),
+    click: () => console.log(1),
   },
   {
     title: "Create File",
     icon: "fa-file-plus",
-    click: () => renderFileStruct(folderStore.openFolder),
+    click: () => handleClickCreateDir(true),
   },
   {
     title: "Create Folder",
     icon: "fa-folder-plus",
-    click: () => renderFileStruct(folderStore.openFolder),
+    click: () => handleClickCreateDir(false),
   },
   {
     title: "Refresh Explorer",
     icon: "fa-rotate-right",
-    click: () => renderFileStruct(folderStore.openFolder),
+    click: () => folderStore.reloadFolder(),
   },
 ];
 </script>
 
 <template>
   <div class="flex flex-col h-full">
-    <div class="flex items-center justify-between px-4 py-1 bg-bgSecondary">
+    <div class="flex items-center justify-between px-4 py-1 bg-bgMain">
       <span class="text-sm font-light">Explorer</span>
 
       <div class="flex">
@@ -93,12 +160,26 @@ const actionButtons = [
       </div>
     </div>
 
-    <perfect-scrollbar class="px-2 py-2 overflow-auto grow">
-      <template
-        v-for="{ fileClass, isFile, isOpen, name, path } in directoryStruct"
-      >
-        <ExplorerItem :name :isFile :fileClass :isOpen :path /> </template
-    ></perfect-scrollbar>
+    <perfect-scrollbar class="py-2 pr-4 overflow-x-hidden overflow-y-auto grow">
+      <div class="flex items-center gap-2 px-2 py-1 pl-4" v-if="showCreateDir">
+        <i
+          class="fa-light"
+          :class="isCreateFile ? 'fa-bars-sort' : 'fa-folder'"
+        ></i>
+
+        <input
+          ref="inputCreateDirRef"
+          type="text"
+          class="w-full py-1 pl-2 text-sm rounded-md outline-none bg-bgSecondary"
+        />
+      </div>
+
+      <ExplorerItem
+        v-if="folderStore.openFolder"
+        :isOpen="true"
+        :path="folderStore.openFolder"
+      />
+    </perfect-scrollbar>
 
     <div class="flex items-center justify-between px-2 py-2 bg-bgSecondary">
       <Button>
