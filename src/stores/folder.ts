@@ -7,7 +7,7 @@ export const useFolderStore = defineStore("folder", () => {
   const editorsOpenStore = useEditorsOpenStore();
   // const openFolder = ref<null | string>(null);
   const openFolder = ref<null | string>(
-    "/Users/thuynguyen/study/nothing/vuongle/vscode"
+    "C:\\Users\\admin\\Documents\\pj\\DoriElectron"
   );
 
   const changeOpenFolder = (newFolder: string) => {

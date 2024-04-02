@@ -35,7 +35,6 @@ const handleSaveEditor = async () => {
     (item) => item.id === focusEditor.value
   );
 
-  console.log("🚀 ~ handleSaveEditor ~ newValue:", currentFocusEditor);
   if (!currentFocusEditor) return;
 
   const newValue = monaco.editor.getEditors()[0].getValue() || "";
@@ -62,7 +61,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div
-    class="h-10 overflow-x-scroll overflow-y-hidden grow hideScrollbar"
+    class="h-full overflow-x-scroll overflow-y-hidden max-h-10 grow hideScrollbar"
     ref="scrollContainer"
     v-if="openEditors.length"
     @mousewheel="scrollX"

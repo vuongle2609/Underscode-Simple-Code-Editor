@@ -3,6 +3,10 @@ import fs from "fs";
 import path from "path";
 import { fileSearch } from "search-in-file";
 import { SearchOptions } from "search-in-file/dist/types";
+import isCompressed from "is-compressed";
+import * as pkg from "istextorbinary";
+import { isExecutableSync } from "is-executable";
+import { useFolderStore } from "@/stores/folder";
 
 type DirItemGeneric<T> = {
   name: string;
@@ -31,9 +35,12 @@ export const readDirRecursive = ({
 
       let nameCondition = !excludeDir.includes(item.name);
 
+      const isFileCompressed =
+        isCompressed(item.name) || path.parse(item.name).ext === ".asar";
+
       return [
         ...prev,
-        ...(nameCondition
+        ...(nameCondition && !isFileCompressed
           ? [
               {
                 name: item.name,
@@ -72,9 +79,19 @@ export const readDirRecursiveFlat = ({
 
       let nameCondition = !excludeDir.some((path) => item.name.includes(path));
 
+      const isFileBinary = pkg.isBinary(item.name);
+
+      const isFileExec = isExecutableSync(item.name);
+
+      const isFileCompressed =
+        isCompressed(item.name) || path.parse(item.name).ext === ".asar";
+
+      const returnCondition =
+        nameCondition && !isFileBinary && !isFileCompressed && !isFileExec;
+
       return [
         ...prev,
-        ...(nameCondition
+        ...(returnCondition
           ? isDirectory
             ? [
                 ...readDirRecursiveFlat({
@@ -112,4 +129,23 @@ export const getFileIconClass = (fileName: string) => {
   const defaultIcon = "foo.txt";
 
   return getClassWithColor(fileName) || getClassWithColor(defaultIcon);
+};
+
+export const getAbsolutePath = (
+  pathString: string,
+  replaceWithPosix?: boolean
+) => {
+  const { openFolder } = useFolderStore();
+
+  let pathAbs = pathString.replace(openFolder || "", "");
+
+  if (pathAbs[0] === path.sep) {
+    pathAbs = pathAbs.substring(1);
+  }
+
+  if (replaceWithPosix) {
+    pathAbs = pathAbs.replaceAll(path.sep, path.posix.sep);
+  }
+  
+  return pathAbs;
 };

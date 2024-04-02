@@ -147,7 +147,7 @@ const actionButtons = [
 </script>
 
 <template>
-  <div class="flex flex-col h-full">
+  <div class="flex flex-col h-full select-none">
     <div class="flex items-center justify-between px-4 py-1 bg-bgMain">
       <span class="text-sm font-light">Explorer</span>
 

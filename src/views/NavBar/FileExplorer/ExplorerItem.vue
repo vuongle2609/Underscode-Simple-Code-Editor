@@ -3,9 +3,13 @@ import Button from "@/components/general/Button.vue";
 import { useEditorsOpenStore } from "@/stores/editorsOpen";
 import { usePathOpenStore } from "@/stores/pathOpen";
 
-import ExplorerItemRecursive, { DirectoryStructType } from "./ExplorerItemRecursive.vue";
+import ExplorerItemRecursive, {
+  DirectoryStructType,
+} from "./ExplorerItemRecursive.vue";
+import { computed } from "vue";
+import { getAbsolutePath } from "@/utils/file";
 
-defineProps<DirectoryStructType & { index: number }>();
+const props = defineProps<DirectoryStructType & { index: number }>();
 
 const { addEditorWithPath } = useEditorsOpenStore();
 const pathOpenStore = usePathOpenStore();
@@ -25,7 +29,7 @@ const handleClickFolder = ({
 }: Omit<DirectoryStructType, "fileClass" | "isFile"> & {
   index: number;
 }) => {
-  pathOpenStore.openFolder(path);
+  pathOpenStore.toggleFolder(getAbsolutePath(path));
 };
 
 const handleClickItem = ({
@@ -42,6 +46,10 @@ const handleClickItem = ({
 
   handleClickFile({ fileClass, name, path });
 };
+
+const isOpen = computed(() =>
+  pathOpenStore.openFolderPath.includes(getAbsolutePath(props.path))
+);
 </script>
 
 <template>
@@ -60,13 +68,13 @@ const handleClickItem = ({
   >
     <i
       class="text-xs fa-light fa-chevron-right"
-      v-if="!pathOpenStore.openFolderPath.includes(path)"
+      v-if="!isOpen"
       :class="isFile && 'invisible'"
     ></i>
 
     <i
       class="text-xs fa-light fa-chevron-down"
-      v-if="pathOpenStore.openFolderPath.includes(path)"
+      v-if="isOpen"
       :class="isFile && 'invisible'"
     ></i>
 
@@ -80,8 +88,5 @@ const handleClickItem = ({
     >
   </Button>
 
-  <ExplorerItemRecursive
-    v-if="!isFile && pathOpenStore.openFolderPath.includes(path)"
-    :path
-  />
+  <ExplorerItemRecursive v-if="!isFile && isOpen" :path />
 </template>

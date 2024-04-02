@@ -3,19 +3,21 @@ import IconButton from "@/components/general/IconButton.vue";
 import { useFolderStore } from "@/stores/folder";
 import { useSearchDirStore } from "@/stores/searchDir";
 import { readDirRecursiveFlat } from "@/utils/file";
+import { chunksArray } from "@/utils/common";
 import { refDebounced } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { fileSearch } from "search-in-file";
 import { LineResult, SearchOptions } from "search-in-file/dist/types";
-import { onMounted, ref, watch } from "vue";
+import { nextTick, onMounted, ref, watch } from "vue";
 import SearchItem from "./SeachItem.vue";
 
 const inputSearchRef = ref<HTMLInputElement>();
 
 const searchDirStore = useSearchDirStore();
-const { searchResult, searchText } = storeToRefs(searchDirStore);
+const { searchResult, searchText, exclude } = storeToRefs(searchDirStore);
 
-const exclude = ref("node_modules,.git,dist,release,build,.exe");
+const timeOutSearch = ref<NodeJS.Timeout[]>([]);
+
 const debounced = refDebounced(searchText, 700);
 
 const folderStore = useFolderStore();
@@ -29,8 +31,15 @@ const actionButtons = [
 ];
 
 const searchFile = async () => {
+  timeOutSearch.value.forEach((item) => {
+    if (item) clearTimeout(item);
+  });
+
+  searchResult.value = [];
+
+  await nextTick();
+
   if (!folderStore.openFolder || !debounced.value) {
-    searchResult.value = [];
     return;
   }
 
@@ -41,12 +50,26 @@ const searchFile = async () => {
     excludeDir: ignorePath,
   });
 
-  const result = await fileSearch(paths, debounced.value, {
-    searchResults: "lineNo",
-    recursive: false,
-  } as SearchOptions);
+  const pathsChunk = chunksArray(paths, 20);
 
-  searchResult.value = result as unknown as LineResult[][];
+  const findText = async (path: string) => {
+    try {
+      const result = await fileSearch([path], debounced.value, {
+        searchResults: "lineNo",
+        recursive: false,
+      } as SearchOptions);
+
+      if (result[0]) searchResult.value.push(result[0] as LineResult[]);
+    } catch {}
+  };
+
+  const timeOutSearchMap = pathsChunk.map((paths, index) => {
+    return setTimeout(() => {
+      Promise.all(paths.map(findText));
+    }, index * 100);
+  });
+
+  timeOutSearch.value = timeOutSearchMap;
 };
 
 watch(debounced, () => {
