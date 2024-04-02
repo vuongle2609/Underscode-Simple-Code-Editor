@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useEditorsOpenStore } from "@/stores/editorsOpen";
-import { isAudio } from "@/utils/file";
+import isAudio from "@kikopalomares/is-audio";
 import isImage from "is-image";
 import isVideo from "is-video";
 import { storeToRefs } from "pinia";

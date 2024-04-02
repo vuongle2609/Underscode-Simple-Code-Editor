@@ -10,10 +10,10 @@
   "dependencies": {
     "@electron/remote": "^2.1.2",
     "@guolao/vue-monaco-editor": "^1.5.1",
+    "@kikopalomares/is-audio": "^0.0.4",
     "@vueuse/core": "^10.9.0",
     "file-icons-js": "github:websemantics/file-icons-js",
     "hotkeys-js": "^3.13.7",
-    "is-audio": "^0.0.0",
     "is-image": "^4.0.0",
     "is-video": "^2.0.0",
     "monaco-editor": "^0.47.0",

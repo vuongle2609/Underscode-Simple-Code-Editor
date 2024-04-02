@@ -19,7 +19,7 @@ const folderStore = useFolderStore();
       <h1 class="text-xl">Welcome to Dori</h1>
 
       <div class="flex flex-col items-center gap-2">
-        <span class="text-slate-400"> To start, choose a project </span>
+        <span class="text-slate-400">To start, choose a project</span>
 
         <Button variant="filled" @click="folderStore.chooseFolder()"
           >Open Folder</Button
@@ -27,7 +27,7 @@ const folderStore = useFolderStore();
       </div>
 
       <div class="flex flex-col items-center gap-2">
-        <span class="text-slate-400"> Or clone a repository </span>
+        <span class="text-slate-400">Or clone a repository</span>
 
         <Button variant="filled">Clone Repository</Button>
       </div>
