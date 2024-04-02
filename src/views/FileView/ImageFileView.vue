@@ -13,6 +13,6 @@ const { fileDetail } = defineProps<PropsType>();
 
 <template>
   <div class="grid p-4 size-full place-content-center">
-    <img :src="fileDetail.path" :alt="fileDetail.name" />
+    <img :src="'file://' + fileDetail.path" :alt="fileDetail.name" />
   </div>
 </template>

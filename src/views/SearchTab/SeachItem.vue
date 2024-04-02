@@ -21,13 +21,16 @@ const handleClickResult = (
 ) => {
   addEditorWithPath(path);
 
-  const lineSplit = line.split(input);
-
-  const startCursor = lineSplit[0].length + 1;
-  const endCursor = startCursor + input.length;
-
   setTimeout(() => {
+    const actualLine =
+      monaco.editor.getEditors()[0].getModel()?.getLineContent(lineNo) || "";
+
     monaco.editor.getEditors()[0].revealLineInCenter(lineNo);
+
+    const lineSplit = actualLine.split(input);
+
+    const startCursor = lineSplit[0].length + 1;
+    const endCursor = startCursor + input.length;
 
     monaco.editor
       .getEditors()[0]

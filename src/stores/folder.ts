@@ -1,12 +1,14 @@
+import * as remote from "@electron/remote";
 import { defineStore } from "pinia";
 import { nextTick, ref } from "vue";
-import * as remote from "@electron/remote";
 import { useEditorsOpenStore } from "./editorsOpen";
 
 export const useFolderStore = defineStore("folder", () => {
   const editorsOpenStore = useEditorsOpenStore();
   // const openFolder = ref<null | string>(null);
-  const openFolder = ref<null | string>("D:\\pj\\testType");
+  const openFolder = ref<null | string>(
+    "/Users/thuynguyen/study/nothing/vuongle/vscode"
+  );
 
   const changeOpenFolder = (newFolder: string) => {
     openFolder.value = newFolder;

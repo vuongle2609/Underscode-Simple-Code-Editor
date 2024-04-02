@@ -1,20 +1,24 @@
 <script setup lang="ts">
 import IconButton from "@/components/general/IconButton.vue";
 import { useFolderStore } from "@/stores/folder";
+import { useSearchDirStore } from "@/stores/searchDir";
 import { readDirRecursiveFlat } from "@/utils/file";
 import { refDebounced } from "@vueuse/core";
+import { storeToRefs } from "pinia";
 import { fileSearch } from "search-in-file";
 import { LineResult, SearchOptions } from "search-in-file/dist/types";
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import SearchItem from "./SeachItem.vue";
 
-const input = ref("");
+const inputSearchRef = ref<HTMLInputElement>();
+
+const searchDirStore = useSearchDirStore();
+const { searchResult, searchText } = storeToRefs(searchDirStore);
+
 const exclude = ref("node_modules,.git,dist,release,build,.exe");
-const debounced = refDebounced(input, 700);
+const debounced = refDebounced(searchText, 700);
 
 const folderStore = useFolderStore();
-
-const searchResult = ref<LineResult[][]>([]);
 
 const actionButtons = [
   {
@@ -48,8 +52,10 @@ const searchFile = async () => {
 watch(debounced, () => {
   searchFile();
 });
-//dev
-searchFile();
+
+onMounted(() => {
+  inputSearchRef.value?.focus();
+});
 </script>
 
 <template>
@@ -68,9 +74,10 @@ searchFile();
 
     <div class="px-4 py-1">
       <input
+        ref="inputSearchRef"
         type="text"
         placeholder="Typing to search..."
-        v-model="input"
+        v-model="searchText"
         class="w-full py-1 pl-2 text-sm rounded-md outline-none bg-bgSecondary"
       />
     </div>

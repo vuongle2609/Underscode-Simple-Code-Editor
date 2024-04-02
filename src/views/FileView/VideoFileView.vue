@@ -13,6 +13,6 @@ const { fileDetail } = defineProps<PropsType>();
 
 <template>
   <div class="grid p-4 size-full place-content-center">
-    <video :src="fileDetail.path" controls/>
+    <video :src="'file://' + fileDetail.path" controls />
   </div>
 </template>

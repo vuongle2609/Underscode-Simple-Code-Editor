@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { mainTheme } from "@/config/theme";
 import { useEditorsOpenStore } from "@/stores/editorsOpen";
+import { streamToString } from "@/utils/file";
 import fs from "fs";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { storeToRefs } from "pinia";
-import { nextTick, shallowRef, watchEffect } from "vue";
+import { computed, onMounted, shallowRef, watch } from "vue";
 
 interface PropsType {
   fileDetail: {
@@ -15,10 +16,10 @@ interface PropsType {
   };
 }
 
-const { fileDetail } = defineProps<PropsType>();
+const props = defineProps<PropsType>();
 
 const editorsOpenStore = useEditorsOpenStore();
-const { focusEditor, openEditors } = storeToRefs(editorsOpenStore);
+const { openEditors } = storeToRefs(editorsOpenStore);
 
 const editorRef = shallowRef<monaco.editor.IStandaloneCodeEditor>();
 
@@ -34,31 +35,32 @@ const MONACO_EDITOR_OPTIONS: monaco.editor.IStandaloneEditorConstructionOptions 
     cursorSmoothCaretAnimation: "on",
   };
 
-const mapFileContent = async (id: string | null) => {
-  try {
-    // TODO: change to stream file
-    const value = await fs.promises.readFile(fileDetail.path, "utf8");
+const mapFileContent = async (newFilePath: string) => {
+  let model = monaco.editor.getModel(monaco.Uri.file(newFilePath));
 
-    const newModel =
-      monaco.editor.getModel(monaco.Uri.file(fileDetail.path)) ||
-      monaco.editor.createModel(
-        value,
-        undefined,
-        monaco.Uri.file(fileDetail.path)
-      );
+  if (!model) {
+    const stream = fs.createReadStream(newFilePath, { encoding: "utf8" });
 
-    editorRef.value?.setModel(newModel);
-  } catch (err) {
-    console.error(err);
+    const text = await streamToString(stream);
+
+    model =
+      monaco.editor.getModel(monaco.Uri.file(newFilePath)) ||
+      monaco.editor.createModel(text, undefined, monaco.Uri.file(newFilePath));
+
+    stream.destroy();
   }
+
+  editorRef.value?.setModel(model);
 };
 
-watchEffect(async () => {
-  if (focusEditor.value) {
-    // prevent some time model not update content
-    await nextTick();
-    mapFileContent(focusEditor.value);
-  }
+const path = computed(() => props.fileDetail.path);
+
+watch(path, async () => {
+  mapFileContent(path.value);
+});
+
+onMounted(() => {
+  mapFileContent(path.value);
 });
 
 const handleMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
