@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { fileSearch } from "search-in-file";
 import { SearchOptions } from "search-in-file/dist/types";
+import isAudioLib from "is-audio";
 
 type DirItemGeneric<T> = {
   name: string;
@@ -96,4 +97,10 @@ export const searchInFiles = async (paths: string[], value: string) => {
   } as SearchOptions);
 
   return result;
+};
+
+export const isAudio = (fileName: string) => {
+  const newFileName = "sample." + fileName.split(".").at(-1);
+
+  return isAudioLib(newFileName);
 };

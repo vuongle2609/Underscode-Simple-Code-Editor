@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import FileView from "../views/FileView.vue";
+import FileView from "../views/FileView";
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),

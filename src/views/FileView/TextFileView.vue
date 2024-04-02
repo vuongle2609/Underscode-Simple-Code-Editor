@@ -4,8 +4,18 @@ import { useEditorsOpenStore } from "@/stores/editorsOpen";
 import fs from "fs";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { storeToRefs } from "pinia";
-import { shallowRef, watchEffect, nextTick } from "vue";
-import OpenEditors from "./OpenEditors.vue";
+import { nextTick, shallowRef, watchEffect } from "vue";
+
+interface PropsType {
+  fileDetail: {
+    name: string;
+    path: string;
+    fileClass: string;
+    id: string;
+  };
+}
+
+const { fileDetail } = defineProps<PropsType>();
 
 const editorsOpenStore = useEditorsOpenStore();
 const { focusEditor, openEditors } = storeToRefs(editorsOpenStore);
@@ -26,21 +36,15 @@ const MONACO_EDITOR_OPTIONS: monaco.editor.IStandaloneEditorConstructionOptions 
 
 const mapFileContent = async (id: string | null) => {
   try {
-    if (!id) return;
-
-    const currentFocusEditor = openEditors.value.find((item) => item.id === id);
-
-    if (!currentFocusEditor) return;
-
     // TODO: change to stream file
-    const value = await fs.promises.readFile(currentFocusEditor.path, "utf8");
+    const value = await fs.promises.readFile(fileDetail.path, "utf8");
 
     const newModel =
-      monaco.editor.getModel(monaco.Uri.file(currentFocusEditor.path)) ||
+      monaco.editor.getModel(monaco.Uri.file(fileDetail.path)) ||
       monaco.editor.createModel(
         value,
         undefined,
-        monaco.Uri.file(currentFocusEditor.path)
+        monaco.Uri.file(fileDetail.path)
       );
 
     editorRef.value?.setModel(newModel);
@@ -75,8 +79,6 @@ const handleMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
 </script>
 
 <template>
-  <OpenEditors />
-
   <vue-monaco-editor
     v-if="openEditors.length"
     theme="vs-dark"
