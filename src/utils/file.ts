@@ -1,3 +1,4 @@
+import { getClassWithColor } from "file-icons-js";
 import fs from "fs";
 import path from "path";
 import { fileSearch } from "search-in-file";
@@ -105,4 +106,10 @@ export const streamToString = (stream: fs.ReadStream) => {
     stream.on("error", (err) => reject(err));
     stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
   });
+};
+
+export const getFileIconClass = (fileName: string) => {
+  const defaultIcon = "foo.txt";
+
+  return getClassWithColor(fileName) || getClassWithColor(defaultIcon);
 };

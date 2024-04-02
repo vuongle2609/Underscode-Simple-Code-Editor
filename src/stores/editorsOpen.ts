@@ -1,10 +1,10 @@
+import { getFileIconClass } from "@/utils/file";
+import fs from "fs";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import path from "path";
 import { defineStore } from "pinia";
 import { v4 } from "uuid";
 import { nextTick, ref } from "vue";
-import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-import fs from "fs";
-import path from "path";
-import { getClassWithColor } from "file-icons-js";
 
 interface EditorProps {
   name: string;
@@ -42,7 +42,7 @@ export const useEditorsOpenStore = defineStore("editorsOpen", () => {
   const addEditorWithPath = (pathRead: string) => {
     const filePath = path.parse(pathRead);
     const name = filePath.base;
-    const fileClass = getClassWithColor(name) || getClassWithColor("foo.txt");
+    const fileClass = getFileIconClass(name);
 
     addEditor({
       fileClass,

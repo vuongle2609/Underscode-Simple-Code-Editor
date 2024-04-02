@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useEditorsOpenStore } from "@/stores/editorsOpen";
-import { getClassWithColor } from "file-icons-js";
+import { usePathOpenStore } from "@/stores/pathOpen";
+import { getFileIconClass } from "@/utils/file";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import path from "path";
 import { LineResult } from "search-in-file/dist/types";
@@ -12,6 +13,7 @@ interface PropsType {
 const { files, input } = defineProps<PropsType>();
 
 const { addEditorWithPath } = useEditorsOpenStore();
+const pathOpenStore = usePathOpenStore();
 
 const handleClickResult = (
   path: string,
@@ -22,6 +24,7 @@ const handleClickResult = (
   addEditorWithPath(path);
 
   setTimeout(() => {
+    pathOpenStore.openFolder(path)
     const actualLine =
       monaco.editor.getEditors()[0].getModel()?.getLineContent(lineNo) || "";
 
@@ -50,10 +53,7 @@ const handleClickResult = (
       <div class="flex gap-2 overflow-hidden grow">
         <i
           class="icon"
-          :class="
-            getClassWithColor(path.basename(files[0].filePath)) ||
-            getClassWithColor('sample.txt')
-          "
+          :class="getFileIconClass(path.basename(files[0].filePath))"
         ></i>
 
         <span

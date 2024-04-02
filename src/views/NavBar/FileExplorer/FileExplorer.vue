@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ExplorerItem from "@/components/bussiness/ExplorerItem.vue";
+import ExplorerItemRecursive from "./ExplorerItemRecursive.vue";
 import Button from "@/components/general/Button.vue";
 import IconButton from "@/components/general/IconButton.vue";
 import { useEditorsOpenStore } from "@/stores/editorsOpen";
@@ -174,7 +174,7 @@ const actionButtons = [
         />
       </div>
 
-      <ExplorerItem
+      <ExplorerItemRecursive
         v-if="folderStore.openFolder"
         :isOpen="true"
         :path="folderStore.openFolder"
