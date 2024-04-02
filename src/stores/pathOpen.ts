@@ -9,13 +9,18 @@ export const usePathOpenStore = defineStore("pathOpen", () => {
   const folderStore = useFolderStore();
 
   const openFolder = (pathToggle: string) => {
-    openFolderPath.value.push(pathToggle);
+    openFolderPath.value = {
+      ...openFolderPath.value,
+      [pathToggle]: true,
+    };
   };
 
   const closeFolder = (pathToggle: string) => {
-    openFolderPath.value = [
-      ...openFolderPath.value.filter((item) => item !== pathToggle),
-    ];
+    const openFolderPathClone = { ...openFolderPath.value };
+
+    delete openFolderPathClone[pathToggle];
+
+    openFolderPath.value = openFolderPathClone;
   };
 
   const toggleFolder = (pathToggle: string) => {

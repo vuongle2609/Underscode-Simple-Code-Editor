@@ -47,8 +47,8 @@ const handleClickItem = ({
   handleClickFile({ fileClass, name, path });
 };
 
-const isOpen = computed(() =>
-  pathOpenStore.openFolderPath.includes(getAbsolutePath(props.path))
+const isOpen = computed(
+  () => pathOpenStore.openFolderPath[getAbsolutePath(props.path)]
 );
 </script>
 

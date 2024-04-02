@@ -7,7 +7,7 @@ export const useFolderStore = defineStore("folder", () => {
   const editorsOpenStore = useEditorsOpenStore();
   // const openFolder = ref<null | string>(null);
   const openFolder = ref<null | string>(
-    "C:\\Users\\admin\\Documents\\pj\\DoriElectron"
+    "D:\\code\\DoriElectron"
   );
 
   const changeOpenFolder = (newFolder: string) => {
