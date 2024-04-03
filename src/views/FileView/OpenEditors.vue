@@ -66,7 +66,7 @@ onBeforeUnmount(() => {
     v-if="openEditors.length"
     @mousewheel="scrollX"
   >
-    <div class="flex divide-x size-full divide-bgButtonHover bg-bgMain">
+    <div class="flex divide-x size-full divide-bgButtonHover bg-bgMain select-none">
       <div
         v-for="{ fileClass, name, id } of openEditors"
         @click="editorsOpenStore.focusEditor = id"
