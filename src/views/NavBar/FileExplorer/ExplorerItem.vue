@@ -39,6 +39,8 @@ const handleClickItem = ({
   path,
   index,
 }: DirectoryStructType & { index: number }) => {
+  pathOpenStore.$patch({ currentFocusPathNav: path });
+
   if (!isFile) {
     handleClickFolder({ index, name, path });
     return;
@@ -65,24 +67,18 @@ const isOpen = computed(
         index,
       })
     "
+    :data-active="path === pathOpenStore.currentFocusPathNav"
+    :title="name"
   >
-    <i
-      class="text-xs fa-light fa-chevron-right"
-      v-if="!isOpen"
-      :class="isFile && 'invisible'"
-    ></i>
+    <i class="text-xs fa-light fa-chevron-right" v-if="!isOpen && !isFile"></i>
 
-    <i
-      class="text-xs fa-light fa-chevron-down"
-      v-if="isOpen"
-      :class="isFile && 'invisible'"
-    ></i>
+    <i class="text-xs fa-light fa-chevron-down" v-if="isOpen && !isFile"></i>
 
-    <i class="icon" :class="fileClass" v-if="isFile"></i>
-    <i class="fa-regular fa-file" v-if="isFile && !fileClass"></i>
+    <i class="ml-4 icon" :class="fileClass" v-if="isFile"></i>
+    <i class="ml-4 fa-regular fa-file" v-if="isFile && !fileClass"></i>
 
     <span
-      class="overflow-hidden text-sm font-light whitespace-nowrap text-ellipsis"
+      class="block overflow-hidden grow text-left break-word text-sm font-light whitespace-nowrap text-ellipsis"
     >
       {{ name }}</span
     >

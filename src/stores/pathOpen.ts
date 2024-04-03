@@ -1,12 +1,10 @@
+import { getAbsolutePath } from "@/utils/file";
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { useFolderStore } from "./folder";
-import { getAbsolutePath } from "@/utils/file";
 
 export const usePathOpenStore = defineStore("pathOpen", () => {
   const openFolderPath = ref<Record<string, true>>({});
-
-  const folderStore = useFolderStore();
+  const currentFocusPathNav = ref<string | null>(null);
 
   const openFolder = (pathToggle: string) => {
     openFolderPath.value = {
@@ -35,5 +33,5 @@ export const usePathOpenStore = defineStore("pathOpen", () => {
     openFolder(newPathToggle);
   };
 
-  return { toggleFolder, openFolderPath };
+  return { toggleFolder, openFolderPath, currentFocusPathNav };
 });

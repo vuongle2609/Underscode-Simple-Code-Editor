@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import ExplorerItemRecursive from "./ExplorerItemRecursive.vue";
 import Button from "@/components/general/Button.vue";
 import IconButton from "@/components/general/IconButton.vue";
 import { useEditorsOpenStore } from "@/stores/editorsOpen";
@@ -12,8 +11,9 @@ useWindowFocus,
 } from "@vueuse/core";
 import fs from "fs";
 import path from "path";
-import { nextTick, ref, watch } from "vue";
+import { nextTick, onMounted, ref, watch } from "vue";
 import { useToast } from "vue-toastification";
+import ExplorerItemRecursive from "./ExplorerItemRecursive.vue";
 
 const toast = useToast();
 
@@ -122,12 +122,25 @@ watch(windowFocused, () => {
   }
 });
 
+const scrollToFocusItem = () => {
+  setTimeout(() => {
+    document.querySelector("[data-active=true]")?.scrollIntoView({
+      inline: "center",
+      block: "center",
+    });
+  }, 100);
+};
+
+onMounted(() => {
+  scrollToFocusItem();
+});
+
 const actionButtons = [
-  {
-    title: "Search Files",
-    icon: "fa-magnifying-glass",
-    click: () => console.log(1),
-  },
+  // {
+  //   title: "Search Files",
+  //   icon: "fa-magnifying-glass",
+  //   click: () => console.log(1),
+  // },
   {
     title: "Create File",
     icon: "fa-file-plus",
@@ -141,7 +154,11 @@ const actionButtons = [
   {
     title: "Refresh Explorer",
     icon: "fa-rotate-right",
-    click: () => folderStore.reloadFolder(),
+    click: () => {
+      folderStore.reloadFolder();
+
+      nextTick(scrollToFocusItem);
+    },
   },
 ];
 </script>
@@ -160,7 +177,10 @@ const actionButtons = [
       </div>
     </div>
 
-    <perfect-scrollbar class="py-2 pr-4 overflow-x-hidden overflow-y-auto grow">
+    <perfect-scrollbar
+      class="py-2 pr-4 overflow-x-hidden overflow-y-auto grow"
+      @click="console.log"
+    >
       <div class="flex items-center gap-2 px-2 py-1 pl-4" v-if="showCreateDir">
         <i
           class="fa-light"

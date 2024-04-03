@@ -6,12 +6,16 @@ import { useEditorsOpenStore } from "./editorsOpen";
 export const useFolderStore = defineStore("folder", () => {
   const editorsOpenStore = useEditorsOpenStore();
   // const openFolder = ref<null | string>(null);
+  // const openFolder = ref<null | string>(
+  //   "D:\\code\\DoriElectron"
+  // );
   const openFolder = ref<null | string>(
-    "D:\\code\\DoriElectron"
+    '/Users/thuynguyen/study/nothing/vuongle/vscode'
   );
 
   const changeOpenFolder = (newFolder: string) => {
     openFolder.value = newFolder;
+    console.log(newFolder)
   };
 
   const reloadFolder = async () => {

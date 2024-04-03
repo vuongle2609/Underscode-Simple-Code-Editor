@@ -50,7 +50,7 @@ renderFileStruct(path.value);
 </script>
 
 <template>
-  <div class="pl-2">
+  <div class="pl-2 w-full overflow-hidden">
     <ExplorerItem
       v-for="({ fileClass, isFile, name, path }, index) in directoryStruct"
       :fileClass

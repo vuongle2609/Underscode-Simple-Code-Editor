@@ -1,36 +1,42 @@
 <script setup lang="ts">
-import type { ButtonHTMLAttributes } from 'vue';
+import { computed, type ButtonHTMLAttributes } from "vue";
 
 export interface ButtonProps extends /** @vue-ignore */ ButtonHTMLAttributes {
-    size?: 'sm' | 'md' | 'lg' | 'xl',
-    variant?: 'filled' | 'subtle',
-    fullWidth?: boolean
+  size?: "sm" | "md" | "lg" | "xl";
+  variant?: "filled" | "subtle";
+  fullWidth?: boolean;
+  active?: boolean;
 }
 
-const { size, variant, fullWidth } = defineProps<ButtonProps>()
+const { size, variant, fullWidth } = defineProps<ButtonProps>();
 
 const sizeStyle = {
-    sm: 'text-sm',
-    md: 'text-md',
-    lg: 'text-lg',
-    xl: 'text-xl',
-}
+  sm: "text-sm",
+  md: "text-md",
+  lg: "text-lg",
+  xl: "text-xl",
+};
 
 const variantStyle = {
-    filled: 'bg-bgButton',
-    subtle: '',
-}
+  filled: "bg-bgButton",
+  subtle: "",
+};
 
-const widthStyle = fullWidth ? 'w-full' : ''
+const widthStyle = fullWidth ? "w-full" : "";
 
-const buttonStyle = [sizeStyle[size || 'md'], variantStyle[variant || 'subtle'], widthStyle]
-
+const buttonStyle = computed(() => [
+  sizeStyle[size || "md"],
+  variantStyle[variant || "subtle"],
+  widthStyle,
+]);
 </script>
 
 <template>
-    <button :class="buttonStyle"
-        class="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-bgButtonHover active:bg-bgSecondary"
-        v-bind="$props">
-        <slot />
-    </button>
+  <button
+    class="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-bgButtonHover active:bg-bgSecondary data-[active=true]:bg-bgSecondary"
+    :class="buttonStyle"
+    v-bind="$props"
+  >
+    <slot />
+  </button>
 </template>
