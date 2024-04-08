@@ -2,14 +2,22 @@
 import "@xterm/xterm/css/xterm.css";
 import { Terminal } from "@xterm/xterm";
 import { onMounted, ref } from "vue";
-
+import { ipcMain, ipcRenderer } from "electron";
 const terminalRef = ref();
 
 onMounted(() => {
   const term = new Terminal();
   term.open(terminalRef.value);
   //   term.write("Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ");
-  term.onData((e) => term.write(e));
+  //   term.onData((e) => term.write(e));
+
+  ipcRenderer.on("terminal.incomingData", (event, data) => {
+    term.write(data);
+  });
+
+  term.onData((e) => {
+    ipcRenderer.send("terminal.keystroke", e);
+  });
 });
 </script>
 

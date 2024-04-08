@@ -4,6 +4,7 @@ import path from "node:path";
 import { ipcMain } from "electron";
 
 import * as os from "node:os";
+import * as pty from '@scrypted/node-pty'
 
 const shell = os.platform() === "win32" ? "powershell.exe" : "bash";
 
@@ -48,21 +49,22 @@ function createWindow() {
   // win.setMenu(null);
   win.maximize();
 
-  // var ptyProcess = pty.spawn(shell, [], {
-  //   name: "xterm-color",
-  //   cols: 80,
-  //   rows: 30,
-  //   cwd: process.env.HOME,
-  //   env: process.env,
-  // });
+  var ptyProcess = pty.spawn(shell, [], {
+    name: "xterm-color",
+    cols: 80,
+    rows: 30,
+    // cwd: process.env.HOME,
+    env: process.env,
+  });
 
-  // ptyProcess.on("data", function (data) {
-  //   win.webContents.send("terminal.incomingData", data);
-  //   console.log("Data sent");
-  // });
-  // ipcMain.on("terminal.keystroke", (event, key) => {
-  //   ptyProcess.write(key);
-  // });
+  ptyProcess.on("data", function (data) {
+    win.webContents.send("terminal.incomingData", data);
+    console.log("Data sent");
+  });
+  ipcMain.on("terminal.keystroke", (event, key) => {
+    console.log('1')
+    ptyProcess.write(key);
+  });
 
   remoteMain.enable(win.webContents);
 
