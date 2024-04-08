@@ -14,7 +14,10 @@ import SearchItem from "./SeachItem.vue";
 const inputSearchRef = ref<HTMLInputElement>();
 
 const searchDirStore = useSearchDirStore();
-const { searchResult, searchText, exclude } = storeToRefs(searchDirStore);
+const { exclude } = storeToRefs(searchDirStore);
+
+const searchText = ref("");
+const searchResult = ref<LineResult[][]>([]);
 
 const timeOutSearch = ref<NodeJS.Timeout[]>([]);
 
