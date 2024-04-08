@@ -10,6 +10,7 @@ import ImageFileView from "./ImageFileView.vue";
 import OpenEditors from "./OpenEditors.vue";
 import TextFileView from "./TextFileView.vue";
 import VideoFileView from "./VideoFileView.vue";
+import TerminalView from "./TerminalView.vue";
 
 const editorsOpenStore = useEditorsOpenStore();
 const { focusEditor, openEditors } = storeToRefs(editorsOpenStore);
@@ -66,4 +67,6 @@ const fileType = computed(() => {
     v-if="fileDetail && fileType === FileType.audio"
     :fileDetail="fileDetail"
   />
+
+  <TerminalView />
 </template>

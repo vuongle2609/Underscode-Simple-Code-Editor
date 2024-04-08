@@ -61,12 +61,14 @@ onBeforeUnmount(() => {
 
 <template>
   <div
-    class="h-full overflow-x-scroll overflow-y-hidden max-h-10 grow hideScrollbar"
+    class="h-full overflow-x-scroll overflow-y-hidden max-h-10 min-h-10 grow hideScrollbar"
     ref="scrollContainer"
     v-if="openEditors.length"
     @mousewheel="scrollX"
   >
-    <div class="flex divide-x size-full divide-bgButtonHover bg-bgMain select-none">
+    <div
+      class="flex divide-x select-none size-full divide-bgButtonHover bg-bgMain"
+    >
       <div
         v-for="{ fileClass, name, id } of openEditors"
         @click="editorsOpenStore.focusEditor = id"

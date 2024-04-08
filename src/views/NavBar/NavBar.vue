@@ -14,6 +14,7 @@ const tabOpen = useTabOpen();
 
       <SearchTab v-if="tabOpen.openTab == Tab.search" />
 
-      <GitTab v-if="tabOpen.openTab == Tab.git" /></div
-  ></vue-resizable>
+      <!-- <GitTab v-if="tabOpen.openTab == Tab.git" /> -->
+    </div></vue-resizable
+  >
 </template>

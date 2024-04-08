@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import FileView from "../views/FileView";
+import EditorPage from "../views/EditorPage";
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -7,7 +7,7 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: FileView,
+      component: EditorPage,
     },
     // {
     //   path: '/about',

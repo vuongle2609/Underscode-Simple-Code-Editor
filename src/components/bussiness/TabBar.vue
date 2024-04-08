@@ -14,10 +14,10 @@ const tabItems = [
     type: Tab.search,
     icon: "fa-solid fa-magnifying-glass",
   },
-  {
-    type: Tab.git,
-    icon: "text-3xl fa-brands fa-git-alt",
-  },
+  // {
+  //   type: Tab.git,
+  //   icon: "text-3xl fa-brands fa-git-alt",
+  // },
 ];
 </script>
 
