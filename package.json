@@ -5,6 +5,11 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build && electron-builder",
+    "buildWeb": "vue-tsc && vite build",
+    "buildWin": "electron-builder --win",
+    "buildLinux": "electron-builder --linux",
+    "buildMac": "electron-builder --mac",
+    "buildAll": "electron-builder -wl",
     "preview": "vite preview"
   },
   "dependencies": {
