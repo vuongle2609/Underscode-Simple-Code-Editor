@@ -3,3 +3,6 @@ choco install visualstudio2019buildtools visualstudio2019-workload-vctools
 
 npm install --save-dev electron-rebuild
 ./node_modules/.bin/electron-rebuild
+
+
+ sudo docker run --rm -it -v $(pwd):/project electronuserland/builder:wine /bin/bash
