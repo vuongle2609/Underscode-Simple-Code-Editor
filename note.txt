@@ -6,3 +6,19 @@ npm install --save-dev electron-rebuild
 
 
  sudo docker run --rm -it -v $(pwd):/project electronuserland/builder:wine /bin/bash
+
+
+
+ install
+ node 14.18.0
+ python 3.10
+
+npm --add-python-to-path='true' --debug install --global windows-build-tools@4.0.0
+
+node-gyp configure --msvs_version=2017
+
+get path python:
+python3 -c "import os, sys; print(os.path.dirname(sys.executable))"
+
+set path
+npm config set python <path_to_python>
