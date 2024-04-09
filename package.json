@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
+    "postinstall": "./node_modules/.bin/electron-rebuild",
     "build": "vue-tsc && vite build && electron-builder",
     "buildWeb": "vue-tsc && vite build",
     "buildWin": "electron-builder --win",

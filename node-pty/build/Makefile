@@ -339,7 +339,7 @@ endif
 
 quiet_cmd_regen_makefile = ACTION Regenerating $@
 cmd_regen_makefile = cd $(srcdir); /home/vuongle/pjs/DoriElectron/node_modules/node-gyp/gyp/gyp_main.py -fmake --ignore-environment "-Dlibrary=shared_library" "-Dvisibility=default" "-Dnode_root_dir=/home/vuongle/.electron-gyp/26.6.10" "-Dnode_gyp_dir=/home/vuongle/pjs/DoriElectron/node_modules/node-gyp" "-Dnode_lib_file=/home/vuongle/.electron-gyp/26.6.10/<(target_arch)/node.lib" "-Dmodule_root_dir=/home/vuongle/pjs/DoriElectron/node-pty" "-Dnode_engine=v8" "--depth=." "-Goutput_dir=." "--generator-output=build" -I/home/vuongle/pjs/DoriElectron/node-pty/build/config.gypi -I/home/vuongle/pjs/DoriElectron/node_modules/node-gyp/addon.gypi -I/home/vuongle/.electron-gyp/26.6.10/include/node/common.gypi "--toplevel-dir=." binding.gyp
-Makefile: $(srcdir)/../node_modules/node-gyp/addon.gypi $(srcdir)/build/config.gypi $(srcdir)/binding.gyp $(srcdir)/../../../.electron-gyp/26.6.10/include/node/common.gypi
+Makefile: $(srcdir)/../../../.electron-gyp/26.6.10/include/node/common.gypi $(srcdir)/build/config.gypi $(srcdir)/binding.gyp $(srcdir)/../node_modules/node-gyp/addon.gypi
 	$(call do_cmd,regen_makefile)
 
 # "all" is a concatenation of the "all" targets from all the included

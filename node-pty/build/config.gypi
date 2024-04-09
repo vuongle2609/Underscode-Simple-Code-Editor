@@ -407,6 +407,16 @@
     "standalone_static_library": 1,
     "runtime": "electron",
     "target": "26.6.10",
-    "build_from_source": "true"
+    "build_from_source": "true",
+    "user_agent": "npm/10.2.4 node/v21.6.1 linux x64 workspaces/false",
+    "userconfig": "/home/vuongle/.npmrc",
+    "local_prefix": "/home/vuongle/pjs/DoriElectron",
+    "prefix": "/home/vuongle/.nvm/versions/node/v21.6.1",
+    "npm_version": "10.2.4",
+    "cache": "/home/vuongle/.npm",
+    "node_gyp": "/home/vuongle/.nvm/versions/node/v21.6.1/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js",
+    "globalconfig": "/home/vuongle/.nvm/versions/node/v21.6.1/etc/npmrc",
+    "init_module": "/home/vuongle/.npm-init.js",
+    "global_prefix": "/home/vuongle/.nvm/versions/node/v21.6.1"
   }
 }
