@@ -6,6 +6,7 @@ npm install --save-dev electron-rebuild
 
 
  sudo docker run --rm -it -v $(pwd):/project electronuserland/builder:wine /bin/bash
+npm config set msbuild_path "C:\Program Files\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin\MSBuild.exe"
 
 
 
