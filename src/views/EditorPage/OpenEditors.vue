@@ -73,7 +73,7 @@ onBeforeUnmount(() => {
         v-for="{ fileClass, name, id } of openEditors"
         @click="editorsOpenStore.focusEditor = id"
         :id
-        class="flex items-center justify-center h-full gap-1 px-2 pl-4 text-sm transition-colors duration-150 cursor-pointer text-textSecondary hover:text-white hover:bg-bgSecondary whitespace-nowrap"
+        class="flex items-center justify-center h-full gap-1 px-2 pl-4 text-sm transition-colors duration-150 cursor-pointer text-textSecondary hover:text-textMain hover:bg-bgSecondary whitespace-nowrap"
         :class="focusEditor === id ? 'bg-bgSecondary text-white' : 'bg-bgMain'"
         @click.middle.exact="closeEditor(id)"
       >

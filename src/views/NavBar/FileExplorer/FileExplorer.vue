@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Button from "@/components/general/Button.vue";
 import IconButton from "@/components/general/IconButton.vue";
 import { useEditorsOpenStore } from "@/stores/editorsOpen";
 import { useFolderStore } from "@/stores/folder";
@@ -178,7 +177,7 @@ const actionButtons = [
     </div>
 
     <perfect-scrollbar
-      class="py-2 pr-4 overflow-x-hidden overflow-y-auto grow"
+      class="h-full py-2 pr-2 overflow-x-hidden overflow-y-auto grow"
       @click="console.log"
     >
       <div class="flex items-center gap-2 px-2 py-1 pl-4" v-if="showCreateDir">
@@ -201,7 +200,7 @@ const actionButtons = [
       />
     </perfect-scrollbar>
 
-    <div class="flex items-center justify-between px-2 py-2 bg-bgSecondary">
+    <!-- <div class="flex items-center justify-between px-2 py-2 bg-bgSecondary">
       <Button>
         <i class="fa-light fa-code-branch"></i>
 
@@ -222,6 +221,6 @@ const actionButtons = [
           <i class="fa-solid fa-triangle-exclamation"></i> 2
         </span>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>

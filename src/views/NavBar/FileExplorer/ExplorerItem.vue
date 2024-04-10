@@ -2,7 +2,7 @@
 import Button from "@/components/general/Button.vue";
 import { useEditorsOpenStore } from "@/stores/editorsOpen";
 import { usePathOpenStore } from "@/stores/pathOpen";
-
+import { useContextMenuStore } from "@/stores/ContextMenu";
 import ExplorerItemRecursive, {
   DirectoryStructType,
 } from "./ExplorerItemRecursive.vue";
@@ -11,6 +11,7 @@ import { getAbsolutePath } from "@/utils/file";
 
 const props = defineProps<DirectoryStructType & { index: number }>();
 
+const contextMenuStore = useContextMenuStore();
 const { addEditorWithPath } = useEditorsOpenStore();
 const pathOpenStore = usePathOpenStore();
 
@@ -49,6 +50,26 @@ const handleClickItem = ({
   handleClickFile({ fileClass, name, path });
 };
 
+const handleContextMenu = (props: Omit<DirectoryStructType, "fileClass">) => {
+  const fileMenus = [
+    { label: "Open", action: console.log(1) },
+    { label: "Copy", action: console.log(1) },
+    { label: "Cut", action: console.log(1) },
+    { label: "Rename", action: console.log(1) },
+    { label: "Delete", action: console.log(1) },
+  ];
+
+  const folderMenus = [
+    { label: "Open", action: console.log(1) },
+    { label: "Copy", action: console.log(1) },
+    { label: "Cut", action: console.log(1) },
+    { label: "Rename", action: console.log(1) },
+    { label: "Delete", action: console.log(1) },
+  ];
+
+  contextMenuStore.openContextMenu(fileMenus);
+};
+
 const isOpen = computed(
   () => pathOpenStore.openFolderPath[getAbsolutePath(props.path)]
 );
@@ -69,6 +90,13 @@ const isOpen = computed(
     "
     :data-active="path === pathOpenStore.currentFocusPathNav"
     :title="name"
+    @contextmenu.prevent="
+      handleContextMenu({
+        isFile,
+        name,
+        path,
+      })
+    "
   >
     <i class="text-xs fa-light fa-chevron-right" v-if="!isOpen && !isFile"></i>
 
@@ -78,7 +106,7 @@ const isOpen = computed(
     <i class="ml-4 fa-regular fa-file" v-if="isFile && !fileClass"></i>
 
     <span
-      class="block overflow-hidden grow text-left break-word text-sm font-light whitespace-nowrap text-ellipsis"
+      class="block overflow-hidden text-sm font-light text-left grow break-word whitespace-nowrap text-ellipsis"
     >
       {{ name }}</span
     >
