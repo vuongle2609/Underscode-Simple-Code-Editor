@@ -28,7 +28,6 @@ jobs:
       - run: 'npm run build'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: 'Compress-Archive -Path .\release\0.0.0\* -Destination Dori.zip'
 
       - uses: 'marvinpinto/action-automatic-releases@latest'
         with:
@@ -37,5 +36,5 @@ jobs:
           prerelease: true
           title: 'Development Build'
           files: |
-            Dori.zip
+            .\release\0.0.0\Dori-Windows-0.0.0-Setup.exe
         id: 'automatic_releases'
