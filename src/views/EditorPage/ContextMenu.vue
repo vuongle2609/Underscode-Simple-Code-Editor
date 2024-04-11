@@ -36,9 +36,16 @@ watch(contextMenu, () => {
     v-if="!!contextMenu"
   >
     <ListBox>
-      <ListBoxItem v-for="{ action, label } of contextMenu" @click="action">{{
-        label
-      }}</ListBoxItem>
+      <ListBoxItem
+        v-for="{ action, label } of contextMenu"
+        @click="
+          () => {
+            action?.();
+            contextMenuStore.closeContextMenu();
+          }
+        "
+        >{{ label }}</ListBoxItem
+      >
     </ListBox>
   </div>
 </template>

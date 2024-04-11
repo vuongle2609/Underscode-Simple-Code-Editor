@@ -5,6 +5,7 @@ import path from "path";
 import { defineStore } from "pinia";
 import { v4 } from "uuid";
 import { nextTick, ref } from "vue";
+import pathSys from "path";
 
 interface EditorProps {
   name: string;
@@ -100,6 +101,37 @@ export const useEditorsOpenStore = defineStore("editorsOpen", () => {
     monaco.editor.getEditors()[0].getAction("actions.find")?.run();
   };
 
+  const reloadEditor = (path: string) => {
+    let indexFound = 0;
+
+    const foundEditor = openEditors.value?.find((item, index) => {
+      if (item.path === path) {
+        indexFound = index;
+
+        return true;
+      }
+
+      return false;
+    });
+
+    const dir = pathSys.parse(path);
+
+    openEditors.value = [...openEditors.value.map((item, index) => {
+      if (index === indexFound) {
+        return {
+          ...openEditors.value[indexFound],
+          path,
+          name: dir.base,
+        };
+      }
+
+      return item;
+    })];
+
+    console.log(openEditors.value);
+    console.log(foundEditor);
+  };
+
   return {
     openEditors,
     focusEditor,
@@ -110,5 +142,6 @@ export const useEditorsOpenStore = defineStore("editorsOpen", () => {
     handleSaveEditor,
     handleSaveAllEditor,
     toggleSearch,
+    reloadEditor,
   };
 });

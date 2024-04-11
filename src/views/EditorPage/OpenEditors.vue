@@ -61,7 +61,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div
-    class="h-full overflow-x-scroll overflow-y-hidden max-h-10 min-h-10 grow hideScrollbar"
+    class="w-full h-full overflow-x-scroll overflow-y-hidden grow max-h-10 min-h-10 hideScrollbar"
     ref="scrollContainer"
     v-if="openEditors.length"
     @mousewheel="scrollX"
