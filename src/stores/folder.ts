@@ -9,7 +9,6 @@ export const useFolderStore = defineStore("folder", () => {
 
   const changeOpenFolder = (newFolder: string) => {
     openFolder.value = newFolder;
-    console.log(newFolder);
   };
 
   const reloadFolder = async () => {

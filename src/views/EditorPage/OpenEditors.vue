@@ -48,7 +48,6 @@ onMounted(() => {
   });
 
   hotkeys("ctrl+s,command+s", () => {
-    console.log(2);
     handleSaveEditor();
   });
 });

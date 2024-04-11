@@ -176,8 +176,7 @@ const actionButtons = [
     </div>
 
     <perfect-scrollbar
-      class="h-full py-2 pr-2 overflow-x-hidden overflow-y-auto grow"
-      @click="console.log"
+      class="h-full py-2 pr-2 overflow-x-hidden grow"
     >
       <div class="flex items-center gap-2 px-2 py-1 pl-4" v-if="showCreateDir">
         <i
