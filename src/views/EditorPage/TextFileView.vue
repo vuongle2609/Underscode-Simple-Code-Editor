@@ -5,7 +5,7 @@ import { streamToString } from "@/utils/file";
 import fs from "fs";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { storeToRefs } from "pinia";
-import { computed, onMounted, shallowRef, watch } from "vue";
+import { computed, shallowRef, watchEffect } from "vue";
 
 interface PropsType {
   fileDetail: {
@@ -55,11 +55,7 @@ const mapFileContent = async (newFilePath: string) => {
 
 const path = computed(() => props.fileDetail.path);
 
-watch(path, async () => {
-  mapFileContent(path.value);
-});
-
-onMounted(() => {
+watchEffect(() => {
   mapFileContent(path.value);
 });
 

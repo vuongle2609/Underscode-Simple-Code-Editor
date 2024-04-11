@@ -3,10 +3,10 @@ import IconButton from "@/components/general/IconButton.vue";
 import { useEditorsOpenStore } from "@/stores/editorsOpen";
 import { useFolderStore } from "@/stores/folder";
 import {
-onClickOutside,
-onKeyStroke,
-useFocus,
-useWindowFocus,
+  onClickOutside,
+  onKeyStroke,
+  useFocus,
+  useWindowFocus,
 } from "@vueuse/core";
 import fs from "fs";
 import path from "path";
@@ -110,8 +110,7 @@ onKeyStroke(["Enter"], () => {
 
 onKeyStroke(["Escape"], () => {
   if (showCreateDir && inputCreateDirRef.value) {
-    showCreateDir.value = false;
-    inputCreateDirRef.value.value = "";
+    handleCloseCreateDir();
   }
 });
 

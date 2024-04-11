@@ -1,24 +1,25 @@
 <script setup lang="ts">
 import Button from "@/components/general/Button.vue";
+import { useContextMenuStore } from "@/stores/contextMenu";
 import { useEditorsOpenStore } from "@/stores/editorsOpen";
+import { useFolderStore } from "@/stores/folder";
 import { usePathOpenStore } from "@/stores/pathOpen";
-import { useContextMenuStore } from "@/stores/ContextMenu";
-import ExplorerItemRecursive, {
-  DirectoryStructType,
-} from "./ExplorerItemRecursive.vue";
-import { computed, nextTick, ref } from "vue";
-import { getAbsolutePath } from "@/utils/file";
+import { getAbsolutePath, getFileIconClass } from "@/utils/file";
 import { onClickOutside, onKeyStroke, useFocus } from "@vueuse/core";
 import fs from "fs";
 import pathSys from "path";
+import { computed, nextTick, ref } from "vue";
 import { useToast } from "vue-toastification";
-import { useFolderStore } from "@/stores/folder";
+import ExplorerItemRecursive, {
+  DirectoryStructType,
+} from "./ExplorerItemRecursive.vue";
 
 const isEditName = ref(false);
 
 const toast = useToast();
 
 const inputRenameRef = ref<HTMLInputElement>();
+const inputNameValue = ref("");
 const { focused } = useFocus(inputRenameRef);
 
 const props = defineProps<DirectoryStructType & { index: number }>();
@@ -27,7 +28,7 @@ const contextMenuStore = useContextMenuStore();
 const { addEditorWithPath } = useEditorsOpenStore();
 const pathOpenStore = usePathOpenStore();
 
-const editorsOpenStore = useEditorsOpenStore()
+const editorsOpenStore = useEditorsOpenStore();
 const folderStore = useFolderStore();
 
 const handleClickFile = ({
@@ -67,6 +68,7 @@ const handleClickItem = ({
 
 // rename section
 const handleEditName = async () => {
+  inputNameValue.value = props.name;
   isEditName.value = true;
 
   await nextTick();
@@ -74,20 +76,29 @@ const handleEditName = async () => {
   focused.value = true;
 };
 
+const handleCloseRename = () => {
+  isEditName.value = false;
+};
+
 const handleRename = async () => {
+  if (props.name === inputNameValue.value) {
+    handleCloseRename();
+
+    return;
+  }
+
   try {
     pathSys.parse(props.path);
 
     const dirPath = pathSys.parse(props.path).dir;
+    const newPath = pathSys.join(dirPath, inputNameValue.value.trim());
 
-    fs.renameSync(props.path, pathSys.join(dirPath, inputRenameRef.value?.value || ''));
+    fs.renameSync(props.path, newPath);
 
-    editorsOpenStore.reloadEditor(props.path)
+    editorsOpenStore.reloadEditor(props.path, newPath);
     folderStore.reloadFolder();
-    
-    isEditName.value = false;
 
-    if (inputRenameRef.value) inputRenameRef.value.value = "";
+    handleCloseRename();
   } catch (err) {
     if (err instanceof Error) {
       toast.error(err.message);
@@ -96,7 +107,7 @@ const handleRename = async () => {
 };
 
 onClickOutside(inputRenameRef, () => {
-  handleRename();
+  handleCloseRename();
 });
 
 onKeyStroke(["Enter"], () => {
@@ -104,10 +115,7 @@ onKeyStroke(["Enter"], () => {
 });
 
 onKeyStroke(["Escape"], () => {
-  if (isEditName.value && inputRenameRef.value) {
-    isEditName.value = false;
-    inputRenameRef.value.value = "";
-  }
+  handleCloseRename();
 });
 //end rename section
 
@@ -139,6 +147,10 @@ const handleContextMenu = ({
 
 const isOpen = computed(
   () => pathOpenStore.openFolderPath[getAbsolutePath(props.path)]
+);
+
+const fileClass = computed(() =>
+  isEditName.value ? getFileIconClass(inputNameValue.value) : props.fileClass
 );
 </script>
 
@@ -176,6 +188,7 @@ const isOpen = computed(
     <input
       @click.stop=""
       @blur=""
+      v-model="inputNameValue"
       v-if="isEditName"
       ref="inputRenameRef"
       type="text"

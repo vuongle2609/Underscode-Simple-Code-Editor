@@ -101,35 +101,42 @@ export const useEditorsOpenStore = defineStore("editorsOpen", () => {
     monaco.editor.getEditors()[0].getAction("actions.find")?.run();
   };
 
-  const reloadEditor = (path: string) => {
-    let indexFound = 0;
+  const reloadEditor = (path: string, newPath: string) => {
+    const name = pathSys.parse(newPath).base;
+    const fileClass = getFileIconClass(name);
 
-    const foundEditor = openEditors.value?.find((item, index) => {
-      if (item.path === path) {
-        indexFound = index;
+    openEditors.value = [
+      ...openEditors.value.map((item, index) => {
+        if (item.path === path) {
+          return {
+            ...openEditors.value[index],
+            path: newPath,
+            name,
+            fileClass,
+          };
+        }
 
-        return true;
-      }
+        return item;
+      }),
+    ];
 
-      return false;
-    });
+    const oldUri = monaco.Uri.file(path);
+    const newUri = monaco.Uri.file(newPath);
 
-    const dir = pathSys.parse(path);
+    const matchingModel = monaco.editor
+      .getModels()
+      .find((model) => model.uri.toString() === oldUri.toString());
 
-    openEditors.value = [...openEditors.value.map((item, index) => {
-      if (index === indexFound) {
-        return {
-          ...openEditors.value[indexFound],
-          path,
-          name: dir.base,
-        };
-      }
+    if (matchingModel) {
+      console.log(matchingModel.getValue());
+      const prevValue = matchingModel.getValue();
 
-      return item;
-    })];
+      console.log("day ka orev", prevValue);
 
-    console.log(openEditors.value);
-    console.log(foundEditor);
+      const newModel = monaco.editor.createModel(prevValue, undefined, newUri);
+      matchingModel.dispose();
+      monaco.editor?.getEditors()[0].setModel(newModel);
+    }
   };
 
   return {
