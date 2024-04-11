@@ -1,41 +1,41 @@
 ---
-name: 'release'
+name: "release"
 
 on:
   push:
     branches:
-      - 'main'
+      - "main"
 
 jobs:
   buildWin:
-    runs-on: 'windows-latest'
+    runs-on: "windows-latest"
 
     steps:
-      - name: 'Checkout source code'
-        uses: 'actions/checkout@v3'
+      - name: "Checkout source code"
+        uses: "actions/checkout@v3"
         with:
           lfs: true
           fetch-depth: 0
-          
-      - name: '🔧 setup node'
+
+      - name: "🔧 setup node"
         uses: actions/setup-node@v3
         with:
-          cache: 'npm'
-          cache-dependency-path: 'package-lock.json'
+          cache: "npm"
+          cache-dependency-path: "package-lock.json"
           node-version: 20
-      
-      - run: 'npm install'
-      - run: 'npm run build'
+
+      - run: "npm install"
+      - run: "npm run build"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: 'Compress-Archive -Path .\release\0.0.0\* -Destination Dori.zip'
 
-      - uses: 'marvinpinto/action-automatic-releases@latest'
+      - name: "release build file"
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          repo_token: '${{ secrets.GITHUB_TOKEN }}'
-          automatic_release_tag: 'latest'
-          prerelease: true
-          title: 'Development Build'
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "stable"
+          prerelease: false
+          title: "Dori Code Editor"
           files: |
-            Dori.zip
-        id: 'automatic_releases'
+            ./release/Dori-Setup.exe
+        id: "automatic_releases"
