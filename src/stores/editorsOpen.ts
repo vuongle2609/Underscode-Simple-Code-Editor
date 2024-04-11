@@ -101,7 +101,7 @@ export const useEditorsOpenStore = defineStore("editorsOpen", () => {
     monaco.editor.getEditors()[0].getAction("actions.find")?.run();
   };
 
-  const reloadEditor = (path: string, newPath: string) => {
+  const reloadEditor = async (path: string, newPath: string) => {
     const name = pathSys.parse(newPath).base;
     const fileClass = getFileIconClass(name);
 
@@ -128,10 +128,9 @@ export const useEditorsOpenStore = defineStore("editorsOpen", () => {
       .find((model) => model.uri.toString() === oldUri.toString());
 
     if (matchingModel) {
-      console.log(matchingModel.getValue());
       const prevValue = matchingModel.getValue();
-
-      console.log("day ka orev", prevValue);
+      
+      await handleSaveAllEditor();
 
       const newModel = monaco.editor.createModel(prevValue, undefined, newUri);
       matchingModel.dispose();
