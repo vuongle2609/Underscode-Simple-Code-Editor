@@ -10,7 +10,7 @@ defineProps<PropsType>();
 
 <template>
   <button
-    class="flex items-center w-full gap-2 px-3 py-2 text-gray-400 rounded-md hover:text-white hover:bg-bgButtonHover active:bg-bgSecondary"
+    class="flex items-center w-full gap-2 px-3 py-1 text-gray-400 rounded-md hover:text-white hover:bg-bgButtonHover active:bg-bgSecondary"
     v-bind="$props"
   >
     <div class="flex items-center justify-center h-fit min-w-4" v-if="icon">

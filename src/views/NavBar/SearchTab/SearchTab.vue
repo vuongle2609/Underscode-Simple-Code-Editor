@@ -1,20 +1,29 @@
 <script setup lang="ts">
 import IconButton from "@/components/general/IconButton.vue";
 import { useFolderStore } from "@/stores/folder";
+import { useSearchDirStore } from "@/stores/searchDir";
 import { readDirRecursiveFlat } from "@/utils/file";
+import { chunksArray } from "@/utils/common";
 import { refDebounced } from "@vueuse/core";
+import { storeToRefs } from "pinia";
 import { fileSearch } from "search-in-file";
 import { LineResult, SearchOptions } from "search-in-file/dist/types";
-import { ref, watch } from "vue";
+import { nextTick, onMounted, ref, watch } from "vue";
 import SearchItem from "./SeachItem.vue";
 
-const input = ref("");
-const exclude = ref("node_modules,.git,dist,release,build,.exe");
-const debounced = refDebounced(input, 700);
+const inputSearchRef = ref<HTMLInputElement>();
+
+const searchDirStore = useSearchDirStore();
+const { exclude } = storeToRefs(searchDirStore);
+
+const searchText = ref("");
+const searchResult = ref<LineResult[][]>([]);
+
+const timeOutSearch = ref<NodeJS.Timeout[]>([]);
+
+const debounced = refDebounced(searchText, 700);
 
 const folderStore = useFolderStore();
-
-const searchResult = ref<LineResult[][]>([]);
 
 const actionButtons = [
   {
@@ -25,8 +34,15 @@ const actionButtons = [
 ];
 
 const searchFile = async () => {
+  timeOutSearch.value.forEach((item) => {
+    if (item) clearTimeout(item);
+  });
+
+  searchResult.value = [];
+
+  await nextTick();
+
   if (!folderStore.openFolder || !debounced.value) {
-    searchResult.value = [];
     return;
   }
 
@@ -37,23 +53,39 @@ const searchFile = async () => {
     excludeDir: ignorePath,
   });
 
-  const result = await fileSearch(paths, debounced.value, {
-    searchResults: "lineNo",
-    recursive: false,
-  } as SearchOptions);
+  const pathsChunk = chunksArray(paths, 20);
 
-  searchResult.value = result as unknown as LineResult[][];
+  const findText = async (path: string) => {
+    try {
+      const result = await fileSearch([path], debounced.value, {
+        searchResults: "lineNo",
+        recursive: false,
+      } as SearchOptions);
+
+      if (result[0]) searchResult.value.push(result[0] as LineResult[]);
+    } catch {}
+  };
+
+  const timeOutSearchMap = pathsChunk.map((paths, index) => {
+    return setTimeout(() => {
+      Promise.all(paths.map(findText));
+    }, index * 100);
+  });
+
+  timeOutSearch.value = timeOutSearchMap;
 };
 
 watch(debounced, () => {
   searchFile();
 });
-//dev
-searchFile();
+
+onMounted(() => {
+  inputSearchRef.value?.focus();
+});
 </script>
 
 <template>
-  <div class="flex flex-col h-full">
+  <div class="flex flex-col size-full">
     <div class="flex items-center justify-between px-4 py-1 bg-bgMain">
       <span class="text-sm font-light">Search</span>
 
@@ -68,9 +100,10 @@ searchFile();
 
     <div class="px-4 py-1">
       <input
+        ref="inputSearchRef"
         type="text"
         placeholder="Typing to search..."
-        v-model="input"
+        v-model="searchText"
         class="w-full py-1 pl-2 text-sm rounded-md outline-none bg-bgSecondary"
       />
     </div>

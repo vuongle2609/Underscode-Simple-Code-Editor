@@ -1,21 +1,14 @@
+import * as remote from "@electron/remote";
 import { defineStore } from "pinia";
 import { nextTick, ref } from "vue";
-import * as remote from "@electron/remote";
 import { useEditorsOpenStore } from "./editorsOpen";
 
 export const useFolderStore = defineStore("folder", () => {
   const editorsOpenStore = useEditorsOpenStore();
   const openFolder = ref<null | string>(null);
-  // const openFolder = ref<null | string>("D:\\code\\test1");
-
-  const openFile = ref<null | string>(null);
 
   const changeOpenFolder = (newFolder: string) => {
     openFolder.value = newFolder;
-  };
-
-  const changeOpenFile = (path: string) => {
-    openFile.value = path;
   };
 
   const reloadFolder = async () => {
@@ -46,9 +39,7 @@ export const useFolderStore = defineStore("folder", () => {
 
   return {
     openFolder,
-    openFile,
     changeOpenFolder,
-    changeOpenFile,
     reloadFolder,
     chooseFolder,
     closeFolder,

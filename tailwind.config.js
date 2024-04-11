@@ -6,9 +6,13 @@ export default {
       colors: {
         bgSecondary: "#282c34",
         bgMain: "#21252b",
-        bgButtonHover: "#33373b",
+        bgButtonHover: "#2c313a",
         bgButton: "#3a3f44",
-        textSecondary: "#6e7178",
+        textMain: "#d1dadb",
+        textSecondary: "#a7aebb",
+      },
+      boxShadow: {
+        menu: "rgba(0,_0,_0,_0.24)_0px_3px_8px",
       },
     },
   },

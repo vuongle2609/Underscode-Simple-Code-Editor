@@ -1,10 +1,11 @@
+import { getFileIconClass } from "@/utils/file";
+import fs from "fs";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import path from "path";
 import { defineStore } from "pinia";
 import { v4 } from "uuid";
 import { nextTick, ref } from "vue";
-import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-import fs from "fs";
-import path from "path";
-import { getClassWithColor } from "file-icons-js";
+import pathSys from "path";
 
 interface EditorProps {
   name: string;
@@ -42,7 +43,7 @@ export const useEditorsOpenStore = defineStore("editorsOpen", () => {
   const addEditorWithPath = (pathRead: string) => {
     const filePath = path.parse(pathRead);
     const name = filePath.base;
-    const fileClass = getClassWithColor(name) || getClassWithColor("foo.txt");
+    const fileClass = getFileIconClass(name);
 
     addEditor({
       fileClass,
@@ -100,6 +101,43 @@ export const useEditorsOpenStore = defineStore("editorsOpen", () => {
     monaco.editor.getEditors()[0].getAction("actions.find")?.run();
   };
 
+  const reloadEditor = async (path: string, newPath: string) => {
+    const name = pathSys.parse(newPath).base;
+    const fileClass = getFileIconClass(name);
+
+    openEditors.value = [
+      ...openEditors.value.map((item, index) => {
+        if (item.path === path) {
+          return {
+            ...openEditors.value[index],
+            path: newPath,
+            name,
+            fileClass,
+          };
+        }
+
+        return item;
+      }),
+    ];
+
+    const oldUri = monaco.Uri.file(path);
+    const newUri = monaco.Uri.file(newPath);
+
+    const matchingModel = monaco.editor
+      .getModels()
+      .find((model) => model.uri.toString() === oldUri.toString());
+
+    if (matchingModel) {
+      const prevValue = matchingModel.getValue();
+      
+      await handleSaveAllEditor();
+
+      const newModel = monaco.editor.createModel(prevValue, undefined, newUri);
+      matchingModel.dispose();
+      monaco.editor?.getEditors()[0].setModel(newModel);
+    }
+  };
+
   return {
     openEditors,
     focusEditor,
@@ -110,5 +148,6 @@ export const useEditorsOpenStore = defineStore("editorsOpen", () => {
     handleSaveEditor,
     handleSaveAllEditor,
     toggleSearch,
+    reloadEditor,
   };
 });

@@ -54,11 +54,11 @@ const options = computed<OptionType[]>(() => [
       },
     ],
   },
-  {
-    label: "View",
-    icon: "fa-sidebar",
-    items: [{ label: "a" }],
-  },
+  // {
+  //   label: "View",
+  //   icon: "fa-sidebar",
+  //   items: [{ label: "New Terminal", action: () => console.log(1) }],
+  // },
   {
     label: "Edit",
     icon: "fa-file-pen",

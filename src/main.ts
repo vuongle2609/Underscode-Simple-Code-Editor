@@ -8,13 +8,14 @@ import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker";
 import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
 import { createPinia } from "pinia";
 import { createApp } from "vue";
+import VueResizable from "vue-resizable";
 import PerfectScrollbar from "vue3-perfect-scrollbar";
 import "vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import App from "./App.vue";
 import "./assets/main.css";
-import router from "./router";
+import router from "./router"; 
 
 self.MonacoEnvironment = {
   getWorker(_, label) {
@@ -45,5 +46,6 @@ app.use(VueMonacoEditorPlugin, {
 app.use(Toast, {
   position: "bottom-right",
 });
+app.component("vue-resizable", VueResizable);
 
 app.mount("#app");

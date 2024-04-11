@@ -1,5 +1,4 @@
 import { contextBridge, ipcRenderer } from "electron";
-console.log("preload: ", process.env.VITE_PUBLIC);
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld("ipcRenderer", withPrototype(ipcRenderer));
 

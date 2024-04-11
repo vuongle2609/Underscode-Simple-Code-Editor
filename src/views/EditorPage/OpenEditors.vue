@@ -35,7 +35,6 @@ const handleSaveEditor = async () => {
     (item) => item.id === focusEditor.value
   );
 
-  console.log("🚀 ~ handleSaveEditor ~ newValue:", currentFocusEditor);
   if (!currentFocusEditor) return;
 
   const newValue = monaco.editor.getEditors()[0].getValue() || "";
@@ -49,7 +48,6 @@ onMounted(() => {
   });
 
   hotkeys("ctrl+s,command+s", () => {
-    console.log(2);
     handleSaveEditor();
   });
 });
@@ -62,17 +60,19 @@ onBeforeUnmount(() => {
 
 <template>
   <div
-    class="h-10 overflow-x-scroll overflow-y-hidden grow hideScrollbar"
+    class="w-full h-full overflow-x-scroll overflow-y-hidden grow max-h-10 min-h-10 hideScrollbar"
     ref="scrollContainer"
     v-if="openEditors.length"
     @mousewheel="scrollX"
   >
-    <div class="flex divide-x size-full divide-bgButtonHover bg-bgMain">
+    <div
+      class="flex divide-x select-none size-full divide-bgButtonHover bg-bgMain"
+    >
       <div
         v-for="{ fileClass, name, id } of openEditors"
         @click="editorsOpenStore.focusEditor = id"
         :id
-        class="flex items-center justify-center h-full gap-1 px-2 pl-4 text-sm transition-colors duration-150 cursor-pointer text-textSecondary hover:text-white hover:bg-bgSecondary whitespace-nowrap"
+        class="flex items-center justify-center h-full gap-1 px-2 pl-4 text-sm transition-colors duration-150 cursor-pointer text-textSecondary hover:text-textMain hover:bg-bgSecondary whitespace-nowrap"
         :class="focusEditor === id ? 'bg-bgSecondary text-white' : 'bg-bgMain'"
         @click.middle.exact="closeEditor(id)"
       >

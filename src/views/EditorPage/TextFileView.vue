@@ -1,14 +1,25 @@
 <script setup lang="ts">
 import { mainTheme } from "@/config/theme";
 import { useEditorsOpenStore } from "@/stores/editorsOpen";
+import { streamToString } from "@/utils/file";
 import fs from "fs";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { storeToRefs } from "pinia";
-import { shallowRef, watchEffect, nextTick } from "vue";
-import OpenEditors from "./OpenEditors.vue";
+import { computed, shallowRef, watchEffect } from "vue";
+
+interface PropsType {
+  fileDetail: {
+    name: string;
+    path: string;
+    fileClass: string;
+    id: string;
+  };
+}
+
+const props = defineProps<PropsType>();
 
 const editorsOpenStore = useEditorsOpenStore();
-const { focusEditor, openEditors } = storeToRefs(editorsOpenStore);
+const { openEditors } = storeToRefs(editorsOpenStore);
 
 const editorRef = shallowRef<monaco.editor.IStandaloneCodeEditor>();
 
@@ -24,37 +35,28 @@ const MONACO_EDITOR_OPTIONS: monaco.editor.IStandaloneEditorConstructionOptions 
     cursorSmoothCaretAnimation: "on",
   };
 
-const mapFileContent = async (id: string | null) => {
-  try {
-    if (!id) return;
+const mapFileContent = async (newFilePath: string) => {
+  let model = monaco.editor.getModel(monaco.Uri.file(newFilePath));
 
-    const currentFocusEditor = openEditors.value.find((item) => item.id === id);
+  if (!model) {
+    const stream = fs.createReadStream(newFilePath, { encoding: "utf8" });
 
-    if (!currentFocusEditor) return;
+    const text = await streamToString(stream);
 
-    // TODO: change to stream file
-    const value = await fs.promises.readFile(currentFocusEditor.path, "utf8");
+    model =
+      monaco.editor.getModel(monaco.Uri.file(newFilePath)) ||
+      monaco.editor.createModel(text, undefined, monaco.Uri.file(newFilePath));
 
-    const newModel =
-      monaco.editor.getModel(monaco.Uri.file(currentFocusEditor.path)) ||
-      monaco.editor.createModel(
-        value,
-        undefined,
-        monaco.Uri.file(currentFocusEditor.path)
-      );
-
-    editorRef.value?.setModel(newModel);
-  } catch (err) {
-    console.error(err);
+    stream.destroy();
   }
+
+  editorRef.value?.setModel(model);
 };
 
-watchEffect(async () => {
-  if (focusEditor.value) {
-    // prevent some time model not update content
-    await nextTick();
-    mapFileContent(focusEditor.value);
-  }
+const path = computed(() => props.fileDetail.path);
+
+watchEffect(() => {
+  mapFileContent(path.value);
 });
 
 const handleMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
@@ -75,8 +77,6 @@ const handleMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
 </script>
 
 <template>
-  <OpenEditors />
-
   <vue-monaco-editor
     v-if="openEditors.length"
     theme="vs-dark"
