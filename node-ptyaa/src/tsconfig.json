@@ -6,9 +6,10 @@
     "outDir": "../lib",
     "sourceMap": true,
     "lib": [
-      "es2015"
+      "es6",
+      "DOM"
     ],
-    "strict": true
+    "strict": true,
   },
   "exclude": [
     "node_modules",
