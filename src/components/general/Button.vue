@@ -33,7 +33,7 @@ const buttonStyle = computed(() => [
 
 <template>
   <button
-    class="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-bgButtonHover active:bg-bgSecondary data-[active=true]:bg-bgSecondary"
+    class="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-bgButtonHover active:bg-bgSecondary data-[active=true]:bg-bgSecondary text-ellipsis overflow-hidden whitespace-nowrap break-all"
     :class="buttonStyle"
     v-bind="$props"
   >
