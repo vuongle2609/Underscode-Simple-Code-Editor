@@ -94,10 +94,12 @@ watch(currentFocusSession, () => {
     </div>
 
     <div class="flex pt-2">
-      <div ref="terminalRef" id="terminal"></div>
+      <div class="h-full grow">
+        <div ref="terminalRef" id="terminal"></div>
+      </div>
 
       <div
-        class="p-2 overflow-hidden text-sm text-white break-all rounded-md hideScrollbar bg-bgMain grow text-ellipsis whitespace-nowrap"
+        class="w-[200px] p-2 overflow-hidden text-sm text-white break-all rounded-md hideScrollbar bg-bgMain text-ellipsis whitespace-nowrap"
       >
         <template v-for="({ name }, id) in sessions">
           <Button

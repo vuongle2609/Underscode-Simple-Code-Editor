@@ -22,12 +22,12 @@ const initTerminalService = (win: BrowserWindow) => {
       win.webContents.send("terminal.incomingData" + currentId, data);
     });
 
-    ipcMain.on("terminal.keystroke" + currentId, (event, key) => {
+    ipcMain.on("terminal.keystroke" + currentId, (_, key) => {
       ptySessions[currentId].write(key);
     });
   };
 
-  ipcMain.on("terminal.createSessions", (event, props) => {
+  ipcMain.on("terminal.createSessions", (_, props) => {
     createPtySession(props);
   });
 };
