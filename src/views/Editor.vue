@@ -10,7 +10,7 @@ import TabBar from "@/components/bussiness/TabBar.vue";
 
     <NavBar />
 
-    <div class="flex flex-col overflow-hidden grow bg-bgSecondary">
+    <div class="flex flex-col overflow-hidden grow bg-bgSecondary relative">
       <RouterView />
     </div>
   </div>

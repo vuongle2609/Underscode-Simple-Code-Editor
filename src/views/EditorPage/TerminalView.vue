@@ -1,66 +1,17 @@
 <script setup lang="ts">
 import Button from "@/components/general/Button.vue";
-import { terminalTheme } from "@/config/theme";
-import { useFolderStore } from "@/stores/folder";
-import { Terminal } from "@xterm/xterm";
+import IconButton from "@/components/general/IconButton.vue";
+import { useTerminalSessionStore } from "@/stores/terminalSessions";
 import "@xterm/xterm/css/xterm.css";
-import { ipcRenderer } from "electron";
-import { v4 } from "uuid";
+import { storeToRefs } from "pinia";
 import { ref, watch } from "vue";
 
-const folderStore = useFolderStore();
+const terminalSessionsStore = useTerminalSessionStore();
+const { currentFocusSession, sessions, isOpenTerminal } = storeToRefs(
+  terminalSessionsStore
+);
 
 const terminalRef = ref();
-
-const currentFocusSession = ref<string | null>(null);
-const sessions = ref<
-  Record<
-    string,
-    {
-      terminal: Terminal;
-      name: string;
-    }
-  >
->({});
-
-const createSession = () => {
-  const currentId = v4();
-
-  ipcRenderer.send("terminal.createSessions", {
-    path: folderStore.openFolder,
-    id: currentId,
-  });
-
-  const newTerminal = new Terminal({
-    theme: terminalTheme,
-  });
-
-  newTerminal.write("Hello from \x1B[1;3;31mmemay\x1B[0m $ ");
-
-  ipcRenderer.on("terminal.incomingData" + currentId, (event, data) => {
-    newTerminal.write(data);
-  });
-
-  newTerminal.onData((e) => {
-    ipcRenderer.send("terminal.keystroke" + currentId, e);
-  });
-
-  newTerminal.open(terminalRef.value);
-
-  currentFocusSession.value = currentId;
-
-  sessions.value = {
-    ...sessions.value,
-    [currentId]: {
-      name: "Terminal " + (Object.keys(sessions.value).length + 1),
-      terminal: newTerminal,
-    },
-  };
-};
-
-const changeFocusTerminal = (id: string) => {
-  currentFocusSession.value = id;
-};
 
 watch(currentFocusSession, () => {
   Object.values(sessions.value).forEach((item) => {
@@ -82,14 +33,23 @@ watch(currentFocusSession, () => {
 </script>
 
 <template>
-  <div class="px-4 py-2 mt-auto border-t-2 border-solid border-bgButton">
+  <div
+    class="px-4 py-2 mt-auto border-t-2 border-solid border-bgButton absolute left-0 right-0"
+    :class="isOpenTerminal ? 'bottom-0' : 'top-full'"
+  >
     <div class="flex items-center justify-between text-white">
       <div>Terminal</div>
 
-      <div class="text-white">
-        <Button variant="filled" @click="createSession"
-          >New <i class="text-white fa-solid fa-plus"></i
+      <div class="text-white flex gap-2">
+        <Button variant="filled" @click="terminalSessionsStore.createSession()"
+          >New <i class="text-white fa-thin fa-plus"></i
         ></Button>
+
+        <IconButton
+          variant="filled"
+          @click="terminalSessionsStore.closeTerminal()"
+          ><i class="text-white fa-thin fa-xmark"></i
+        ></IconButton>
       </div>
     </div>
 
@@ -99,13 +59,13 @@ watch(currentFocusSession, () => {
       </div>
 
       <div
-        class="w-[200px] p-2 overflow-hidden text-sm text-white break-all rounded-md hideScrollbar bg-bgMain text-ellipsis whitespace-nowrap"
+        class="w-[200px] p-2 overflow-hidden text-sm text-white break-all rounded-md hideScrollbar bg-bgMain text-ellipsis whitespace-nowrap flex flex-col gap-1"
       >
         <template v-for="({ name }, id) in sessions">
           <Button
             :full-width="true"
             :data-active="currentFocusSession === id"
-            @click="changeFocusTerminal(id)"
+            @click="terminalSessionsStore.changeFocusTerminal(id)"
             ><span
               class="overflow-hidden text-sm text-left text-white break-all grow text-ellipsis whitespace-nowrap"
             >

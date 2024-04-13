@@ -7,6 +7,7 @@ import { ipcRenderer, shell } from "electron";
 import { computed, nextTick } from "vue";
 import TabBarItem from "../TabBarItem.vue";
 import Item from "./Item.vue";
+import { useTerminalSessionStore } from "@/stores/terminalSessions";
 
 export type OptionType = {
   label: string;
@@ -18,6 +19,7 @@ export type OptionType = {
 
 const folderStore = useFolderStore();
 const editorsOpenStore = useEditorsOpenStore();
+const terminalStore = useTerminalSessionStore();
 
 const options = computed<OptionType[]>(() => [
   {
@@ -54,11 +56,11 @@ const options = computed<OptionType[]>(() => [
       },
     ],
   },
-  // {
-  //   label: "View",
-  //   icon: "fa-sidebar",
-  //   items: [{ label: "New Terminal", action: () => console.log(1) }],
-  // },
+  {
+    label: "View",
+    icon: "fa-sidebar",
+    items: [{ label: "Terminal", action: () => terminalStore.openTerminal() }],
+  },
   {
     label: "Edit",
     icon: "fa-file-pen",

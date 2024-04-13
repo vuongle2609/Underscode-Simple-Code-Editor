@@ -7,7 +7,9 @@ const folderStore = useFolderStore();
 </script>
 
 <template>
-  <NoFile v-if="!folderStore.openFolder" />
+  <div class="h-screen w-screen overflow-hidden">
+    <NoFile v-if="!folderStore.openFolder" />
 
-  <Editor v-if="folderStore.openFolder" />
+    <Editor v-if="folderStore.openFolder" />
+  </div>
 </template>
