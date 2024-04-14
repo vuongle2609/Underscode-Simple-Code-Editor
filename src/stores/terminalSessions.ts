@@ -1,14 +1,13 @@
 import { terminalTheme } from "@/config/theme";
 import { useFolderStore } from "@/stores/folder";
-import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
+import { Terminal } from "@xterm/xterm";
 import "@xterm/xterm/css/xterm.css";
 import { ipcRenderer } from "electron";
+import * as os from "node:os";
 import { defineStore } from "pinia";
 import { v4 } from "uuid";
 import { computed, ref } from "vue";
-import * as os from "node:os";
-import debounce from "debounce";
 
 interface SessionType {
   terminal: Terminal;
