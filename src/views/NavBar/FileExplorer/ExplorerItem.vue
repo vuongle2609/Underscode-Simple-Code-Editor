@@ -168,7 +168,7 @@ const fileClass = computed(() =>
       })
     "
     :data-active="path === pathOpenStore.currentFocusPathNav && !isEditName"
-    :title="name"
+    :title="getAbsolutePath(path, true)"
     @contextmenu.prevent="handleContextMenu({ fileClass, isFile, name, path })"
   >
     <i class="text-xs fa-light fa-chevron-right" v-if="!isOpen && !isFile"></i>
@@ -180,7 +180,7 @@ const fileClass = computed(() =>
 
     <span
       v-if="!isEditName"
-      class="block overflow-hidden text-sm font-light text-left grow break-word whitespace-nowrap text-ellipsis"
+      class="block overflow-hidden text-xs font-light text-left grow break-word whitespace-nowrap text-ellipsis"
     >
       {{ name }}</span
     >
@@ -192,7 +192,7 @@ const fileClass = computed(() =>
       v-if="isEditName"
       ref="inputRenameRef"
       type="text"
-      class="w-full py-1 pl-2 text-sm rounded-md outline-none bg-bgSecondary"
+      class="w-full py-1 pl-2 text-xs text-sm rounded-md outline-none bg-bgSecondary"
     />
   </Button>
 

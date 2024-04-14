@@ -105,6 +105,7 @@ export const useTerminalSessionStore = defineStore("terminalStore", () => {
 
     const newTerminal = new Terminal({
       theme: terminalTheme,
+      fontSize: 14,
     });
 
     ipcRenderer.on("terminal.incomingData" + currentId, (event, data) => {

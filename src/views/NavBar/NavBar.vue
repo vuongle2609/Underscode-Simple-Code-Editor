@@ -6,7 +6,7 @@ import { computed, ref } from "vue";
 
 const tabOpen = useTabOpen();
 
-const width = ref(300);
+const width = ref(250);
 
 const minWidthDinamic = computed(() => ({
   "min-width": width.value + "px",
@@ -26,6 +26,7 @@ const handleChangeSize = ({ width: newWidth }: { width: number }) => {
     @resize:start="handleChangeSize"
     @resize:move="handleChangeSize"
     @resize:end="handleChangeSize"
+    class="!h-full"
   >
     <div class="min-w-full text-white bg-bgMain size-full">
       <FileExplorer v-if="tabOpen.openTab == Tab.explorer" />

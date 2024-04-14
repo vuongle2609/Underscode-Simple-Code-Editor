@@ -165,12 +165,12 @@ const actionButtons = [
 
 <template>
   <div class="flex flex-col h-full select-none">
-    <div class="flex items-center justify-between px-4 py-1 bg-bgMain">
-      <span class="text-sm font-light">Explorer</span>
+    <div class="flex items-center justify-between px-4 py-2 bg-bgMain">
+      <span class="text-xs font-light">Explorer</span>
 
       <div class="flex">
         <template v-for="{ icon, title, click } in actionButtons">
-          <IconButton :title @click="click">
+          <IconButton :title @click="click" size="sm">
             <i :class="['fa-solid', icon]"></i>
           </IconButton>
         </template>
@@ -187,7 +187,7 @@ const actionButtons = [
         <input
           ref="inputCreateDirRef"
           type="text"
-          class="w-full py-1 pl-2 text-sm rounded-md outline-none bg-bgSecondary"
+          class="w-full py-1 pl-2 text-xs rounded-md outline-none bg-bgSecondary"
         />
       </div>
 

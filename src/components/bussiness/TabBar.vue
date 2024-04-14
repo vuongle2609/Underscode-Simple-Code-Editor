@@ -9,10 +9,12 @@ const tabItems = [
   {
     type: Tab.explorer,
     icon: "fa-solid fa-files",
+    title: "Folder",
   },
   {
     type: Tab.search,
     icon: "fa-solid fa-magnifying-glass",
+    title: "Search",
   },
   // {
   //   type: Tab.git,
@@ -23,15 +25,16 @@ const tabItems = [
 
 <template>
   <div
-    class="flex flex-col items-center justify-between py-2 text-2xl min-w-14 bg-bgSecondary"
+    class="flex flex-col items-center justify-between py-2 min-w-10 bg-bgSecondary"
   >
     <div class="flex flex-col items-center gap-2">
       <AppOptions />
 
       <TabBarItem
-        v-for="{ icon, type } in tabItems"
+        v-for="{ icon, type, title } in tabItems"
         :is-active="tabOpen.openTab === type"
         @click="tabOpen.changeOpenTab(type)"
+        :title
       >
         <i :class="icon"></i>
       </TabBarItem>
@@ -41,7 +44,7 @@ const tabItems = [
         <i class="fa-solid fa-circle-user"></i>
       </TabBarItem> -->
 
-      <TabBarItem>
+      <TabBarItem title="Settings">
         <i class="fa-solid fa-gear"></i>
       </TabBarItem>
     </div>

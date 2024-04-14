@@ -1,11 +1,8 @@
-import { app, BrowserWindow, globalShortcut } from "electron";
 import * as remoteMain from "@electron/remote/main";
+import { app, BrowserWindow, ipcMain } from "electron";
 import path from "node:path";
-import { ipcMain } from "electron";
 import initTerminalService from "./services/terminal";
-
-
-
+const { screen } = require("electron");
 
 // The built directory structure
 //

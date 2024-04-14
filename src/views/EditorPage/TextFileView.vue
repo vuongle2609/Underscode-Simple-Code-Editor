@@ -33,6 +33,7 @@ const MONACO_EDITOR_OPTIONS: monaco.editor.IStandaloneEditorConstructionOptions 
     scrollBeyondLastLine: true,
     theme: "ace",
     cursorSmoothCaretAnimation: "on",
+    fontSize: 12,
   };
 
 const mapFileContent = async (newFilePath: string) => {

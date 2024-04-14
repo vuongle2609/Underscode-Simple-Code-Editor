@@ -8,6 +8,7 @@ import { computed, nextTick } from "vue";
 import TabBarItem from "../TabBarItem.vue";
 import Item from "./Item.vue";
 import { useTerminalSessionStore } from "@/stores/terminalSessions";
+import { Tab, useTabOpen } from "@/stores/tabOpen";
 
 export type OptionType = {
   label: string;
@@ -17,6 +18,7 @@ export type OptionType = {
   disabled?: boolean;
 };
 
+const tabOpen = useTabOpen();
 const folderStore = useFolderStore();
 const editorsOpenStore = useEditorsOpenStore();
 const terminalStore = useTerminalSessionStore();
@@ -59,7 +61,11 @@ const options = computed<OptionType[]>(() => [
   {
     label: "View",
     icon: "fa-sidebar",
-    items: [{ label: "Terminal", action: () => terminalStore.openTerminal() }],
+    items: [
+      { label: "Folder", action: () => tabOpen.changeOpenTab(Tab.explorer) },
+      { label: "Search", action: () => tabOpen.changeOpenTab(Tab.search) },
+      { label: "Terminal", action: () => terminalStore.openTerminal() },
+    ],
   },
   {
     label: "Edit",
@@ -91,7 +97,7 @@ const options = computed<OptionType[]>(() => [
 
 <template>
   <Popover v-slot="{ toggle, dropDownClass, close }">
-    <TabBarItem @click="toggle()">
+    <TabBarItem @click="toggle()" title="Options">
       <i class="fa-solid fa-bars"></i>
     </TabBarItem>
 

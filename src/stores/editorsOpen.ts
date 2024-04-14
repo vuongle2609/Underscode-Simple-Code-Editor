@@ -64,7 +64,9 @@ export const useEditorsOpenStore = defineStore("editorsOpen", () => {
     // closed editor has same path with focus editor then change
     // focus editor to last path in open editors
     setTimeout(
-      () => (focusEditor.value = openEditors.value.at(0)?.id || null),
+      () =>
+        (focusEditor.value =
+          openEditors.value.at(openEditors.value.length - 1)?.id || null),
       50
     );
 
@@ -129,7 +131,7 @@ export const useEditorsOpenStore = defineStore("editorsOpen", () => {
 
     if (matchingModel) {
       const prevValue = matchingModel.getValue();
-      
+
       await handleSaveAllEditor();
 
       const newModel = monaco.editor.createModel(prevValue, undefined, newUri);
