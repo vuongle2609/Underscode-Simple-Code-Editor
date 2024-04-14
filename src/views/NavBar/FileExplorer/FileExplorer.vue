@@ -10,7 +10,7 @@ import {
   useFocus,
   useWindowFocus,
 } from "@vueuse/core";
-import fs from "fs";
+const fs = require("fs-extra");
 import path from "path";
 import { nextTick, onMounted, ref, watch } from "vue";
 import { useToast } from "vue-toastification";

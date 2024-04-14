@@ -1,5 +1,5 @@
 import { getClassWithColor } from "file-icons-js";
-import fs from "fs";
+const fs = require("fs-extra");
 import path from "path";
 import { fileSearch } from "search-in-file";
 import { SearchOptions } from "search-in-file/dist/types";

@@ -1,5 +1,5 @@
 import { getFileIconClass } from "@/utils/file";
-import fs from "fs";
+const fs = require("fs-extra");
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import path from "path";
 import { defineStore } from "pinia";

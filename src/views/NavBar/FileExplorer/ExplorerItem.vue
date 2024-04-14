@@ -1,18 +1,20 @@
 <script setup lang="ts">
 import Button from "@/components/general/Button.vue";
+import { useClipboardStore } from "@/stores/clipboard";
 import { useContextMenuStore } from "@/stores/contextMenu";
 import { useEditorsOpenStore } from "@/stores/editorsOpen";
 import { useFolderStore } from "@/stores/folder";
 import { usePathOpenStore } from "@/stores/pathOpen";
 import { getAbsolutePath, getFileIconClass } from "@/utils/file";
 import { onClickOutside, onKeyStroke, useFocus } from "@vueuse/core";
-import fs from "fs";
 import pathSys from "path";
+import { storeToRefs } from "pinia";
 import { computed, nextTick, ref } from "vue";
 import { useToast } from "vue-toastification";
 import ExplorerItemRecursive, {
-  DirectoryStructType,
+DirectoryStructType,
 } from "./ExplorerItemRecursive.vue";
+const fs = require("fs-extra");
 
 const isEditName = ref(false);
 
@@ -27,9 +29,10 @@ const props = defineProps<DirectoryStructType & { index: number }>();
 const contextMenuStore = useContextMenuStore();
 const { addEditorWithPath } = useEditorsOpenStore();
 const pathOpenStore = usePathOpenStore();
-
 const editorsOpenStore = useEditorsOpenStore();
 const folderStore = useFolderStore();
+const clipboardStore = useClipboardStore();
+const { cutClipboard, copyClipboard, clipboard } = storeToRefs(clipboardStore);
 
 const handleClickFile = ({
   path,
@@ -108,13 +111,48 @@ const handleRename = async () => {
 
 const handleDelete = async (isFile: boolean) => {
   try {
-    if (isFile) {
-      fs.unlinkSync(props.path);
-    } else {
-      fs.rmSync(props.path, { recursive: true, force: true });
+    fs.removeSync(props.path);
+
+    folderStore.reloadFolder();
+  } catch (err) {
+    if (err instanceof Error) {
+      toast.error(err.message);
+    }
+  }
+};
+
+const handleCopy = async (isFile: boolean) => {
+  clipboardStore.handleCopy(props.path, isFile);
+};
+
+const handleCut = async (isFile: boolean) => {
+  clipboardStore.handleCut(props.path, isFile);
+};
+
+const handlePaste = async () => {
+  try {
+    if (!clipboard.value) return;
+
+    let dirMoveName = pathSys.parse(clipboard.value.path).base;
+
+    let dirDist = pathSys.join(props.path, dirMoveName);
+
+    while (fs.pathExistsSync(dirDist)) {
+      dirDist += "Copy";
+    }
+
+    if (clipboard.value.isCut) {
+      fs.moveSync(clipboard.value.path, dirDist, {
+        overwrite: true,
+      });
+    }
+
+    if (!clipboard.value.isCut) {
+      fs.copySync(clipboard.value.path, dirDist);
     }
 
     folderStore.reloadFolder();
+    clipboardStore.handleClearClipboardPath();
   } catch (err) {
     if (err instanceof Error) {
       toast.error(err.message);
@@ -143,8 +181,8 @@ const handleContextMenu = ({
 }: DirectoryStructType) => {
   const fileMenus = [
     { label: "Open", action: () => handleClickFile({ fileClass, name, path }) },
-    { label: "Copy", action: () => console.log(1) },
-    { label: "Cut", action: () => console.log(1) },
+    { label: "Copy", action: () => handleCopy(true) },
+    { label: "Cut", action: () => handleCut(true) },
     { label: "Rename", action: () => handleEditName() },
     { label: "Delete", action: () => handleDelete(true) },
   ];
@@ -152,8 +190,11 @@ const handleContextMenu = ({
   const folderMenus = [
     { label: "Create File", action: () => console.log(1) },
     { label: "Create Folder", action: () => console.log(1) },
-    { label: "Copy", action: () => console.log(1) },
-    { label: "Cut", action: () => console.log(1) },
+    { label: "Copy", action: () => handleCopy(false) },
+    { label: "Cut", action: () => handleCut(false) },
+    ...(clipboard.value
+      ? [{ label: "Paste", action: () => handlePaste() }]
+      : []),
     { label: "Rename", action: () => handleEditName() },
     { label: "Delete", action: () => handleDelete(false) },
   ];
@@ -197,6 +238,7 @@ const fileClass = computed(() =>
     <span
       v-if="!isEditName"
       class="block overflow-hidden text-xs font-light text-left grow break-word whitespace-nowrap text-ellipsis"
+      :class="cutClipboard?.path === path ? 'text-gray-500' : ''"
     >
       {{ name }}</span
     >

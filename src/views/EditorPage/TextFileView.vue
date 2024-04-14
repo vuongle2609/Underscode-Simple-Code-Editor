@@ -2,7 +2,7 @@
 import { mainTheme } from "@/config/theme";
 import { useEditorsOpenStore } from "@/stores/editorsOpen";
 import { streamToString } from "@/utils/file";
-import fs from "fs";
+const fs = require("fs-extra");
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { storeToRefs } from "pinia";
 import { computed, shallowRef, watchEffect } from "vue";

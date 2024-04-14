@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getFileIconClass } from "@/utils/file";
-import fs from "fs";
+const fs = require("fs-extra");
 import sysPath from "path";
 import { ref, toRef, watch } from "vue";
 import ExplorerItem from "./ExplorerItem.vue";

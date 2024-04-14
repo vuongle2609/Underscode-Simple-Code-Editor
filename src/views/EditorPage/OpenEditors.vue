@@ -8,7 +8,7 @@ import { onBeforeUnmount, onMounted, ref, watchEffect } from "vue";
 const editorsOpenStore = useEditorsOpenStore();
 const { openEditors, focusEditor } = storeToRefs(editorsOpenStore);
 import hotkeys from "hotkeys-js";
-import fs from "fs";
+const fs = require("fs-extra");
 
 const scrollContainer = ref();
 

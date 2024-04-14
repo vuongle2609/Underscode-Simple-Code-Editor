@@ -2,7 +2,7 @@
 import { useEditorsOpenStore } from "@/stores/editorsOpen";
 import { useFolderStore } from "@/stores/folder";
 import isAudio from "@kikopalomares/is-audio";
-import fs from "fs";
+const fs = require("fs-extra");
 import isImage from "is-image";
 import isVideo from "is-video";
 import { storeToRefs } from "pinia";

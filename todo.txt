@@ -1,4 +1,4 @@
-update to - https://www.npmjs.com/package/fs-extra
+update to - https://www.npmjs.com/package/fs-extra done
 
 add chokidar
 
@@ -6,3 +6,8 @@ add choose shell
 
 add git integration
 
+shortcut
+
+context menu explorer bar
+
+confirm rename and delete
