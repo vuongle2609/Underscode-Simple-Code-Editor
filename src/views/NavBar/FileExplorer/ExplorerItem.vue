@@ -106,6 +106,22 @@ const handleRename = async () => {
   }
 };
 
+const handleDelete = async (isFile: boolean) => {
+  try {
+    if (isFile) {
+      fs.unlinkSync(props.path);
+    } else {
+      fs.rmSync(props.path, { recursive: true, force: true });
+    }
+
+    folderStore.reloadFolder();
+  } catch (err) {
+    if (err instanceof Error) {
+      toast.error(err.message);
+    }
+  }
+};
+
 onClickOutside(inputRenameRef, () => {
   handleCloseRename();
 });
@@ -130,7 +146,7 @@ const handleContextMenu = ({
     { label: "Copy", action: () => console.log(1) },
     { label: "Cut", action: () => console.log(1) },
     { label: "Rename", action: () => handleEditName() },
-    { label: "Delete", action: () => console.log(1) },
+    { label: "Delete", action: () => handleDelete(true) },
   ];
 
   const folderMenus = [
@@ -139,7 +155,7 @@ const handleContextMenu = ({
     { label: "Copy", action: () => console.log(1) },
     { label: "Cut", action: () => console.log(1) },
     { label: "Rename", action: () => handleEditName() },
-    { label: "Delete", action: () => console.log(1) },
+    { label: "Delete", action: () => handleDelete(false) },
   ];
 
   contextMenuStore.openContextMenu(isFile ? fileMenus : folderMenus);

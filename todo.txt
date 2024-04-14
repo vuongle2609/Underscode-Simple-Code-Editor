@@ -1,0 +1,8 @@
+update to - https://www.npmjs.com/package/fs-extra
+
+add chokidar
+
+add choose shell
+
+add git integration
+

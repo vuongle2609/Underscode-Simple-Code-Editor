@@ -30,6 +30,7 @@
     "is-image": "^4.0.0",
     "is-video": "^2.0.0",
     "istextorbinary": "^9.5.0",
+    "mitt": "^3.0.1",
     "monaco-editor": "^0.47.0",
     "node-pty": "file:node-ptyaa",
     "pinia": "^2.1.7",

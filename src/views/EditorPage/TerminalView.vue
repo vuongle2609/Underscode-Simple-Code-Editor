@@ -42,10 +42,6 @@ useResizeObserver(terminalRef, () => {
     currentFocusSession.value as keyof typeof sessions.value
   ]?.fitAddon.fit();
 });
-
-onMounted(() => {
-  terminalSessionsStore.createSession();
-});
 </script>
 
 <template>

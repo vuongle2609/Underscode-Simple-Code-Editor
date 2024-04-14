@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import IconButton from "@/components/general/IconButton.vue";
+import { emitter } from "@/main";
 import { useEditorsOpenStore } from "@/stores/editorsOpen";
 import { useFolderStore } from "@/stores/folder";
+import { useTerminalSessionStore } from "@/stores/terminalSessions";
 import {
   onClickOutside,
   onKeyStroke,
@@ -13,7 +15,6 @@ import path from "path";
 import { nextTick, onMounted, ref, watch } from "vue";
 import { useToast } from "vue-toastification";
 import ExplorerItemRecursive from "./ExplorerItemRecursive.vue";
-import { useTerminalSessionStore } from "@/stores/terminalSessions";
 
 const toast = useToast();
 
@@ -22,6 +23,7 @@ const { addEditorWithPath } = useEditorsOpenStore();
 
 const folderStore = useFolderStore();
 
+const componentKey = ref("explorerBar");
 const inputCreateDirRef = ref<HTMLInputElement>();
 const { focused } = useFocus(inputCreateDirRef);
 
@@ -161,6 +163,8 @@ const actionButtons = [
     },
   },
 ];
+
+emitter.on("reloadFolder", () => (componentKey.value += 1));
 </script>
 
 <template>
@@ -192,6 +196,7 @@ const actionButtons = [
       </div>
 
       <ExplorerItemRecursive
+        :key="componentKey"
         v-if="folderStore.openFolder"
         :isOpen="true"
         :path="folderStore.openFolder"
