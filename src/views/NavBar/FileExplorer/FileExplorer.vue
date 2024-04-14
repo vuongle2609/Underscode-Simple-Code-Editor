@@ -13,9 +13,11 @@ import path from "path";
 import { nextTick, onMounted, ref, watch } from "vue";
 import { useToast } from "vue-toastification";
 import ExplorerItemRecursive from "./ExplorerItemRecursive.vue";
+import { useTerminalSessionStore } from "@/stores/terminalSessions";
 
 const toast = useToast();
 
+const { toggleTerminal } = useTerminalSessionStore();
 const { addEditorWithPath } = useEditorsOpenStore();
 
 const folderStore = useFolderStore();
@@ -134,11 +136,11 @@ onMounted(() => {
 });
 
 const actionButtons = [
-  // {
-  //   title: "Search Files",
-  //   icon: "fa-magnifying-glass",
-  //   click: () => console.log(1),
-  // },
+  {
+    title: "Terminal",
+    icon: "fa-terminal text-xs",
+    click: () => toggleTerminal(),
+  },
   {
     title: "Create File",
     icon: "fa-file-plus",
@@ -163,21 +165,19 @@ const actionButtons = [
 
 <template>
   <div class="flex flex-col h-full select-none">
-    <div class="flex items-center justify-between px-4 py-1 bg-bgMain">
-      <span class="text-sm font-light">Explorer</span>
+    <div class="flex items-center justify-between px-4 py-2 bg-bgMain">
+      <span class="text-xs font-light">Explorer</span>
 
       <div class="flex">
         <template v-for="{ icon, title, click } in actionButtons">
-          <IconButton :title @click="click">
+          <IconButton :title @click="click" size="sm">
             <i :class="['fa-solid', icon]"></i>
           </IconButton>
         </template>
       </div>
     </div>
 
-    <perfect-scrollbar
-      class="h-full py-2 pr-2 overflow-x-hidden grow"
-    >
+    <div class="h-full py-2 pr-2 overflow-x-hidden sideBar grow">
       <div class="flex items-center gap-2 px-2 py-1 pl-4" v-if="showCreateDir">
         <i
           class="fa-light"
@@ -187,7 +187,7 @@ const actionButtons = [
         <input
           ref="inputCreateDirRef"
           type="text"
-          class="w-full py-1 pl-2 text-sm rounded-md outline-none bg-bgSecondary"
+          class="w-full py-1 pl-2 text-xs rounded-md outline-none bg-bgSecondary"
         />
       </div>
 
@@ -196,7 +196,7 @@ const actionButtons = [
         :isOpen="true"
         :path="folderStore.openFolder"
       />
-    </perfect-scrollbar>
+    </div>
 
     <!-- <div class="flex items-center justify-between px-2 py-2 bg-bgSecondary">
       <Button>

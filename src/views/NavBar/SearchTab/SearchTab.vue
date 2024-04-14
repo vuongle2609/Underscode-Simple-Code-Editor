@@ -86,12 +86,12 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col size-full">
-    <div class="flex items-center justify-between px-4 py-1 bg-bgMain">
-      <span class="text-sm font-light">Search</span>
+    <div class="flex items-center justify-between px-4 py-2 bg-bgMain">
+      <span class="text-xs font-light">Search</span>
 
       <div class="flex">
         <template v-for="{ icon, title, click } in actionButtons">
-          <IconButton :title @click="click">
+          <IconButton :title @click="click" size="sm">
             <i :class="['fa-solid', icon]"></i>
           </IconButton>
         </template>
@@ -104,12 +104,12 @@ onMounted(() => {
         type="text"
         placeholder="Typing to search..."
         v-model="searchText"
-        class="w-full py-1 pl-2 text-sm rounded-md outline-none bg-bgSecondary"
+        class="w-full py-1 pl-2 text-xs rounded-md outline-none bg-bgSecondary"
       />
     </div>
 
     <div class="px-4 py-1">
-      <label for="exclude_search" class="text-xs text-gray-400"
+      <label for="exclude_search" class="text-[10px] text-gray-400"
         >Directory to exclude</label
       >
       <input
@@ -117,18 +117,16 @@ onMounted(() => {
         id="exclude_search"
         placeholder="eg. .ts,.js,node_modules"
         v-model="exclude"
-        class="w-full py-1 pl-2 text-sm rounded-md outline-none bg-bgSecondary"
+        class="w-full py-1 pl-2 text-xs rounded-md outline-none bg-bgSecondary"
       />
     </div>
 
-    <perfect-scrollbar
-      class="px-2 py-2 overflow-x-hidden overflow-y-auto text-sm grow"
-    >
+    <div class="px-2 py-2 overflow-x-hidden overflow-y-auto text-xs grow">
       <SearchItem
         v-for="files in searchResult"
         :input="debounced"
         :files="files"
       />
-    </perfect-scrollbar>
+    </div>
   </div>
 </template>

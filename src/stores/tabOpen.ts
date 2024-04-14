@@ -5,6 +5,7 @@ export enum Tab {
   explorer,
   search,
   git,
+  terminal,
 }
 
 export const useTabOpen = defineStore("tab", () => {

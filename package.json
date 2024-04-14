@@ -7,6 +7,12 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build && electron-builder",
+    "buildDeps": "electron-rebuild",
+    "buildWeb": "vue-tsc && vite build",
+    "buildWin": "electron-builder --win",
+    "buildLinux": "electron-builder --linux",
+    "buildMac": "electron-builder --mac",
+    "buildAll": "electron-builder -wl",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -14,6 +20,8 @@
     "@guolao/vue-monaco-editor": "^1.5.1",
     "@kikopalomares/is-audio": "^0.0.4",
     "@vueuse/core": "^10.9.0",
+    "@xterm/addon-fit": "^0.10.0",
+    "@xterm/xterm": "^5.5.0",
     "chokidar": "^3.6.0",
     "file-icons-js": "github:websemantics/file-icons-js",
     "hotkeys-js": "^3.13.7",
@@ -23,6 +31,7 @@
     "is-video": "^2.0.0",
     "istextorbinary": "^9.5.0",
     "monaco-editor": "^0.47.0",
+    "node-pty": "file:node-ptyaa",
     "pinia": "^2.1.7",
     "search-in-file": "^3.5.2",
     "uuid": "^9.0.1",
@@ -30,9 +39,7 @@
     "vue-horizontal-scroll": "^0.2.4",
     "vue-resizable": "^2.1.7",
     "vue-router": "^4.3.0",
-    "vue-toastification": "^2.0.0-rc.5",
-    "vue-virtual-scroller": "^2.0.0-beta.8",
-    "vue3-perfect-scrollbar": "^1.6.1"
+    "vue-toastification": "^2.0.0-rc.5"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.2",
@@ -43,6 +50,7 @@
     "autoprefixer": "^10.4.18",
     "electron": "^26.1.0",
     "electron-builder": "^24.6.4",
+    "electron-rebuild": "^3.2.9",
     "npm-run-all2": "^6.1.2",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",

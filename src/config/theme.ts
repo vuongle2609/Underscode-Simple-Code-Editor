@@ -220,3 +220,9 @@ export const mainTheme = {
     "welcomePage.buttonHoverBackground": "#404754",
   },
 };
+
+export const terminalTheme = {
+  background: "#282c34",
+  foreground: "#abb2bf",
+  selectionBackground: "#abb2bf30",
+};

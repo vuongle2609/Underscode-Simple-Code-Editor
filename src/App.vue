@@ -2,12 +2,17 @@
 import { useFolderStore } from "./stores/folder";
 import Editor from "./views/Editor.vue";
 import NoFile from "./views/NoFile.vue";
+import ContextMenu from "@/components/general/ContextMenu.vue";
 
 const folderStore = useFolderStore();
 </script>
 
 <template>
-  <NoFile v-if="!folderStore.openFolder" />
+  <div class="w-screen h-screen overflow-hidden">
+    <ContextMenu />
 
-  <Editor v-if="folderStore.openFolder" />
+    <NoFile v-if="!folderStore.openFolder" />
+
+    <Editor v-if="folderStore.openFolder" />
+  </div>
 </template>
