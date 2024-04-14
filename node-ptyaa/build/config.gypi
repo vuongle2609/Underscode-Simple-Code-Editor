@@ -6,8 +6,8 @@
     "defines": [],
     "include_dirs": [],
     "libraries": [],
-    "msbuild_toolset": "v143",
-    "msvs_windows_target_platform_version": "10.0.22621.0"
+    "msbuild_toolset": "v142",
+    "msvs_windows_target_platform_version": "10.0.19041.0"
   },
   "variables": {
     "asan": 0,
@@ -407,19 +407,9 @@
     "want_separate_host_toolset": 0,
     "nodedir": "C:\\Users\\vuongle\\.electron-gyp\\26.6.10",
     "standalone_static_library": 1,
-    "msbuild_path": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe",
+    "msbuild_path": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\MSBuild\\Current\\Bin\\MSBuild.exe",
     "runtime": "electron",
     "target": "26.6.10",
-    "build_from_source": "true",
-    "cache": "C:\\Users\\vuongle\\AppData\\Local\\npm-cache",
-    "globalconfig": "C:\\Users\\vuongle\\AppData\\Roaming\\npm\\etc\\npmrc",
-    "global_prefix": "C:\\Users\\vuongle\\AppData\\Roaming\\npm",
-    "init_module": "C:\\Users\\vuongle\\.npm-init.js",
-    "local_prefix": "D:\\code\\DoriElectron",
-    "node_gyp": "C:\\Program Files\\nodejs\\node_modules\\npm\\node_modules\\node-gyp\\bin\\node-gyp.js",
-    "npm_version": "10.5.0",
-    "prefix": "C:\\Users\\vuongle\\AppData\\Roaming\\npm",
-    "userconfig": "C:\\Users\\vuongle\\.npmrc",
-    "user_agent": "npm/10.5.0 node/v20.12.2 win32 x64 workspaces/false"
+    "build_from_source": "true"
   }
 }

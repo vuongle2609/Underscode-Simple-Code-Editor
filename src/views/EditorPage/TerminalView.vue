@@ -2,6 +2,7 @@
 import Button from "@/components/general/Button.vue";
 import IconButton from "@/components/general/IconButton.vue";
 import { useTerminalSessionStore } from "@/stores/terminalSessions";
+import { useResizeObserver } from "@vueuse/core";
 import "@xterm/xterm/css/xterm.css";
 import { storeToRefs } from "pinia";
 import { ref, watch } from "vue";
@@ -10,6 +11,8 @@ const terminalSessionsStore = useTerminalSessionStore();
 const { currentFocusSession, sessions, isOpenTerminal } = storeToRefs(
   terminalSessionsStore
 );
+
+const isFullView = ref(false);
 
 const terminalRef = ref();
 
@@ -21,100 +24,97 @@ watch(currentFocusSession, () => {
   });
 
   if (currentFocusSession.value) {
-    const currentTerminal = sessions.value[currentFocusSession.value].terminal;
+    const currentSession = sessions.value[currentFocusSession.value];
+    const currentTerminal = currentSession.terminal;
 
     currentTerminal.open(terminalRef.value);
 
     const element = currentTerminal.element;
 
     if (element) element.style.display = "block";
+
+    currentSession?.fitAddon.fit();
   }
+});
+
+useResizeObserver(terminalRef, () => {
+  sessions.value[
+    currentFocusSession.value as keyof typeof sessions.value
+  ]?.fitAddon.fit();
 });
 </script>
 
 <template>
   <div
-    class="absolute w-full"
-    :class="isOpenTerminal ? 'bottom-0' : 'top-full'"
+    class="absolute z-20 w-full bg-bgSecondary"
+    :class="[
+      isOpenTerminal ? 'bottom-0' : 'top-full',
+      isFullView ? 'h-full' : 'h-[300px]',
+    ]"
   >
-    <vue-resizable :active="['t']">
-      <div
-        class="w-full h-full border-t-2 border-solid border-bgButton px-4 py-2"
-      >
-        <div class="flex items-center justify-between text-white">
-          <div>Terminal</div>
+    <div
+      class="flex flex-col w-full h-full p-4 border-t-2 border-solid border-bgButton"
+    >
+      <div class="flex overflow-hidden grow">
+        <div ref="terminalRef" id="terminal" class="h-full grow"></div>
 
-          <div class="text-white flex gap-2">
-            <Button
-              variant="filled"
-              @click="terminalSessionsStore.createSession()"
-              >New <i class="text-white fa-thin fa-plus"></i
-            ></Button>
-
+        <div
+          class="w-full max-w-[200px] p-2 overflow-hidden text-sm text-white break-all rounded-md hideScrollbar bg-bgMain text-ellipsis whitespace-nowrap flex flex-col gap-1 h-full"
+        >
+          <div class="flex text-white">
             <IconButton
-              variant="filled"
-              @click="terminalSessionsStore.closeTerminal()"
-              ><i class="text-white fa-thin fa-xmark"></i
+              title="Create Terminal"
+              @click="terminalSessionsStore.createSession()"
+              ><i class="text-white fa-solid fa-plus"></i
             ></IconButton>
-          </div>
-        </div>
 
-        <div class="flex pt-2 h-full">
-          <div class="h-full grow">
-            <div ref="terminalRef" id="terminal" class="h-full"></div>
+            <IconButton title="Full view" @click="isFullView = !isFullView"
+              ><i
+                class="text-white fa-solid"
+                :class="isFullView ? 'fa-chevron-down' : 'fa-chevron-up'"
+              ></i
+            ></IconButton>
+
+            <span class="ml-auto">
+              <IconButton
+                title="Hide Terminal"
+                @click="terminalSessionsStore.closeTerminal()"
+                ><i class="text-white fa-solid fa-xmark"></i
+              ></IconButton>
+            </span>
           </div>
 
-          <div
-            class="w-[200px] p-2 overflow-hidden text-sm text-white break-all rounded-md hideScrollbar bg-bgMain text-ellipsis whitespace-nowrap flex flex-col gap-1"
-          >
+          <div class="flex flex-col gap-1 overflow-auto sideBar">
             <template v-for="({ name }, id) in sessions">
-              <Button
-                :full-width="true"
-                :data-active="currentFocusSession === id"
-                @click="terminalSessionsStore.changeFocusTerminal(id)"
-                ><span
-                  class="overflow-hidden text-sm text-left text-white break-all grow text-ellipsis whitespace-nowrap"
-                >
-                  <i class="fa-solid fa-terminal"></i> {{ name }}
-                </span></Button
-              >
+              <div class="flex gap-1">
+                <Button
+                  :full-width="true"
+                  :data-active="currentFocusSession === id"
+                  @click="terminalSessionsStore.changeFocusTerminal(id)"
+                  ><span
+                    class="overflow-hidden text-xs text-left text-white break-all grow text-ellipsis whitespace-nowrap"
+                  >
+                    <i class="fa-solid fa-terminal"></i> {{ name }}
+                  </span>
+                </Button>
+
+                <IconButton
+                  title="Hide Terminal"
+                  @click="terminalSessionsStore.closeSession(id)"
+                  ><i class="text-red-500 fa-solid fa-trash"></i
+                ></IconButton>
+              </div>
             </template>
           </div>
         </div>
       </div>
-    </vue-resizable>
+    </div>
   </div>
 </template>
 
 <style>
 .terminal.xterm {
-  padding: 10px;
-}
-
-.xterm-viewport {
-  overflow: auto;
-  /* transition: all 0.4s ease-in-out; */
-}
-
-.xterm-viewport::-webkit-scrollbar {
-  width: 0px;
-}
-
-.xterm .xterm-viewport:hover::-webkit-scrollbar {
-  width: 10px;
-}
-
-.xterm-viewport::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* Handle */
-.xterm-viewport::-webkit-scrollbar-thumb {
-  background: #888;
-}
-
-/* Handle on hover */
-.xterm-viewport::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  height: 100%;
+  overflow: hidden;
 }
 </style>

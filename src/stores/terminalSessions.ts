@@ -1,23 +1,26 @@
 import { terminalTheme } from "@/config/theme";
 import { useFolderStore } from "@/stores/folder";
 import { Terminal } from "@xterm/xterm";
+import { FitAddon } from "@xterm/addon-fit";
 import "@xterm/xterm/css/xterm.css";
 import { ipcRenderer } from "electron";
 import { defineStore } from "pinia";
 import { v4 } from "uuid";
 import { computed, ref } from "vue";
+import * as os from "node:os";
+import debounce from "debounce";
+
+interface SessionType {
+  terminal: Terminal;
+  name: string;
+  fitAddon: FitAddon;
+}
+
+const shell = os.platform() === "win32" ? "powershell.exe" : "bash";
 
 export const useTerminalSessionStore = defineStore("terminalStore", () => {
   const currentFocusSession = ref<string | null>(null);
-  const sessions = ref<
-    Record<
-      string,
-      {
-        terminal: Terminal;
-        name: string;
-      }
-    >
-  >({});
+  const sessions = ref<Record<string, SessionType>>({});
   const isOpenTerminal = ref(false);
   const activeSessionLength = computed(
     () => Object.values(sessions.value).length
@@ -25,12 +28,14 @@ export const useTerminalSessionStore = defineStore("terminalStore", () => {
 
   const folderStore = useFolderStore();
 
-  const renderTeminal = (terminal: Terminal) => {
+  const renderTeminal = (session: SessionType) => {
     const terminalElement = document.getElementById("terminal");
 
     if (!terminalElement) return;
 
-    terminal.open(terminalElement);
+    session.terminal.open(terminalElement);
+
+    session?.fitAddon.fit();
   };
 
   const openTerminal = () => {
@@ -45,11 +50,49 @@ export const useTerminalSessionStore = defineStore("terminalStore", () => {
     const currentTerminal =
       sessions.value[currentFocusSession.value as keyof typeof sessions.value];
 
-    renderTeminal(currentTerminal.terminal);
+    renderTeminal(currentTerminal);
   };
 
   const closeTerminal = () => {
     isOpenTerminal.value = false;
+  };
+
+  const toggleTerminal = () => {
+    if (isOpenTerminal.value) {
+      closeTerminal();
+
+      return;
+    }
+
+    openTerminal();
+  };
+
+  const closeSession = (id: string) => {
+    const sessionToClose = sessions.value[id];
+
+    sessionToClose.fitAddon.dispose();
+
+    sessionToClose.terminal.dispose();
+
+    const sessionsClone = { ...sessions.value };
+
+    delete sessionsClone[id];
+
+    sessions.value = sessionsClone;
+
+    ipcRenderer.send("terminal.destroy", id);
+
+    const listKeySessions = Object.keys(sessions.value);
+
+    if (!listKeySessions.length) {
+      closeTerminal();
+
+      return;
+    }
+
+    if (id === currentFocusSession.value) {
+      currentFocusSession.value = listKeySessions[listKeySessions.length - 1];
+    }
   };
 
   const createSession = () => {
@@ -58,6 +101,7 @@ export const useTerminalSessionStore = defineStore("terminalStore", () => {
     ipcRenderer.send("terminal.createSessions", {
       path: folderStore.openFolder,
       id: currentId,
+      shell,
     });
 
     const newTerminal = new Terminal({
@@ -72,22 +116,29 @@ export const useTerminalSessionStore = defineStore("terminalStore", () => {
       ipcRenderer.send("terminal.keystroke" + currentId, e);
     });
 
-    newTerminal.onResize((e) => {
-      console.log(e);
+    newTerminal.onResize((size) => {
+      ipcRenderer.send("terminal.resize" + currentId, size);
     });
 
     isOpenTerminal.value = true;
 
-    renderTeminal(newTerminal);
-
     currentFocusSession.value = currentId;
+
+    const fitAddon = new FitAddon();
+
+    const session = {
+      name: shell,
+      terminal: newTerminal,
+      fitAddon,
+    };
+
+    renderTeminal(session);
+
+    newTerminal.loadAddon(fitAddon);
 
     sessions.value = {
       ...sessions.value,
-      [currentId]: {
-        name: "Terminal " + (Object.keys(sessions.value).length + 1),
-        terminal: newTerminal,
-      },
+      [currentId]: session,
     };
   };
 
@@ -103,5 +154,7 @@ export const useTerminalSessionStore = defineStore("terminalStore", () => {
     isOpenTerminal,
     openTerminal,
     closeTerminal,
+    closeSession,
+    toggleTerminal,
   };
 });

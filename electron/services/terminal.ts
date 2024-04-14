@@ -1,13 +1,19 @@
 import { BrowserWindow, ipcMain } from "electron";
-import * as os from "node:os";
-const { spawn } = require("node-pty");
 
-const shell = os.platform() === "win32" ? "powershell.exe" : "bash";
+const { spawn } = require("node-pty");
 
 const initTerminalService = (win: BrowserWindow) => {
   const ptySessions: Record<string, any> = {};
 
-  const createPtySession = ({ path, id }: { path: string; id: string }) => {
+  const createPtySession = ({
+    path,
+    id,
+    shell,
+  }: {
+    path: string;
+    id: string;
+    shell: string;
+  }) => {
     const currentId = id;
 
     ptySessions[currentId] = spawn(shell, [], {
@@ -25,10 +31,23 @@ const initTerminalService = (win: BrowserWindow) => {
     ipcMain.on("terminal.keystroke" + currentId, (_, key) => {
       ptySessions[currentId].write(key);
     });
+
+    ipcMain.on("terminal.resize" + currentId, (_, size) => {
+      ptySessions[currentId].resize(size ? size.cols : 1, size ? size.rows : 1);
+    });
   };
 
   ipcMain.on("terminal.createSessions", (_, props) => {
     createPtySession(props);
+  });
+
+  ipcMain.on("terminal.destroy", (_, id) => {
+    // I dont know why is this not fcking work?
+    // try {
+    //   ptySessions[id].kill();
+    // } catch (err) {
+    //   console.log(err.message);
+    // }
   });
 };
 

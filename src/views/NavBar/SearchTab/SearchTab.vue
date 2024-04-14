@@ -121,7 +121,7 @@ onMounted(() => {
       />
     </div>
 
-    <perfect-scrollbar
+    <div
       class="px-2 py-2 overflow-x-hidden overflow-y-auto text-sm grow"
     >
       <SearchItem
@@ -129,6 +129,6 @@ onMounted(() => {
         :input="debounced"
         :files="files"
       />
-    </perfect-scrollbar>
+    </div>
   </div>
 </template>

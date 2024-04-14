@@ -9,7 +9,6 @@ import { storeToRefs } from "pinia";
 import { computed, onMounted, toRef, watch } from "vue";
 import { useToast } from "vue-toastification";
 import AudioFileView from "./AudioFileView.vue";
-import ContextMenu from "./ContextMenu.vue";
 import ImageFileView from "./ImageFileView.vue";
 import OpenEditors from "./OpenEditors.vue";
 import TerminalView from "./TerminalView.vue";
@@ -76,8 +75,6 @@ onMounted(() => {
 
 <template>
   <OpenEditors />
-
-  <ContextMenu />
 
   <TextFileView
     v-if="fileDetail && fileType === FileType.other"
