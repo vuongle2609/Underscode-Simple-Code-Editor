@@ -72,6 +72,10 @@ export const useTerminalSessionStore = defineStore("terminalStore", () => {
       ipcRenderer.send("terminal.keystroke" + currentId, e);
     });
 
+    newTerminal.onResize((e) => {
+      console.log(e);
+    });
+
     isOpenTerminal.value = true;
 
     renderTeminal(newTerminal);

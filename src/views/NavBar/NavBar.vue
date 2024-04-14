@@ -8,24 +8,24 @@ const tabOpen = useTabOpen();
 
 const width = ref(300);
 
-const test = computed(() => ({
+const minWidthDinamic = computed(() => ({
   "min-width": width.value + "px",
 }));
 
-const hanleChangeSize = ({ width: newWidth }: { width: number }) => {
+const handleChangeSize = ({ width: newWidth }: { width: number }) => {
   width.value = newWidth;
 };
 </script>
 
 <template>
   <vue-resizable
-    :style="test"
+    :style="minWidthDinamic"
     minWidth="250"
     :active="['r']"
-    :width
-    @resize:start="hanleChangeSize"
-    @resize:move="hanleChangeSize"
-    @resize:end="hanleChangeSize"
+    :width="width"
+    @resize:start="handleChangeSize"
+    @resize:move="handleChangeSize"
+    @resize:end="handleChangeSize"
   >
     <div class="min-w-full text-white bg-bgMain size-full">
       <FileExplorer v-if="tabOpen.openTab == Tab.explorer" />

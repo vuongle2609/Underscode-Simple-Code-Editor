@@ -34,47 +34,55 @@ watch(currentFocusSession, () => {
 
 <template>
   <div
-    class="px-4 py-2 mt-auto border-t-2 border-solid border-bgButton absolute left-0 right-0"
+    class="absolute w-full"
     :class="isOpenTerminal ? 'bottom-0' : 'top-full'"
   >
-    <div class="flex items-center justify-between text-white">
-      <div>Terminal</div>
-
-      <div class="text-white flex gap-2">
-        <Button variant="filled" @click="terminalSessionsStore.createSession()"
-          >New <i class="text-white fa-thin fa-plus"></i
-        ></Button>
-
-        <IconButton
-          variant="filled"
-          @click="terminalSessionsStore.closeTerminal()"
-          ><i class="text-white fa-thin fa-xmark"></i
-        ></IconButton>
-      </div>
-    </div>
-
-    <div class="flex pt-2">
-      <div class="h-full grow">
-        <div ref="terminalRef" id="terminal"></div>
-      </div>
-
+    <vue-resizable :active="['t']">
       <div
-        class="w-[200px] p-2 overflow-hidden text-sm text-white break-all rounded-md hideScrollbar bg-bgMain text-ellipsis whitespace-nowrap flex flex-col gap-1"
+        class="w-full h-full border-t-2 border-solid border-bgButton px-4 py-2"
       >
-        <template v-for="({ name }, id) in sessions">
-          <Button
-            :full-width="true"
-            :data-active="currentFocusSession === id"
-            @click="terminalSessionsStore.changeFocusTerminal(id)"
-            ><span
-              class="overflow-hidden text-sm text-left text-white break-all grow text-ellipsis whitespace-nowrap"
-            >
-              <i class="fa-solid fa-terminal"></i> {{ name }}
-            </span></Button
+        <div class="flex items-center justify-between text-white">
+          <div>Terminal</div>
+
+          <div class="text-white flex gap-2">
+            <Button
+              variant="filled"
+              @click="terminalSessionsStore.createSession()"
+              >New <i class="text-white fa-thin fa-plus"></i
+            ></Button>
+
+            <IconButton
+              variant="filled"
+              @click="terminalSessionsStore.closeTerminal()"
+              ><i class="text-white fa-thin fa-xmark"></i
+            ></IconButton>
+          </div>
+        </div>
+
+        <div class="flex pt-2 h-full">
+          <div class="h-full grow">
+            <div ref="terminalRef" id="terminal" class="h-full"></div>
+          </div>
+
+          <div
+            class="w-[200px] p-2 overflow-hidden text-sm text-white break-all rounded-md hideScrollbar bg-bgMain text-ellipsis whitespace-nowrap flex flex-col gap-1"
           >
-        </template>
+            <template v-for="({ name }, id) in sessions">
+              <Button
+                :full-width="true"
+                :data-active="currentFocusSession === id"
+                @click="terminalSessionsStore.changeFocusTerminal(id)"
+                ><span
+                  class="overflow-hidden text-sm text-left text-white break-all grow text-ellipsis whitespace-nowrap"
+                >
+                  <i class="fa-solid fa-terminal"></i> {{ name }}
+                </span></Button
+              >
+            </template>
+          </div>
+        </div>
       </div>
-    </div>
+    </vue-resizable>
   </div>
 </template>
 
