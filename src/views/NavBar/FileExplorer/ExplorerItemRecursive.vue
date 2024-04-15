@@ -21,9 +21,10 @@ export interface DirectoryStructType {
 const directoryStruct = ref<DirectoryStructType[]>([]);
 
 const getFileDetail = async (path: string) => {
-  return (await fs.promises.readdir(path, { withFileTypes: true }))
-    .sort((a, b) => (a.isFile() ? 1 : 0) - (b.isFile() ? 1 : 0))
-    .map((file) => {
+  return fs
+    .readdirSync(path, { withFileTypes: true })
+    .sort((a: { isFile: () => any; }, b: { isFile: () => any; }) => (a.isFile() ? 1 : 0) - (b.isFile() ? 1 : 0))
+    .map((file: { name: string; isFile: () => any; }) => {
       return {
         name: file.name,
         isFile: file.isFile(),

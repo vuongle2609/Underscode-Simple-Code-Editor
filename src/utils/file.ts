@@ -1,5 +1,5 @@
 import { getClassWithColor } from "file-icons-js";
-const fs = require("fs-extra");
+import fs from "fs";
 import path from "path";
 import { fileSearch } from "search-in-file";
 import { SearchOptions } from "search-in-file/dist/types";
@@ -29,7 +29,7 @@ export const readDirRecursive = ({
       withFileTypes: true,
       recursive: true,
     })
-    .reduce((prev, item) => {
+    .reduce((prev: any, item: { isDirectory: () => any; name: string }) => {
       const isDirectory = item.isDirectory();
       const newPath = path.join(dir, item.name);
 
@@ -73,7 +73,7 @@ export const readDirRecursiveFlat = ({
       withFileTypes: true,
       recursive: true,
     })
-    .reduce((prev, item) => {
+    .reduce((prev: any, item: { isDirectory: () => any; name: string }) => {
       const isDirectory = item.isDirectory();
       const newPath = path.join(dir, item.name);
 
@@ -119,8 +119,12 @@ export const searchInFiles = async (paths: string[], value: string) => {
 export const streamToString = (stream: fs.ReadStream) => {
   const chunks: Buffer[] = [];
   return new Promise<string>((resolve, reject) => {
-    stream.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
-    stream.on("error", (err) => reject(err));
+    stream.on(
+      "data",
+      (chunk: WithImplicitCoercion<ArrayBuffer | SharedArrayBuffer>) =>
+        chunks.push(Buffer.from(chunk))
+    );
+    stream.on("error", (err: any) => reject(err));
     stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
   });
 };
@@ -146,6 +150,6 @@ export const getAbsolutePath = (
   if (replaceWithPosix) {
     pathAbs = pathAbs.replaceAll(path.sep, path.posix.sep);
   }
-  
+
   return pathAbs;
 };
