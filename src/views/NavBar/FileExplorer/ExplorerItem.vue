@@ -6,23 +6,35 @@ import { useEditorsOpenStore } from "@/stores/editorsOpen";
 import { useFolderStore } from "@/stores/folder";
 import { usePathOpenStore } from "@/stores/pathOpen";
 import { getAbsolutePath, getFileIconClass } from "@/utils/file";
-import { onClickOutside, onKeyStroke, useFocus } from "@vueuse/core";
+import {
+  onClickOutside,
+  onKeyStroke,
+  useFocus,
+  useWindowFocus,
+} from "@vueuse/core";
 import pathSys from "path";
 import { storeToRefs } from "pinia";
-import { computed, nextTick, ref } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 import { useToast } from "vue-toastification";
 import ExplorerItemRecursive, {
-DirectoryStructType,
+  DirectoryStructType,
 } from "./ExplorerItemRecursive.vue";
 const fs = require("fs-extra");
 
 const isEditName = ref(false);
 
+const windowFocused = useWindowFocus();
+
 const toast = useToast();
+
+const showCreateDir = ref(false);
+const isCreateFile = ref(false);
+const inputCreateDirRef = ref<HTMLInputElement>();
+const { focused: focusedCreateDir } = useFocus(inputCreateDirRef);
 
 const inputRenameRef = ref<HTMLInputElement>();
 const inputNameValue = ref("");
-const { focused } = useFocus(inputRenameRef);
+const { focused: focusedRename } = useFocus(inputRenameRef);
 
 const props = defineProps<DirectoryStructType & { index: number }>();
 
@@ -69,14 +81,79 @@ const handleClickItem = ({
   handleClickFile({ fileClass, name, path });
 };
 
-// rename section
+const handleClickCreateDir = async (isFile: boolean) => {
+  showCreateDir.value = true;
+  isCreateFile.value = isFile;
+
+  await nextTick();
+
+  focusedCreateDir.value = true;
+};
+
+const handleCreateFile = async () => {
+  if (inputCreateDirRef.value && inputCreateDirRef.value?.value) {
+    try {
+      const fileName = inputCreateDirRef.value.value;
+      const newPath = pathSys.join(props.path, fileName);
+
+      const fd = fs.openSync(newPath, "wx");
+
+      fs.closeSync(fd);
+
+      folderStore.reloadFolder();
+
+      handleCloseCreateDir();
+
+      addEditorWithPath(newPath);
+    } catch (err) {
+      if (err instanceof Error && "code" in err && err.code === "EEXIST") {
+        toast.error("File already exists");
+      } else {
+        toast.error("Error creating file");
+      }
+    }
+  }
+};
+
+const handleCreateFolder = async () => {
+  if (inputCreateDirRef.value && inputCreateDirRef.value?.value) {
+    try {
+      const folderName = inputCreateDirRef.value.value;
+      const newPath = pathSys.join(props.path, folderName);
+
+      fs.mkdirSync(newPath, { recursive: true });
+
+      folderStore.reloadFolder();
+
+      handleCloseCreateDir();
+    } catch (err) {
+      if (err instanceof Error && "code" in err && err.code === "EEXIST") {
+        toast.error("File already exists");
+      } else {
+        toast.error("Error creating file");
+      }
+    }
+  }
+};
+
+const handleCloseCreateDir = () => {
+  if (inputCreateDirRef.value) {
+    showCreateDir.value = false;
+    inputCreateDirRef.value.value = "";
+  }
+};
+
+onClickOutside(inputCreateDirRef, () => {
+  handleCloseCreateDir();
+});
+
 const handleEditName = async () => {
   inputNameValue.value = props.name;
   isEditName.value = true;
 
   await nextTick();
 
-  focused.value = true;
+  focusedRename.value = true;
 };
 
 const handleCloseRename = () => {
@@ -166,12 +243,25 @@ onClickOutside(inputRenameRef, () => {
 
 onKeyStroke(["Enter"], () => {
   if (isEditName.value) handleRename();
+
+  if (showCreateDir && isCreateFile.value) handleCreateFile();
+
+  if (showCreateDir && !isCreateFile.value) handleCreateFolder();
 });
 
 onKeyStroke(["Escape"], () => {
   handleCloseRename();
+
+  handleCloseCreateDir();
 });
 //end rename section
+
+watch(windowFocused, () => {
+  if (!windowFocused.value) {
+    handleCloseCreateDir();
+    handleCloseRename();
+  }
+});
 
 const handleContextMenu = ({
   isFile,
@@ -188,8 +278,8 @@ const handleContextMenu = ({
   ];
 
   const folderMenus = [
-    { label: "Create File", action: () => console.log(1) },
-    { label: "Create Folder", action: () => console.log(1) },
+    { label: "Create File", action: () => handleClickCreateDir(true) },
+    { label: "Create Folder", action: () => handleClickCreateDir(false) },
     { label: "Copy", action: () => handleCopy(false) },
     { label: "Cut", action: () => handleCut(false) },
     ...(clipboard.value
@@ -245,14 +335,26 @@ const fileClass = computed(() =>
 
     <input
       @click.stop=""
-      @blur=""
       v-model="inputNameValue"
       v-if="isEditName"
       ref="inputRenameRef"
       type="text"
-      class="w-full py-1 pl-2 text-xs text-sm rounded-md outline-none bg-bgSecondary"
+      class="w-full py-1 pl-2 text-xs rounded-md outline-none bg-bgSecondary"
     />
   </Button>
+
+  <div class="flex items-center gap-2 px-2 py-1 pl-4" v-if="showCreateDir">
+    <i
+      class="fa-light"
+      :class="isCreateFile ? 'fa-bars-sort' : 'fa-folder'"
+    ></i>
+
+    <input
+      ref="inputCreateDirRef"
+      type="text"
+      class="w-full py-1 pl-2 text-xs rounded-md outline-none bg-bgSecondary"
+    />
+  </div>
 
   <ExplorerItemRecursive v-if="!isFile && isOpen" :path />
 </template>
