@@ -39,10 +39,15 @@ const { focused: focusedRename } = useFocus(inputRenameRef);
 const props = defineProps<DirectoryStructType & { index: number }>();
 
 const contextMenuStore = useContextMenuStore();
+
 const { addEditorWithPath } = useEditorsOpenStore();
+
 const pathOpenStore = usePathOpenStore();
+
 const editorsOpenStore = useEditorsOpenStore();
+
 const folderStore = useFolderStore();
+
 const clipboardStore = useClipboardStore();
 const { cutClipboard, copyClipboard, clipboard } = storeToRefs(clipboardStore);
 
@@ -106,10 +111,8 @@ const handleCreateFile = async () => {
 
       addEditorWithPath(newPath);
     } catch (err) {
-      if (err instanceof Error && "code" in err && err.code === "EEXIST") {
-        toast.error("File already exists");
-      } else {
-        toast.error("Error creating file");
+      if (err instanceof Error) {
+        toast.error(err.message);
       }
     }
   }
@@ -127,10 +130,8 @@ const handleCreateFolder = async () => {
 
       handleCloseCreateDir();
     } catch (err) {
-      if (err instanceof Error && "code" in err && err.code === "EEXIST") {
-        toast.error("File already exists");
-      } else {
-        toast.error("Error creating file");
+      if (err instanceof Error) {
+        toast.error(err.message);
       }
     }
   }
@@ -253,8 +254,7 @@ onKeyStroke(["Escape"], () => {
   handleCloseRename();
 
   handleCloseCreateDir();
-});
-//end rename section
+}); 
 
 watch(windowFocused, () => {
   if (!windowFocused.value) {
@@ -316,7 +316,7 @@ const fileClass = computed(() =>
     "
     :data-active="path === pathOpenStore.currentFocusPathNav && !isEditName"
     :title="getAbsolutePath(path, true)"
-    @contextmenu.prevent="handleContextMenu({ fileClass, isFile, name, path })"
+    @contextmenu.stop.prevent="handleContextMenu({ fileClass, isFile, name, path })"
   >
     <i class="text-xs fa-light fa-chevron-right" v-if="!isOpen && !isFile"></i>
 
