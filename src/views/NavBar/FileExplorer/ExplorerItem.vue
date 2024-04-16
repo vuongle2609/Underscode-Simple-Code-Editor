@@ -105,8 +105,6 @@ const handleCreateFile = async () => {
 
       fs.closeSync(fd);
 
-      folderStore.reloadFolder();
-
       handleCloseCreateDir();
 
       addEditorWithPath(newPath);
@@ -125,8 +123,6 @@ const handleCreateFolder = async () => {
       const newPath = pathSys.join(props.path, folderName);
 
       fs.mkdirSync(newPath, { recursive: true });
-
-      folderStore.reloadFolder();
 
       handleCloseCreateDir();
     } catch (err) {
@@ -177,7 +173,6 @@ const handleRename = async () => {
     fs.renameSync(props.path, newPath);
 
     editorsOpenStore.reloadEditor(props.path, newPath);
-    folderStore.reloadFolder();
 
     handleCloseRename();
   } catch (err) {
@@ -190,8 +185,6 @@ const handleRename = async () => {
 const handleDelete = async (isFile: boolean) => {
   try {
     fs.removeSync(props.path);
-
-    folderStore.reloadFolder();
   } catch (err) {
     if (err instanceof Error) {
       toast.error(err.message);
@@ -229,7 +222,6 @@ const handlePaste = async () => {
       fs.copySync(clipboard.value.path, dirDist);
     }
 
-    folderStore.reloadFolder();
     clipboardStore.handleClearClipboardPath();
   } catch (err) {
     if (err instanceof Error) {
@@ -254,7 +246,7 @@ onKeyStroke(["Escape"], () => {
   handleCloseRename();
 
   handleCloseCreateDir();
-}); 
+});
 
 watch(windowFocused, () => {
   if (!windowFocused.value) {
@@ -316,7 +308,9 @@ const fileClass = computed(() =>
     "
     :data-active="path === pathOpenStore.currentFocusPathNav && !isEditName"
     :title="getAbsolutePath(path, true)"
-    @contextmenu.stop.prevent="handleContextMenu({ fileClass, isFile, name, path })"
+    @contextmenu.stop.prevent="
+      handleContextMenu({ fileClass, isFile, name, path })
+    "
   >
     <i class="text-xs fa-light fa-chevron-right" v-if="!isOpen && !isFile"></i>
 

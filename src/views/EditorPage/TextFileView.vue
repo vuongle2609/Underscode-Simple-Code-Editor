@@ -37,6 +37,26 @@ const MONACO_EDITOR_OPTIONS: monaco.editor.IStandaloneEditorConstructionOptions 
   };
 
 const mapFileContent = async (newFilePath: string) => {
+  monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+    target: monaco.languages.typescript.ScriptTarget.ES2016,
+    allowNonTsExtensions: true,
+    moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
+    module: monaco.languages.typescript.ModuleKind.CommonJS,
+    noEmit: true,
+    typeRoots: ["node_modules/@types"],
+  });
+
+  // extra libraries
+  monaco.languages.typescript.typescriptDefaults.addExtraLib(
+    `export declare function next() : string`,
+    "node_modules/@types/external/index.d.ts"
+  );
+
+  monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+    noSemanticValidation: false,
+    noSyntaxValidation: false,
+  });
+
   let model = monaco.editor.getModel(monaco.Uri.file(newFilePath));
 
   if (!model) {
@@ -44,9 +64,11 @@ const mapFileContent = async (newFilePath: string) => {
 
     const text = await streamToString(stream);
 
-    model =
-      monaco.editor.getModel(monaco.Uri.file(newFilePath)) ||
-      monaco.editor.createModel(text, undefined, monaco.Uri.file(newFilePath));
+    model = monaco.editor.createModel(
+      text,
+      undefined,
+      monaco.Uri.file(newFilePath)
+    );
 
     stream.destroy();
   }

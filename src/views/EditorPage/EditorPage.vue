@@ -6,7 +6,7 @@ const fs = require("fs-extra");
 import isImage from "is-image";
 import isVideo from "is-video";
 import { storeToRefs } from "pinia";
-import { computed, onMounted, toRef, watch } from "vue";
+import { computed, onMounted, toRef, watch, watchEffect } from "vue";
 import { useToast } from "vue-toastification";
 import AudioFileView from "./AudioFileView.vue";
 import ImageFileView from "./ImageFileView.vue";
@@ -14,6 +14,8 @@ import OpenEditors from "./OpenEditors.vue";
 import TerminalView from "./TerminalView.vue";
 import TextFileView from "./TextFileView.vue";
 import VideoFileView from "./VideoFileView.vue";
+import chokidar from "chokidar";
+import { useDebounceFn } from "@vueuse/core";
 
 const folderStore = useFolderStore();
 const editorsOpenStore = useEditorsOpenStore();
@@ -64,12 +66,31 @@ const checkIsDirExist = async () => {
   }
 };
 
-watch(openFolderRef, async () => {
-  checkIsDirExist();
-});
+const reloadFolderDebounce = useDebounceFn(() => {
+  folderStore.reloadFolder();
+}, 200);
 
-onMounted(() => {
-  checkIsDirExist();
+const initChokidar = async (path: string) => {
+  const watcher = chokidar
+    .watch(path, {
+      ignorePermissionErrors: true,
+      persistent: true,
+    })
+    .on("all", reloadFolderDebounce);
+
+  return watcher;
+};
+
+watchEffect(async (cleanUp) => {
+  if (folderStore.openFolder) {
+    checkIsDirExist();
+    
+    const watcher = await initChokidar(folderStore.openFolder);
+
+    cleanUp(() => {
+      watcher.close().then(() => console.log("closed", folderStore.openFolder));
+    });
+  }
 });
 </script>
 

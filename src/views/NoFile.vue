@@ -9,11 +9,7 @@ const folderStore = useFolderStore();
   <div
     class="flex flex-col items-center justify-center w-screen h-screen gap-6 p-5 bg-bgSecondary"
   >
-    <img
-      src="@/assets/image/iconLarge.png"
-      alt="App Icon"
-      class="max-w-[30%]"
-    />
+    <img src="/AppIcon.svg" alt="App Icon" class="max-w-[10%]" />
 
     <div class="flex flex-col items-center gap-4 text-white">
       <h1 class="text-xl">Welcome to Dori</h1>
@@ -26,11 +22,11 @@ const folderStore = useFolderStore();
         >
       </div>
 
-      <div class="flex flex-col items-center gap-2">
+      <!-- <div class="flex flex-col items-center gap-2">
         <span class="text-slate-400">Or clone a repository</span>
 
         <Button variant="filled">Clone Repository</Button>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

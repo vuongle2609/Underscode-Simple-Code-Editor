@@ -26,4 +26,5 @@ release
 *.sw?
 
 
-node-pty/build
+build
+deps

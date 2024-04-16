@@ -63,8 +63,6 @@ const handleCreateFile = async () => {
 
       fs.closeSync(fd);
 
-      folderStore.reloadFolder();
-
       handleCloseCreateDir();
 
       addEditorWithPath(newPath);
@@ -89,8 +87,6 @@ const handleCreateFolder = async () => {
       const newPath = path.join(folderStore.openFolder, folderName);
 
       fs.mkdirSync(newPath, { recursive: true });
-
-      folderStore.reloadFolder();
 
       handleCloseCreateDir();
     } catch (err) {
@@ -194,7 +190,6 @@ const handlePaste = async () => {
       fs.copySync(clipboard.value.path, dirDist);
     }
 
-    folderStore.reloadFolder();
     clipboardStore.handleClearClipboardPath();
   } catch (err) {
     if (err instanceof Error) {

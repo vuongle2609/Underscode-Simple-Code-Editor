@@ -44,9 +44,9 @@ const tabItems = [
         <i class="fa-solid fa-circle-user"></i>
       </TabBarItem> -->
 
-      <TabBarItem title="Settings">
+      <!-- <TabBarItem title="Settings">
         <i class="fa-solid fa-gear"></i>
-      </TabBarItem>
+      </TabBarItem>-->
     </div>
   </div>
 </template>
