@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getFileIconClass } from "@/utils/file";
-import fs from "fs";
+const fs = require("fs-extra");
 import sysPath from "path";
 import { ref, toRef, watch } from "vue";
 import ExplorerItem from "./ExplorerItem.vue";
@@ -21,9 +21,10 @@ export interface DirectoryStructType {
 const directoryStruct = ref<DirectoryStructType[]>([]);
 
 const getFileDetail = async (path: string) => {
-  return (await fs.promises.readdir(path, { withFileTypes: true }))
-    .sort((a, b) => (a.isFile() ? 1 : 0) - (b.isFile() ? 1 : 0))
-    .map((file) => {
+  return fs
+    .readdirSync(path, { withFileTypes: true })
+    .sort((a: { isFile: () => any; }, b: { isFile: () => any; }) => (a.isFile() ? 1 : 0) - (b.isFile() ? 1 : 0))
+    .map((file: { name: string; isFile: () => any; }) => {
       return {
         name: file.name,
         isFile: file.isFile(),

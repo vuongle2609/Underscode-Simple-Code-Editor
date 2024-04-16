@@ -1,19 +1,23 @@
 <script setup lang="ts">
 import IconButton from "@/components/general/IconButton.vue";
+import { emitter } from "@/main";
 import { useEditorsOpenStore } from "@/stores/editorsOpen";
 import { useFolderStore } from "@/stores/folder";
+import { useTerminalSessionStore } from "@/stores/terminalSessions";
 import {
   onClickOutside,
   onKeyStroke,
   useFocus,
   useWindowFocus,
 } from "@vueuse/core";
-import fs from "fs";
+const fs = require("fs-extra");
 import path from "path";
 import { nextTick, onMounted, ref, watch } from "vue";
 import { useToast } from "vue-toastification";
 import ExplorerItemRecursive from "./ExplorerItemRecursive.vue";
-import { useTerminalSessionStore } from "@/stores/terminalSessions";
+import { useClipboardStore } from "@/stores/clipboard";
+import { storeToRefs } from "pinia";
+import { useContextMenuStore } from "@/stores/contextMenu";
 
 const toast = useToast();
 
@@ -22,6 +26,12 @@ const { addEditorWithPath } = useEditorsOpenStore();
 
 const folderStore = useFolderStore();
 
+const clipboardStore = useClipboardStore();
+const { cutClipboard, copyClipboard, clipboard } = storeToRefs(clipboardStore);
+
+const contextMenuStore = useContextMenuStore();
+
+const componentKey = ref("explorerBar");
 const inputCreateDirRef = ref<HTMLInputElement>();
 const { focused } = useFocus(inputCreateDirRef);
 
@@ -53,8 +63,6 @@ const handleCreateFile = async () => {
 
       fs.closeSync(fd);
 
-      folderStore.reloadFolder();
-
       handleCloseCreateDir();
 
       addEditorWithPath(newPath);
@@ -79,8 +87,6 @@ const handleCreateFolder = async () => {
       const newPath = path.join(folderStore.openFolder, folderName);
 
       fs.mkdirSync(newPath, { recursive: true });
-
-      folderStore.reloadFolder();
 
       handleCloseCreateDir();
     } catch (err) {
@@ -161,6 +167,50 @@ const actionButtons = [
     },
   },
 ];
+
+const handlePaste = async () => {
+  try {
+    if (!clipboard.value) return;
+
+    let dirMoveName = path.parse(clipboard.value.path).base;
+
+    let dirDist = path.join(folderStore.openFolder || "", dirMoveName);
+
+    while (fs.pathExistsSync(dirDist)) {
+      dirDist += "Copy";
+    }
+
+    if (clipboard.value.isCut) {
+      fs.moveSync(clipboard.value.path, dirDist, {
+        overwrite: true,
+      });
+    }
+
+    if (!clipboard.value.isCut) {
+      fs.copySync(clipboard.value.path, dirDist);
+    }
+
+    clipboardStore.handleClearClipboardPath();
+  } catch (err) {
+    if (err instanceof Error) {
+      toast.error(err.message);
+    }
+  }
+};
+
+const handleContextMenu = ({}) => {
+  const folderMenus = [
+    { label: "Create File", action: () => handleClickCreateDir(true) },
+    { label: "Create Folder", action: () => handleClickCreateDir(false) },
+    ...(clipboard.value
+      ? [{ label: "Paste", action: () => handlePaste() }]
+      : []),
+  ];
+
+  contextMenuStore.openContextMenu(folderMenus);
+};
+
+emitter.on("reloadFolder", () => (componentKey.value += 1));
 </script>
 
 <template>
@@ -177,7 +227,10 @@ const actionButtons = [
       </div>
     </div>
 
-    <div class="h-full py-2 pr-2 overflow-x-hidden sideBar grow">
+    <div
+      class="h-full py-2 pr-2 overflow-x-hidden sideBar grow"
+      @contextmenu.prevent="handleContextMenu({ path })"
+    >
       <div class="flex items-center gap-2 px-2 py-1 pl-4" v-if="showCreateDir">
         <i
           class="fa-light"
@@ -192,6 +245,7 @@ const actionButtons = [
       </div>
 
       <ExplorerItemRecursive
+        :key="componentKey"
         v-if="folderStore.openFolder"
         :isOpen="true"
         :path="folderStore.openFolder"

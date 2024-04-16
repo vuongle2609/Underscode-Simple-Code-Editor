@@ -1,5 +1,5 @@
 import * as remoteMain from "@electron/remote/main";
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, Menu } from "electron";
 import path from "node:path";
 import initTerminalService from "./services/terminal";
 const { screen } = require("electron");
@@ -27,11 +27,11 @@ remoteMain.initialize();
 
 function createWindow() {
   const win = new BrowserWindow({
-    icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
-    minWidth: 1024,
-    minHeight: 720,
+    icon: path.join(process.env.VITE_PUBLIC, "AppIcon.svg"),
+    minWidth: 640,
+    minHeight: 480,
     autoHideMenuBar: true,
-    title: "Dori",
+    title: "Tabby",
     // frame: false,
     webPreferences: {
       preload: "preload.js",
@@ -42,8 +42,8 @@ function createWindow() {
       webSecurity: false,
     },
   });
+
   // win.setMenu(null);
-  win.maximize();
 
   remoteMain.enable(win.webContents);
 

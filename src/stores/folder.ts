@@ -2,6 +2,7 @@ import * as remote from "@electron/remote";
 import { defineStore } from "pinia";
 import { nextTick, ref } from "vue";
 import { useEditorsOpenStore } from "./editorsOpen";
+import { emitter } from "@/main";
 
 export const useFolderStore = defineStore("folder", () => {
   const editorsOpenStore = useEditorsOpenStore();
@@ -12,13 +13,15 @@ export const useFolderStore = defineStore("folder", () => {
   };
 
   const reloadFolder = async () => {
-    const prevOpen = openFolder.value;
+    // const prevOpen = openFolder.value;
 
-    openFolder.value = null;
+    // openFolder.value = null;
 
-    await nextTick();
+    // await nextTick();
 
-    openFolder.value = prevOpen;
+    // openFolder.value = prevOpen;
+
+    emitter.emit("reloadFolder", { a: "b" });
   };
 
   const closeFolder = () => {
