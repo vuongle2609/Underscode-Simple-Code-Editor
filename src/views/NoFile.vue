@@ -12,7 +12,7 @@ const folderStore = useFolderStore();
     <img src="/AppIcon.svg" alt="App Icon" class="max-w-[10%]" />
 
     <div class="flex flex-col items-center gap-4 text-white">
-      <h1 class="text-xl">Welcome to Dori</h1>
+      <h1 class="text-xl">Welcome to Underscode</h1>
 
       <div class="flex flex-col items-center gap-2">
         <span class="text-slate-400">To start, choose a project</span>

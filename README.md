@@ -1,3 +1,3 @@
-Dori Code Editor
+Underscode Code Editor
 
 <img src="./public/preview.png" />

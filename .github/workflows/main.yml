@@ -35,7 +35,7 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "stable"
           prerelease: false
-          title: "Dori Code Editor"
+          title: "Underscode Code Editor"
           files: |
-            ./release/Dori-Setup.exe
+            ./release/Underscode-Setup.exe
         id: "automatic_releases"

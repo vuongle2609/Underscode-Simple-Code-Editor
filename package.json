@@ -1,7 +1,7 @@
 {
-  "name": "dori",
+  "name": "Underscode",
   "author": "vuongle2609",
-  "description": "Code made easy. Whether you're a beginner or a pro, Dori helps you write code without the fuss.  Get started quickly, stay organized, and get back to what matters – creating.",
+  "description": "Code made easy. Whether you're a beginner or a pro, Underscode helps you write code without the fuss.  Get started quickly, stay organized, and get back to what matters – creating.",
   "private": true,
   "version": "0.0.0",
   "scripts": {
@@ -64,10 +64,5 @@
     "vite-plugin-electron-renderer": "^0.14.5",
     "vue-tsc": "^1.8.8"
   },
-  "main": "dist-electron/main.js",
-  "build": {
-    "win": {
-      "icon": "./public/AppIcon.ico"
-    }
-  }
+  "main": "dist-electron/main.js"
 }

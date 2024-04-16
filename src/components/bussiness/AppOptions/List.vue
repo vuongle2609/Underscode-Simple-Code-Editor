@@ -88,7 +88,7 @@ const options = computed<OptionType[]>(() => [
       {
         label: "Github (Source Code)",
         action: () =>
-          shell.openExternal("https://github.com/vuongle2609/DoriElectron"),
+          shell.openExternal("https://github.com/vuongle2609/Underscode-Simple-Code-Editor"),
       },
     ],
   },
