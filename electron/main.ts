@@ -30,6 +30,8 @@ function createWindow() {
     icon: path.join(process.env.VITE_PUBLIC, "AppIcon.svg"),
     minWidth: 640,
     minHeight: 480,
+    width: 1080,
+    height: 720,
     autoHideMenuBar: true,
     title: "Tabby",
     // frame: false,
@@ -43,7 +45,7 @@ function createWindow() {
     },
   });
 
-  // win.setMenu(null);
+  if (app.isPackaged) win.setMenu(null);
 
   remoteMain.enable(win.webContents);
 

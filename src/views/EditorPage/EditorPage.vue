@@ -75,8 +75,12 @@ const initChokidar = async (path: string) => {
     .watch(path, {
       ignorePermissionErrors: true,
       persistent: true,
+      ignoreInitial: true,
     })
-    .on("all", reloadFolderDebounce);
+    .on("all", () => {
+      console.log("reload");
+      reloadFolderDebounce();
+    });
 
   return watcher;
 };
@@ -84,7 +88,7 @@ const initChokidar = async (path: string) => {
 watchEffect(async (cleanUp) => {
   if (folderStore.openFolder) {
     checkIsDirExist();
-    
+
     const watcher = await initChokidar(folderStore.openFolder);
 
     cleanUp(() => {
