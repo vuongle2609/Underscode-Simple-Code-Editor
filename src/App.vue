@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import ContextMenu from "@/components/general/ContextMenu.vue";
 import { useFolderStore } from "./stores/folder";
 import Editor from "./views/Editor.vue";
 import NoFile from "./views/NoFile.vue";
-import ContextMenu from "@/components/general/ContextMenu.vue";
 
 const folderStore = useFolderStore();
 </script>

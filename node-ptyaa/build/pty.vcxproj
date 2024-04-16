@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{2D645FC5-4E1A-54F8-2441-8911EC9AA773}</ProjectGuid>
+    <ProjectGuid>{0AD8E53A-7DFF-709B-C3EE-4550FEA3146B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>pty</RootNamespace>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
@@ -48,7 +48,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\include\node;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\src;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\deps\openssl\config;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\deps\openssl\openssl\include;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\deps\uv\include;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\deps\zlib;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\deps\v8\include;..\..\node_modules\nan;..\deps\winpty\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\vuongle\.electron-gyp\26.6.10\include\node;C:\Users\vuongle\.electron-gyp\26.6.10\src;C:\Users\vuongle\.electron-gyp\26.6.10\deps\openssl\config;C:\Users\vuongle\.electron-gyp\26.6.10\deps\openssl\openssl\include;C:\Users\vuongle\.electron-gyp\26.6.10\deps\uv\include;C:\Users\vuongle\.electron-gyp\26.6.10\deps\zlib;C:\Users\vuongle\.electron-gyp\26.6.10\deps\v8\include;..\..\node_modules\nan;..\deps\winpty\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:__cplusplus -std:c++17 /guard:cf /ZH:SHA_256 %(AdditionalOptions)</AdditionalOptions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <BufferSecurityCheck>true</BufferSecurityCheck>
@@ -60,7 +60,7 @@
       <OmitFramePointers>false</OmitFramePointers>
       <Optimization>Disabled</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PreprocessorDefinitions>NODE_GYP_MODULE_NAME=pty;USING_UV_SHARED=1;USING_V8_SHARED=1;V8_DEPRECATION_WARNINGS=1;_GLIBCXX_USE_CXX11_ABI=1;WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_HAS_EXCEPTIONS=0;OPENSSL_NO_PINSHARED;OPENSSL_THREADS;BUILDING_NODE_EXTENSION;HOST_BINARY=&quot;node.exe&quot;;DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NODE_GYP_MODULE_NAME=pty;USING_UV_SHARED=1;USING_V8_SHARED=1;V8_DEPRECATION_WARNINGS=1;V8_DEPRECATION_WARNINGS;V8_IMMINENT_DEPRECATION_WARNINGS;_GLIBCXX_USE_CXX11_ABI=1;ELECTRON_ENSURE_CONFIG_GYPI;USING_ELECTRON_CONFIG_GYPI;V8_COMPRESS_POINTERS;V8_COMPRESS_POINTERS_IN_SHARED_CAGE;V8_ENABLE_SANDBOX;V8_31BIT_SMIS_ON_64BIT_ARCH;WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_HAS_EXCEPTIONS=0;OPENSSL_NO_PINSHARED;OPENSSL_THREADS;OPENSSL_NO_ASM;BUILDING_NODE_EXTENSION;HOST_BINARY=&quot;node.exe&quot;;DEBUG;_DEBUG;V8_ENABLE_CHECKS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <StringPooling>true</StringPooling>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -72,7 +72,7 @@
       <AdditionalOptions>/LTCG:INCREMENTAL %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;DelayImp.lib;&quot;C:\\Users\\boot.AI\\AppData\\Local\\node-gyp\\Cache\\20.12.2\\x64\\node.lib&quot;;shlwapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;DelayImp.lib;&quot;C:\\Users\\vuongle\\.electron-gyp\\26.6.10\\x64\\node.lib&quot;;shlwapi.lib</AdditionalDependencies>
       <AdditionalOptions>/guard:cf /LTCG:INCREMENTAL /ignore:4199 %(AdditionalOptions)</AdditionalOptions>
       <DelayLoadDLLs>node.exe;%(DelayLoadDLLs)</DelayLoadDLLs>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -84,13 +84,13 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\include\node;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\src;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\deps\openssl\config;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\deps\openssl\openssl\include;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\deps\uv\include;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\deps\zlib;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\deps\v8\include;..\..\node_modules\nan;..\deps\winpty\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NODE_GYP_MODULE_NAME=pty;USING_UV_SHARED=1;USING_V8_SHARED=1;V8_DEPRECATION_WARNINGS=1;_GLIBCXX_USE_CXX11_ABI=1;WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_HAS_EXCEPTIONS=0;OPENSSL_NO_PINSHARED;OPENSSL_THREADS;BUILDING_NODE_EXTENSION;HOST_BINARY=&quot;node.exe&quot;;DEBUG;_DEBUG;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\vuongle\.electron-gyp\26.6.10\include\node;C:\Users\vuongle\.electron-gyp\26.6.10\src;C:\Users\vuongle\.electron-gyp\26.6.10\deps\openssl\config;C:\Users\vuongle\.electron-gyp\26.6.10\deps\openssl\openssl\include;C:\Users\vuongle\.electron-gyp\26.6.10\deps\uv\include;C:\Users\vuongle\.electron-gyp\26.6.10\deps\zlib;C:\Users\vuongle\.electron-gyp\26.6.10\deps\v8\include;..\..\node_modules\nan;..\deps\winpty\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NODE_GYP_MODULE_NAME=pty;USING_UV_SHARED=1;USING_V8_SHARED=1;V8_DEPRECATION_WARNINGS=1;V8_DEPRECATION_WARNINGS;V8_IMMINENT_DEPRECATION_WARNINGS;_GLIBCXX_USE_CXX11_ABI=1;ELECTRON_ENSURE_CONFIG_GYPI;USING_ELECTRON_CONFIG_GYPI;V8_COMPRESS_POINTERS;V8_COMPRESS_POINTERS_IN_SHARED_CAGE;V8_ENABLE_SANDBOX;V8_31BIT_SMIS_ON_64BIT_ARCH;WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_HAS_EXCEPTIONS=0;OPENSSL_NO_PINSHARED;OPENSSL_THREADS;OPENSSL_NO_ASM;BUILDING_NODE_EXTENSION;HOST_BINARY=&quot;node.exe&quot;;DEBUG;_DEBUG;V8_ENABLE_CHECKS;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\include\node;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\src;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\deps\openssl\config;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\deps\openssl\openssl\include;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\deps\uv\include;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\deps\zlib;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\deps\v8\include;..\..\node_modules\nan;..\deps\winpty\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\vuongle\.electron-gyp\26.6.10\include\node;C:\Users\vuongle\.electron-gyp\26.6.10\src;C:\Users\vuongle\.electron-gyp\26.6.10\deps\openssl\config;C:\Users\vuongle\.electron-gyp\26.6.10\deps\openssl\openssl\include;C:\Users\vuongle\.electron-gyp\26.6.10\deps\uv\include;C:\Users\vuongle\.electron-gyp\26.6.10\deps\zlib;C:\Users\vuongle\.electron-gyp\26.6.10\deps\v8\include;..\..\node_modules\nan;..\deps\winpty\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:__cplusplus -std:c++17 /guard:cf /ZH:SHA_256 %(AdditionalOptions)</AdditionalOptions>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
@@ -104,7 +104,7 @@
       <OmitFramePointers>true</OmitFramePointers>
       <Optimization>Full</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PreprocessorDefinitions>NODE_GYP_MODULE_NAME=pty;USING_UV_SHARED=1;USING_V8_SHARED=1;V8_DEPRECATION_WARNINGS=1;_GLIBCXX_USE_CXX11_ABI=1;WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_HAS_EXCEPTIONS=0;OPENSSL_NO_PINSHARED;OPENSSL_THREADS;BUILDING_NODE_EXTENSION;HOST_BINARY=&quot;node.exe&quot;;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NODE_GYP_MODULE_NAME=pty;USING_UV_SHARED=1;USING_V8_SHARED=1;V8_DEPRECATION_WARNINGS=1;V8_DEPRECATION_WARNINGS;V8_IMMINENT_DEPRECATION_WARNINGS;_GLIBCXX_USE_CXX11_ABI=1;ELECTRON_ENSURE_CONFIG_GYPI;USING_ELECTRON_CONFIG_GYPI;V8_COMPRESS_POINTERS;V8_COMPRESS_POINTERS_IN_SHARED_CAGE;V8_ENABLE_SANDBOX;V8_31BIT_SMIS_ON_64BIT_ARCH;WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_HAS_EXCEPTIONS=0;OPENSSL_NO_PINSHARED;OPENSSL_THREADS;OPENSSL_NO_ASM;BUILDING_NODE_EXTENSION;HOST_BINARY=&quot;node.exe&quot;;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <StringPooling>true</StringPooling>
@@ -117,7 +117,7 @@
       <AdditionalOptions>/LTCG:INCREMENTAL %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;DelayImp.lib;&quot;C:\\Users\\boot.AI\\AppData\\Local\\node-gyp\\Cache\\20.12.2\\x64\\node.lib&quot;;shlwapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;DelayImp.lib;&quot;C:\\Users\\vuongle\\.electron-gyp\\26.6.10\\x64\\node.lib&quot;;shlwapi.lib</AdditionalDependencies>
       <AdditionalOptions>/guard:cf /LTCG:INCREMENTAL /ignore:4199 %(AdditionalOptions)</AdditionalOptions>
       <DelayLoadDLLs>node.exe;%(DelayLoadDLLs)</DelayLoadDLLs>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -129,8 +129,8 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\include\node;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\src;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\deps\openssl\config;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\deps\openssl\openssl\include;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\deps\uv\include;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\deps\zlib;C:\Users\boot.AI\AppData\Local\node-gyp\Cache\20.12.2\deps\v8\include;..\..\node_modules\nan;..\deps\winpty\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NODE_GYP_MODULE_NAME=pty;USING_UV_SHARED=1;USING_V8_SHARED=1;V8_DEPRECATION_WARNINGS=1;_GLIBCXX_USE_CXX11_ABI=1;WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_HAS_EXCEPTIONS=0;OPENSSL_NO_PINSHARED;OPENSSL_THREADS;BUILDING_NODE_EXTENSION;HOST_BINARY=&quot;node.exe&quot;;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\vuongle\.electron-gyp\26.6.10\include\node;C:\Users\vuongle\.electron-gyp\26.6.10\src;C:\Users\vuongle\.electron-gyp\26.6.10\deps\openssl\config;C:\Users\vuongle\.electron-gyp\26.6.10\deps\openssl\openssl\include;C:\Users\vuongle\.electron-gyp\26.6.10\deps\uv\include;C:\Users\vuongle\.electron-gyp\26.6.10\deps\zlib;C:\Users\vuongle\.electron-gyp\26.6.10\deps\v8\include;..\..\node_modules\nan;..\deps\winpty\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NODE_GYP_MODULE_NAME=pty;USING_UV_SHARED=1;USING_V8_SHARED=1;V8_DEPRECATION_WARNINGS=1;V8_DEPRECATION_WARNINGS;V8_IMMINENT_DEPRECATION_WARNINGS;_GLIBCXX_USE_CXX11_ABI=1;ELECTRON_ENSURE_CONFIG_GYPI;USING_ELECTRON_CONFIG_GYPI;V8_COMPRESS_POINTERS;V8_COMPRESS_POINTERS_IN_SHARED_CAGE;V8_ENABLE_SANDBOX;V8_31BIT_SMIS_ON_64BIT_ARCH;WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_HAS_EXCEPTIONS=0;OPENSSL_NO_PINSHARED;OPENSSL_THREADS;OPENSSL_NO_ASM;BUILDING_NODE_EXTENSION;HOST_BINARY=&quot;node.exe&quot;;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -143,15 +143,15 @@
     <ClCompile Include="..\src\win\path_util.cc">
       <ObjectFileName>$(IntDir)\src\win\path_util.obj</ObjectFileName>
     </ClCompile>
-    <ClCompile Include="D:\pj\Underscode-Simple-Code-Editor\node_modules\node-gyp\src\win_delay_load_hook.cc"/>
+    <ClCompile Include="D:\pj\DoriElectron\node_modules\node-gyp\src\win_delay_load_hook.cc"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="deps\winpty\src\winpty-agent.vcxproj">
-      <Project>{9D543BF9-F370-0CAF-87E4-34794ECEBF7C}</Project>
+      <Project>{1C745558-91A0-C4F9-A06D-BB701920E001}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="deps\winpty\src\winpty.vcxproj">
-      <Project>{A724A651-6080-AD55-6282-91C2F49381E9}</Project>
+      <Project>{10EC408E-7565-E647-F51F-08929B4C56A3}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>

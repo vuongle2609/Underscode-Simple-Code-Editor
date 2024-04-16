@@ -21,6 +21,7 @@
         arch: ["x64"],
       },
     ],
+    icon: "build/app.ico",
     artifactName: "${productName}-Setup.${ext}",
   },
   nsis: {

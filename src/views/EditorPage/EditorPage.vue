@@ -16,6 +16,7 @@ import TextFileView from "./TextFileView.vue";
 import VideoFileView from "./VideoFileView.vue";
 import chokidar from "chokidar";
 import { useDebounceFn } from "@vueuse/core";
+import { chokidarWorker } from "@/main";
 
 const folderStore = useFolderStore();
 const editorsOpenStore = useEditorsOpenStore();
@@ -68,32 +69,19 @@ const checkIsDirExist = async () => {
 
 const reloadFolderDebounce = useDebounceFn(() => {
   folderStore.reloadFolder();
-}, 200);
+}, 100);
 
-const initChokidar = async (path: string) => {
-  const watcher = chokidar
-    .watch(path, {
-      ignorePermissionErrors: true,
-      persistent: true,
-      ignoreInitial: true,
-    })
-    .on("all", () => {
-      console.log("reload");
-      reloadFolderDebounce();
-    });
-
-  return watcher;
-};
-
-watchEffect(async (cleanUp) => {
+watchEffect(async () => {
   if (folderStore.openFolder) {
     checkIsDirExist();
 
-    const watcher = await initChokidar(folderStore.openFolder);
-
-    cleanUp(() => {
-      watcher.close().then(() => console.log("closed", folderStore.openFolder));
+    chokidarWorker.postMessage({
+      path: folderStore.openFolder,
     });
+
+    chokidarWorker.onmessage = () => {
+      reloadFolderDebounce();
+    };
   }
 });
 </script>

@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{792169C6-0194-7262-5BD7-941AAB8CF847}</ProjectGuid>
+    <ProjectGuid>{B72FCCEC-B0E4-2275-B406-E5626A43027F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>bindings</RootNamespace>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
@@ -48,7 +48,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\boot.AI\.electron-gyp\26.6.10\include\node;C:\Users\boot.AI\.electron-gyp\26.6.10\src;C:\Users\boot.AI\.electron-gyp\26.6.10\deps\openssl\config;C:\Users\boot.AI\.electron-gyp\26.6.10\deps\openssl\openssl\include;C:\Users\boot.AI\.electron-gyp\26.6.10\deps\uv\include;C:\Users\boot.AI\.electron-gyp\26.6.10\deps\zlib;C:\Users\boot.AI\.electron-gyp\26.6.10\deps\v8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\vuongle\.electron-gyp\26.6.10\include\node;C:\Users\vuongle\.electron-gyp\26.6.10\src;C:\Users\vuongle\.electron-gyp\26.6.10\deps\openssl\config;C:\Users\vuongle\.electron-gyp\26.6.10\deps\openssl\openssl\include;C:\Users\vuongle\.electron-gyp\26.6.10\deps\uv\include;C:\Users\vuongle\.electron-gyp\26.6.10\deps\zlib;C:\Users\vuongle\.electron-gyp\26.6.10\deps\v8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:__cplusplus -std:c++17 %(AdditionalOptions)</AdditionalOptions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <BufferSecurityCheck>true</BufferSecurityCheck>
@@ -72,7 +72,7 @@
       <AdditionalOptions>/LTCG:INCREMENTAL %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;DelayImp.lib;&quot;C:\\Users\\boot.AI\\.electron-gyp\\26.6.10\\x64\\node.lib&quot;</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;DelayImp.lib;&quot;C:\\Users\\vuongle\\.electron-gyp\\26.6.10\\x64\\node.lib&quot;</AdditionalDependencies>
       <AdditionalOptions>/LTCG:INCREMENTAL /ignore:4199 %(AdditionalOptions)</AdditionalOptions>
       <DelayLoadDLLs>node.exe;%(DelayLoadDLLs)</DelayLoadDLLs>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -84,13 +84,13 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>C:\Users\boot.AI\.electron-gyp\26.6.10\include\node;C:\Users\boot.AI\.electron-gyp\26.6.10\src;C:\Users\boot.AI\.electron-gyp\26.6.10\deps\openssl\config;C:\Users\boot.AI\.electron-gyp\26.6.10\deps\openssl\openssl\include;C:\Users\boot.AI\.electron-gyp\26.6.10\deps\uv\include;C:\Users\boot.AI\.electron-gyp\26.6.10\deps\zlib;C:\Users\boot.AI\.electron-gyp\26.6.10\deps\v8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\vuongle\.electron-gyp\26.6.10\include\node;C:\Users\vuongle\.electron-gyp\26.6.10\src;C:\Users\vuongle\.electron-gyp\26.6.10\deps\openssl\config;C:\Users\vuongle\.electron-gyp\26.6.10\deps\openssl\openssl\include;C:\Users\vuongle\.electron-gyp\26.6.10\deps\uv\include;C:\Users\vuongle\.electron-gyp\26.6.10\deps\zlib;C:\Users\vuongle\.electron-gyp\26.6.10\deps\v8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NODE_GYP_MODULE_NAME=bindings;USING_UV_SHARED=1;USING_V8_SHARED=1;V8_DEPRECATION_WARNINGS=1;V8_DEPRECATION_WARNINGS;V8_IMMINENT_DEPRECATION_WARNINGS;_GLIBCXX_USE_CXX11_ABI=1;ELECTRON_ENSURE_CONFIG_GYPI;USING_ELECTRON_CONFIG_GYPI;V8_COMPRESS_POINTERS;V8_COMPRESS_POINTERS_IN_SHARED_CAGE;V8_ENABLE_SANDBOX;V8_31BIT_SMIS_ON_64BIT_ARCH;WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_HAS_EXCEPTIONS=0;OPENSSL_NO_PINSHARED;OPENSSL_THREADS;OPENSSL_NO_ASM;BUILDING_NODE_EXTENSION;HOST_BINARY=&quot;node.exe&quot;;DEBUG;_DEBUG;V8_ENABLE_CHECKS;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\boot.AI\.electron-gyp\26.6.10\include\node;C:\Users\boot.AI\.electron-gyp\26.6.10\src;C:\Users\boot.AI\.electron-gyp\26.6.10\deps\openssl\config;C:\Users\boot.AI\.electron-gyp\26.6.10\deps\openssl\openssl\include;C:\Users\boot.AI\.electron-gyp\26.6.10\deps\uv\include;C:\Users\boot.AI\.electron-gyp\26.6.10\deps\zlib;C:\Users\boot.AI\.electron-gyp\26.6.10\deps\v8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\vuongle\.electron-gyp\26.6.10\include\node;C:\Users\vuongle\.electron-gyp\26.6.10\src;C:\Users\vuongle\.electron-gyp\26.6.10\deps\openssl\config;C:\Users\vuongle\.electron-gyp\26.6.10\deps\openssl\openssl\include;C:\Users\vuongle\.electron-gyp\26.6.10\deps\uv\include;C:\Users\vuongle\.electron-gyp\26.6.10\deps\zlib;C:\Users\vuongle\.electron-gyp\26.6.10\deps\v8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:__cplusplus -std:c++17 %(AdditionalOptions)</AdditionalOptions>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
@@ -117,7 +117,7 @@
       <AdditionalOptions>/LTCG:INCREMENTAL %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;DelayImp.lib;&quot;C:\\Users\\boot.AI\\.electron-gyp\\26.6.10\\x64\\node.lib&quot;</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;DelayImp.lib;&quot;C:\\Users\\vuongle\\.electron-gyp\\26.6.10\\x64\\node.lib&quot;</AdditionalDependencies>
       <AdditionalOptions>/LTCG:INCREMENTAL /ignore:4199 %(AdditionalOptions)</AdditionalOptions>
       <DelayLoadDLLs>node.exe;%(DelayLoadDLLs)</DelayLoadDLLs>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -129,7 +129,7 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>C:\Users\boot.AI\.electron-gyp\26.6.10\include\node;C:\Users\boot.AI\.electron-gyp\26.6.10\src;C:\Users\boot.AI\.electron-gyp\26.6.10\deps\openssl\config;C:\Users\boot.AI\.electron-gyp\26.6.10\deps\openssl\openssl\include;C:\Users\boot.AI\.electron-gyp\26.6.10\deps\uv\include;C:\Users\boot.AI\.electron-gyp\26.6.10\deps\zlib;C:\Users\boot.AI\.electron-gyp\26.6.10\deps\v8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\vuongle\.electron-gyp\26.6.10\include\node;C:\Users\vuongle\.electron-gyp\26.6.10\src;C:\Users\vuongle\.electron-gyp\26.6.10\deps\openssl\config;C:\Users\vuongle\.electron-gyp\26.6.10\deps\openssl\openssl\include;C:\Users\vuongle\.electron-gyp\26.6.10\deps\uv\include;C:\Users\vuongle\.electron-gyp\26.6.10\deps\zlib;C:\Users\vuongle\.electron-gyp\26.6.10\deps\v8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NODE_GYP_MODULE_NAME=bindings;USING_UV_SHARED=1;USING_V8_SHARED=1;V8_DEPRECATION_WARNINGS=1;V8_DEPRECATION_WARNINGS;V8_IMMINENT_DEPRECATION_WARNINGS;_GLIBCXX_USE_CXX11_ABI=1;ELECTRON_ENSURE_CONFIG_GYPI;USING_ELECTRON_CONFIG_GYPI;V8_COMPRESS_POINTERS;V8_COMPRESS_POINTERS_IN_SHARED_CAGE;V8_ENABLE_SANDBOX;V8_31BIT_SMIS_ON_64BIT_ARCH;WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_HAS_EXCEPTIONS=0;OPENSSL_NO_PINSHARED;OPENSSL_THREADS;OPENSSL_NO_ASM;BUILDING_NODE_EXTENSION;HOST_BINARY=&quot;node.exe&quot;;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
@@ -138,7 +138,7 @@
     <None Include="..\binding.gyp"/>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="D:\pj\Underscode-Simple-Code-Editor\node_modules\node-gyp\src\win_delay_load_hook.cc"/>
+    <ClCompile Include="D:\pj\DoriElectron\node_modules\node-gyp\src\win_delay_load_hook.cc"/>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
   <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets"/>

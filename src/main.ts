@@ -1,5 +1,6 @@
 import { install as VueMonacoEditorPlugin } from "@guolao/vue-monaco-editor";
 import "file-icons-js/css/style.css";
+import mitt from "mitt";
 import * as monaco from "monaco-editor";
 import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
 import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";
@@ -14,7 +15,7 @@ import "vue-toastification/dist/index.css";
 import App from "./App.vue";
 import "./assets/main.css";
 import router from "./router";
-import mitt from "mitt";
+import ChokidarWorker from "./worker/chokidar?worker";
 
 self.MonacoEnvironment = {
   getWorker(_, label) {
@@ -34,6 +35,10 @@ self.MonacoEnvironment = {
   },
 };
 
+export const emitter = mitt();
+
+export const chokidarWorker = new ChokidarWorker();
+
 const app = createApp(App);
 
 app.use(createPinia());
@@ -44,8 +49,7 @@ app.use(VueMonacoEditorPlugin, {
 app.use(Toast, {
   position: "bottom-right",
 });
-app.component("vue-resizable", VueResizable);
 
-export const emitter = mitt();
+app.component("vue-resizable", VueResizable);
 
 app.mount("#app");
