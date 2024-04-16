@@ -1,5 +1,5 @@
 import { getClassWithColor } from "file-icons-js";
-import fs from "fs";
+const fs = require("fs-extra");
 import path from "path";
 import { fileSearch } from "search-in-file";
 import { SearchOptions } from "search-in-file/dist/types";
@@ -116,7 +116,7 @@ export const searchInFiles = async (paths: string[], value: string) => {
   return result;
 };
 
-export const streamToString = (stream: fs.ReadStream) => {
+export const streamToString = (stream: any) => {
   const chunks: Buffer[] = [];
   return new Promise<string>((resolve, reject) => {
     stream.on(

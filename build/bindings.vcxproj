@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B72FCCEC-B0E4-2275-B406-E5626A43027F}</ProjectGuid>
+    <ProjectGuid>{792169C6-0194-7262-5BD7-941AAB8CF847}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>bindings</RootNamespace>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
@@ -138,7 +138,7 @@
     <None Include="..\binding.gyp"/>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="D:\pj\DoriElectron\node_modules\node-gyp\src\win_delay_load_hook.cc"/>
+    <ClCompile Include="D:\pj\Underscode-Simple-Code-Editor\node_modules\node-gyp\src\win_delay_load_hook.cc"/>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
   <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets"/>

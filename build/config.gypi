@@ -415,7 +415,7 @@
     "globalconfig": "C:\\Users\\boot.AI\\AppData\\Roaming\\npm\\etc\\npmrc",
     "global_prefix": "C:\\Users\\boot.AI\\AppData\\Roaming\\npm",
     "init_module": "C:\\Users\\boot.AI\\.npm-init.js",
-    "local_prefix": "D:\\pj\\DoriElectron",
+    "local_prefix": "D:\\pj\\Underscode-Simple-Code-Editor",
     "node_gyp": "C:\\Program Files\\nodejs\\node_modules\\npm\\node_modules\\node-gyp\\bin\\node-gyp.js",
     "npm_version": "10.5.0",
     "prefix": "C:\\Users\\boot.AI\\AppData\\Roaming\\npm",
